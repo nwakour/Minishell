@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/04/24 15:58:53 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/04/25 16:31:16 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 int		check_cmd(t_cmd *cmd)
 {
-	if (!ft_strcmp(cmd->cmd, "echo"))
+	if (!cmd->cmd)
+		return (0);
+	else if (!ft_strcmp(cmd->cmd, "echo"))
 		return (1);
 	else if (!ft_strcmp(cmd->cmd, "cd"))
 		return (1);
@@ -82,6 +84,8 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 		args++;
 	i = args;
 	args = args - redirs - 1;
+	if (args < 0)
+		args = 0;
 	if (!i || !ft_struct_list(&all->l_cmd, (void**)&all->cmd, sizeof(t_cmd)))
 		return ;
 	if (redirs >= 0)
@@ -97,9 +101,7 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 	all->cmd->args = nb_args + args;
 	while (i > 0 && str[--i])
 	{
-		if (i == 0)
-			all->cmd->cmd = ft_strdup(str[i]);
-		else if (str_ref[i][0] == '<' || str_ref[i][0] == '>' || str_ref[i][0] == '?')
+		if (str_ref[i][0] == '<' || str_ref[i][0] == '>' || str_ref[i][0] == '?')
 		{
 			if (str_ref[i][0] == '?')
 			{
@@ -109,13 +111,13 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 			else
 				all->cmd->f_name[--redirs] = ft_strdup(str[i]);
 		}
-		// else if (str_ref[i][0] == '-' && flags)
-		// 	all->cmd->flag[--flags] = ft_strdup(str[i]);
+		else if (i == 0 || (i != 0 && all->cmd->cmd == NULL && args == 0))
+			all->cmd->cmd = ft_strdup(str[i]);
 		else
 			all->cmd->arg[--args] = ft_strdup(str[i]);
 	}
 	i = -1;
-	while( all->cmd->cmd[++i])
+	while(all->cmd->cmd && all->cmd->cmd[++i])
 		 all->cmd->cmd[i] = ft_tolower(all->cmd->cmd[i]);
 	all->cmd->valid = check_cmd(all->cmd);
 	fd_files(all->cmd);
@@ -138,10 +140,12 @@ void	execute_cmd(t_all *all, t_cmd *cmd)
 	int i;
 
 	flag = 0;
-	if (!(cmd->valid))
+	if (!cmd->cmd && cmd->fd)
+		return ;
+	else if (!(cmd->valid))
 	{
 		ft_putstr_fd(cmd->cmd, 1);
-		ft_putstr_fd(" NOT VALID\n", 1);
+		ft_putstr_fd(": command not found\n", 1);
 	}
 	else if (!ft_strcmp(cmd->cmd, "echo"))
 	{

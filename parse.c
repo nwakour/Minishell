@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/04/24 16:18:27 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/04/25 16:26:25 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ char	*parse(t_all *all, char *line)
 
 	i = -1;
 	ref = strdup(line);
+	if (line[skip_space(line)] == PIP || line[skip_space(line)] == COLON)
+	{
+		all->error = 1;
+		return(ref);
+	}
 	while (line[++i])
 	{
 		if ((ret = cor_char(line[i])) == BACK_S)
@@ -59,16 +64,16 @@ char	*parse(t_all *all, char *line)
 			{
 				ref[i] = GREATER;
 				ref[++i] = SKIP;
-				while (line[i + 1] && line[i + 1] == ' ')
-					ref[++i] = SKIP;
+				while (line[i + 1] && line[++i] == ' ')
+					ref[i] = SKIP;
 				if (line[i] == GREAT)
 					all->error = 1;
 			}
 			else
 			{
 				ref[i] = GREAT;
-				while (line[i + 1] && line[i + 1] == ' ')
-					ref[++i] = SKIP;
+				while (line[i + 1] && line[++i] == ' ')
+					ref[i] = SKIP;
 				if (line[i] == GREAT)
 					all->error = 1;
 			}

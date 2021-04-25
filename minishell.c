@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/04/24 15:42:12 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/04/25 15:32:23 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,17 @@ void    export_parse(t_all *all, char *s)
     int     i;
     t_env   *env;
 
-    i = 0;
-    if (s[i] == 96 || (s[i] > 'Z' && s[i] < '_') || s[i] < 'A' || s[i] > 'z')
-    {
-        printf("export: `%s': not a valid identifier\n", s);
-        return ;
-    }
+    i = -1;
+	while (s[++i] && s[i] != '=')
+	{
+		if (s[i] == 96 || s[i] < '0' || (s[i] > '9' && s[i] < 'A')
+			|| (s[i] > 'Z' && s[i] < '_') || s[i] > 'z')
+		{
+			printf("export: `%s': not a valid identifier\n", s);
+    		return ;
+    	}
+	}
+	i = 0;
     while(s[i] && s[i] != '=')
         i++;
     env = (t_env*)malloc(sizeof(t_env));
