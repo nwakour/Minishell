@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:00:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/04/24 15:28:45 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/06/20 13:55:31 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ int		cor_char(char c)
 		return (OPEN_D_Q);
 	else if (c == '\'')
 		return (OPEN_S_Q);
-	else if (c == '\\')
-		return (BACK_S);
+	// else if (c == '\\')
+	// 	return (BACK_S);
 	else if (c == '$')
 		return (VAR);
-	else if (c == ';')
-		return (COLON);
+	// else if (c == ';')
+	// 	return (COLON);
 	else if (c == ' ')
 		return (SPACE);
 	else if (c == '|')

@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 10:57:41 by nwakour           #+#    #+#             */
-/*   Updated: 2021/04/24 15:28:50 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/05/26 17:46:56 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	handle_var(int *i, char **ref_line, char *line)
 			(*ref_line)[*i] = 'v';
 		--*i;
 	}
+	else if (line[*i + 1] == '\0' || line[*i + 1] == ' ' || line[*i + 1] == '$')
+		(*ref_line)[*i] = TEXT;
 	else
 	{
 		(*ref_line)[*i] = VAR;
