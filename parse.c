@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/04/25 16:26:25 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/08 17:47:59 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,25 @@ char	*parse(t_all *all, char *line)
 			}
 		}
 		else if (ret == LESS)
-			ref[i] = LESS;
+		{
+			if (ref[i + 1] == LESS)
+			{
+				ref[i] = LESSER;
+				ref[++i] = SKIP;
+				while (line[i + 1] && line[++i] == ' ')
+					ref[i] = SKIP;
+				if (line[i] == LESS)
+					all->error = 1;
+			}
+			else
+			{
+				ref[i] = LESS;
+				while (line[i + 1] && line[++i] == ' ')
+					ref[i] = SKIP;
+				if (line[i] == LESS)
+					all->error = 1;
+			}
+		}
 		else
 			ref[i] = TEXT;
 	}
@@ -133,13 +151,17 @@ void	get_pips(t_all *all, char *line, char *line_ref)
 	ref = ft_split(line_ref, '|');
 	double_char_to_list(&l_pip, str);
 	double_char_to_list(&l_pip_ref, ref);
+	all->pip = ft_lstsize(l_pip);
 	tmp = l_pip;
 	tmp_ref = l_pip_ref;
+	all->inx = 1;
+	all->nextin = 0;
 	while (tmp)
 	{
 		get_cmd(all, tmp->content, tmp_ref->content);
 		tmp = tmp->next;
 		tmp_ref = tmp_ref->next;
+		all->inx++;
 	}
 	if (l_pip)
 			ft_lstclear(&l_pip, &free_content);

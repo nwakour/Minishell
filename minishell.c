@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/04/25 15:32:23 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/08 17:19:39 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,16 @@ int		main(int argc, char **argv, char **env)
 			ref_line = parse(&all, line);
 			if (!all.error && line[0] != '\0')
 			{
-				if (ft_strchr(ref_line, ';'))
-					get_colons(&all, line, ref_line);
+				if (ft_strchr(ref_line, '|'))
+				{
+					all.pip = 1; 
+					get_pips(&all, line, ref_line);
+				}
 				else
+				{
+					all.pip = 0;
 					get_cmd(&all, line, ref_line);
+				}
 			}
 			else if (all.error)
 				ft_putstr_fd("syntax error\n", 1);

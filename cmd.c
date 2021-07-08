@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/04/25 16:31:16 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/08 18:01:59 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,14 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 	while(all->cmd->cmd && all->cmd->cmd[++i])
 		 all->cmd->cmd[i] = ft_tolower(all->cmd->cmd[i]);
 	all->cmd->valid = check_cmd(all->cmd);
-	fd_files(all->cmd);
-	execute_cmd(all, all->cmd);
+	//TODO: check for cmd->exec for file errors before executing
+	fd_files(all, all->cmd);
+	if (check_cmd(all->cmd))
+		execute_cmd(all, all->cmd);
+	else if (all->cmd->exec && all->inx < all->pip)
+		s_cmd(all, all->cmd);
+	else if (all->cmd->exec && all->inx == all->pip)
+		s_last(all, all->cmd);
 	if (all->cmd->fd > 1)
 		close(all->cmd->fd);
 	// i = -1;
