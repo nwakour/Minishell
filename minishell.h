@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/04/24 15:58:34 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/08 17:45:40 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <termcap.h>
 # include <termios.h>
 # include <signal.h>
+# include <errno.h> 
 
 # define OPEN_S_Q 1
 # define CLOSE_S_Q 2
@@ -33,15 +34,19 @@
 # define GREAT 62
 # define LESS 60
 # define GREATER 63
+# define LESSER 64
 
 typedef struct		s_cmd
 {
 	char	*cmd;
 	char	**arg;
+	int		infd;
 	int		fd;
 	char	**f_name;
 	int		args;
 	int		valid;
+	int		pid;
+	int		exec;
 }					t_cmd;
 
 typedef struct		s_env
@@ -77,6 +82,9 @@ typedef struct		s_all
 	struct termios *old;
 	struct termios *new;
 	int		error;
+	int		pip;
+	int		inx;
+	int		nextin;
 }					t_all;
 
 /*				minishell			*/
@@ -131,7 +139,7 @@ void	execute_cmd(t_all *all, t_cmd *cmd);
 
 /*				fd_files			*/
 
-void	fd_files(t_cmd *cmd);
+void	fd_files(t_all *all, t_cmd *cmd);
 
 /*				helpers				*/
 char	*ft_strjoinchar(char *s, char c);
