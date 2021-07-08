@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 14:53:16 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/07/08 18:06:07 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/08 20:20:26 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,19 @@ int	s_wait(t_all *all, t_cmd *cmd)
 	waitpid(cmd->pid, &status, 0);
 	if (WEXITED)
 		all->error = WEXITSTATUS(status);
+}
+
+void	s_env(t_all *all)
+{
+	char	**env;
+	t_list	*tmp;
+
+	tmp = all->l_env;
+	while (tmp)
+	{
+		
+		tmp = tmp->next;	
+	}
 }
 
 void	s_exec(t_all *all)
@@ -76,17 +89,13 @@ void	s_last(t_all *all, t_cmd *cmd)
 		if (cmd->infd)
 			close(cmd->infd);
 		if (cmd->fd != 1)
-			close(cmd->out)
-		close(fd[0]);
-		close(fd[1]);
+			close(cmd->fd);
 		// EXEC	
 	}
 	s_wait(all, cmd);
-	close(fd[1]);
 	if (cmd->infd)
 			close(cmd->infd);
 	if (cmd->fd != 1)
-			close(cmd->out)
-	close(fd[0]);
-	close(fd[1]);
+			close(cmd->fd);
+	s_wait(all, cmd);
 }
