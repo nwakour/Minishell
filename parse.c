@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/09 14:39:58 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/09 17:55:15 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,18 +104,25 @@ char	*parse(t_all *all, char *line)
 	return (ref);
 }
 
-void	get_colons(t_all *all, char *line, char *ref_line)
+void	get_pips(t_all *all, char *line, char *ref_line)
 {
 	char	**str;
 	char	**ref;
 	int i;
 
-	str = ft_split_ref(line, ref_line, ';');
-	ref = ft_split(ref_line, ';');
+	str = ft_split_ref(line, ref_line, '|');
+	ref = ft_split(ref_line, '|');
+	i = 0;
+	while (str[i] != NULL)
+		i++;
+	all->pip = i;
 	i = -1;
+	all->inx = 1;
+	all->nextin = 0;
 	while (str[++i] != NULL)
 	{
 		get_cmd(all, ft_strdup(str[i]), ft_strdup(ref[i]));
+		all->inx++;
 		// if (ft_strchr(tmp_ref->content, '|'))
 		// 	get_pips(all, tmp->content, tmp_ref->content);
 		// else
@@ -136,7 +143,7 @@ void	get_colons(t_all *all, char *line, char *ref_line)
 	// }
 }
 
-void	get_pips(t_all *all, char *line, char *line_ref)
+void	get_colons(t_all *all, char *line, char *line_ref)
 {
 	char	**str;
 	char	**ref;
