@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/08 18:01:59 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/09 17:58:27 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 		execute_cmd(all, all->cmd);
 	else if (all->cmd->exec && all->inx < all->pip)
 		s_cmd(all, all->cmd);
-	else if (all->cmd->exec && all->inx == all->pip)
+	else if (all->cmd->exec && (all->inx == all->pip || all->pip == 0))
 		s_last(all, all->cmd);
 	if (all->cmd->fd > 1)
 		close(all->cmd->fd);
