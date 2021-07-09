@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:06:22 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/08 17:48:48 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/09 17:28:56 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	fd_files(t_all *all, t_cmd *cmd)
 			
 			if (cmd->fd == -1)
 			{
-				printf("%s: %s", cmd->f_name[i], strerror(errno));
+				s_perror(all, cmd->f_name[i], 1);
 				all->error = 1; // all->error can be used to save exit status if there's no parsing error
 				cmd->exec = 0;
 			}
