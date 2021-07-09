@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   system.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 14:53:16 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/07/09 17:57:36 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/09 19:44:11 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,27 +63,60 @@ char	**s_env(t_all *all)
 {
 	char	**env;
 	t_list	*tmp;
+	int	i;
 	int	sz;
 
-	sz = ft_lstsize(all->l_env);
+	sz = ft_lstsize(all->l_env) + 1;
 	env = (char **)malloc(sz * sizeof(char *));
 	if (!env)
 		return (NULL);
 	tmp = all->l_env;
+	i = 0;
 	while (tmp)
 	{
-		*env = s_join(((t_env*)tmp->content)->name, '=',((t_env*)tmp->content)->value);
-		env++;
+		env[i++] = s_join(((t_env*)tmp->content)->name, '=',((t_env*)tmp->content)->value);
 		tmp = tmp->next;	
 	}
+	env[i] = 0;
 	return (env);
+}
+
+char	**s_args(t_cmd *cmd)
+{
+	char **tmp;
+	int i;
+
+	i = 0;
+	tmp = (char **)malloc((cmd->args + 1) * sizeof(char*));
+	tmp[i] = cmd->cmd;
+	i++;
+	while (*cmd->arg)
+	{
+		tmp[i] = *cmd->arg;
+		cmd->arg++;
+		i++;
+	}
+	tmp[i] = 0;
+	return (tmp);
 }
 
 void	s_found(t_all *all, struct stat *st, char *file)
 {
-	if (!lstat(file, st) && S_ISREG(st->st_mode))
+	//char **args = s_args(all->cmd);
+
+	if (!lstat(file, st))
 	{
-		if (execve(file, all->cmd->arg, s_env(all)) == -1)
+		// write(2, "|", 1);
+		// write(2, file, ft_strlen(file));
+		// write(2, "|", 1);
+		// while (*args)
+		// {
+		// 	write(2, "|", 1);
+		// 	write(2, *(args), ft_strlen(*(args)));
+		// 	write(2, "|", 1);
+		// 	args++;
+		// }
+		if (execve(file, s_args(all->cmd), s_env(all)) == -1)
 		{
 			s_perror(all, all->cmd->cmd, 126);
 			exit(126);
@@ -106,7 +139,7 @@ void	s_exec(t_all *all, t_cmd *cmd)
 	paths = s_paths(all);
 	if (cmd->cmd && cmd->cmd[0] == '/')
 	{
-		if (execve(cmd->cmd, cmd->arg, s_env(all)) == -1)
+		if (execve(cmd->cmd, s_args(cmd), s_env(all)) == -1)
 		{
 			s_perror(all, cmd->cmd, 126);
 			exit(126);
@@ -154,6 +187,7 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 
 void	s_last(t_all *all, t_cmd *cmd)
 {
+	printf("%s %d %d\n", cmd->cmd, cmd->infd, cmd->fd);
 	cmd->pid = fork();
 	if (cmd->pid < 0)
 		s_perror(all, "fork", 1);
@@ -172,5 +206,4 @@ void	s_last(t_all *all, t_cmd *cmd)
 			close(cmd->infd);
 	if (cmd->fd != 1)
 			close(cmd->fd);
-	s_wait(all, cmd);
 }
