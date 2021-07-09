@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/08 17:45:40 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/09 17:22:47 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@
 # include <termcap.h>
 # include <termios.h>
 # include <signal.h>
-# include <errno.h> 
+# include <errno.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <time.h>
 
 # define OPEN_S_Q 1
 # define CLOSE_S_Q 2
@@ -164,5 +167,16 @@ int		init_term(t_tc_cmd *tccmd);
 /*				path				*/
 char	*find_path(t_all *all);
 void	check_path(t_all *all);
+
+/*				system				*/
+char	**s_paths(t_all *all);
+void	s_perror(t_all *all, char *name, int err);
+void	s_wait(t_all *all, t_cmd *cmd);
+char	*s_join(char *name, char c, char *val);
+char	**s_env(t_all *all);
+void	s_found(t_all *all, struct stat *st, char *file);
+void	s_exec(t_all *all, t_cmd *cmd);
+void	s_cmd(t_all *all, t_cmd *cmd);
+void	s_last(t_all *all, t_cmd *cmd);
 
 #endif

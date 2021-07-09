@@ -14,11 +14,10 @@ char	*find_path(t_all *all)
 	return NULL;
 }
 
-void	check_path(t_all *all)
+char	**s_paths(t_all *all)
 {
 	char **path;
 
 	path = ft_split(find_path(all), ':');
-	(void)path;
-	//your code
+	return (path);
 }
