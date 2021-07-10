@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 14:53:16 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/07/10 15:20:27 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/10 15:56:53 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,9 +186,14 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 	if (cmd->pid == 0)
 	{
 		dup2(cmd->infd, 0);
-		dup2(fd[1], 1);
+		if (cmd->fd != 1)
+			dup2(cmd->fd, 1);
+		else
+			dup2(fd[1], 1);
 		if (cmd->infd)
 			close(cmd->infd);
+		if (cmd->fd != 1)
+			close(cmd->fd);
 		close(fd[0]);
 		close(fd[1]);
 		s_exec(all, cmd);
@@ -197,6 +202,8 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 	close(fd[1]);
 	if (cmd->infd)
 			close(cmd->infd);
+	if (cmd->fd != 1)
+		close(cmd->fd);
 	// need to to put fd[0] as infd for next cmd
 	all->nextin = fd[0];
 }
