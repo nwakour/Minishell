@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/09 18:16:07 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/10 15:22:08 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 		s_cmd(all, all->cmd);
 	else if (all->cmd->exec && (all->inx == all->pip || all->pip == 0))
 	{
-		printf("here\n");
+		//printf("here\n");
 		s_last(all, all->cmd);
 	}
 	if (all->cmd->fd > 1)
