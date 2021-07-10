@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 14:53:16 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/07/10 15:56:53 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/10 18:11:53 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,9 @@ void	displayenv(t_all *all)
 	}
 }
 
-void	s_found(t_all *all, struct stat *st, char *file)
+void	s_found(t_all *all, struct stat *st, char *file, t_cmd *cmd)
 {
-	char **args = s_args(all->cmd);
+	char **args = s_args(cmd);
 	char **tmp = args;
 	
 	if (!lstat(file, st))
@@ -134,13 +134,13 @@ void	s_found(t_all *all, struct stat *st, char *file)
 		//displayenv(all);
 		if (execve(file, tmp, s_env(all)) == -1)
 		{
-			s_perror(all, all->cmd->cmd, 126);
+			s_perror(all, cmd->cmd, 126);
 			exit(126);
 		}
 	}
 	else
 	{
-		write(2, all->cmd->cmd, ft_strlen(all->cmd->cmd));
+		write(2, cmd->cmd, ft_strlen(cmd->cmd));
 		write(2, ": command not found\n", 20);
 		exit(127);
 	}
@@ -170,7 +170,7 @@ void	s_exec(t_all *all, t_cmd *cmd)
 			if (*paths)
 				file = s_join(*paths, '/', cmd->cmd);
 		}
-		s_found(all, &st, file);
+		s_found(all, &st, file, cmd);
 	}
 }
 
@@ -190,19 +190,21 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 			dup2(cmd->fd, 1);
 		else
 			dup2(fd[1], 1);
-		if (cmd->infd)
+		if (cmd->infd > 1)
 			close(cmd->infd);
-		if (cmd->fd != 1)
+		if (cmd->fd > 1)
 			close(cmd->fd);
-		close(fd[0]);
-		close(fd[1]);
+		if (fd[0])
+			close(fd[0]);
+		if (fd[1] != 1)
+			close(fd[1]);
 		s_exec(all, cmd);
 	}
 	s_wait(all, cmd);
 	close(fd[1]);
-	if (cmd->infd)
-			close(cmd->infd);
-	if (cmd->fd != 1)
+	if (cmd->infd > 1)
+		close(cmd->infd);
+	if (cmd->fd > 1)
 		close(cmd->fd);
 	// need to to put fd[0] as infd for next cmd
 	all->nextin = fd[0];
@@ -210,7 +212,7 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 
 void	s_last(t_all *all, t_cmd *cmd)
 {
-	// printf("%s %d %d\n", cmd->cmd, cmd->infd, cmd->fd);
+	printf("%s %d %d\n", cmd->cmd, cmd->infd, cmd->fd);
 	cmd->pid = fork();
 	if (cmd->pid < 0)
 		s_perror(all, "fork", 1);
@@ -218,15 +220,15 @@ void	s_last(t_all *all, t_cmd *cmd)
 	{
 		dup2(cmd->infd, 0);
 		dup2(cmd->fd, 1);
-		if (cmd->infd)
+		if (cmd->infd > 1)
 			close(cmd->infd);
-		if (cmd->fd != 1)
+		if (cmd->fd > 1)
 			close(cmd->fd);
 		s_exec(all, cmd);
 	}
 	s_wait(all, cmd);
-	if (cmd->infd)
+	if (cmd->infd > 1)
 			close(cmd->infd);
-	if (cmd->fd != 1)
+	if (cmd->fd > 1)
 			close(cmd->fd);
 }

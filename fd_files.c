@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:06:22 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/10 15:57:33 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/10 18:00:49 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	fd_files(t_all *all, t_cmd *cmd)
 	int i;
 
 	// to check later if there's no problem n cmd should be executed
+	cmd->fd = 1;
 	cmd->exec = 1;
 	cmd->infd = all->nextin;
 	if (cmd->f_name[0])
@@ -29,7 +30,9 @@ void	fd_files(t_all *all, t_cmd *cmd)
 			else if (cmd->f_name[i][0] == '>')
 				cmd->fd = open((cmd->f_name[i] + 1), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
 			else if (cmd->f_name[i][0] == '<')
+			{
 				cmd->infd = open((cmd->f_name[i] + 1), O_RDONLY);
+			}
 			else if (cmd->f_name[i][0] == '@')
 				;//
 			if (cmd->fd == -1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/10 16:46:34 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/10 17:31:38 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ int		check_cmd(t_cmd *cmd);
 int		args_nb(char *ref);
 void	get_cmd(t_all *all, char *line, char *ref_line);
 void	execute_cmd(t_all *all, t_cmd *cmd);
+void	new_func(t_all *all, t_cmd *cmd);
 
 /*				fd_files			*/
 
@@ -173,7 +174,7 @@ void	s_perror(t_all *all, char *name, int err);
 void	s_wait(t_all *all, t_cmd *cmd);
 char	*s_join(char *name, char c, char *val);
 char	**s_env(t_all *all);
-void	s_found(t_all *all, struct stat *st, char *file);
+void	s_found(t_all *all, struct stat *st, char *file, t_cmd *cmd);
 void	s_exec(t_all *all, t_cmd *cmd);
 void	s_cmd(t_all *all, t_cmd *cmd);
 void	s_last(t_all *all, t_cmd *cmd);
