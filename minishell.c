@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/08 17:19:39 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/10 16:31:01 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int		main(int argc, char **argv, char **env)
 		if (line[0] != '\0')
 		{
 			ref_line = parse(&all, line);
+			printf("ref = %s\n", ref_line);
 			if (!all.error && line[0] != '\0')
 			{
 				if (ft_strchr(ref_line, '|'))
@@ -116,7 +117,11 @@ int		main(int argc, char **argv, char **env)
 				}
 			}
 			else if (all.error)
+			{
+				
 				ft_putstr_fd("syntax error\n", 1);
+				
+			}
 		}
 		if (line[0] != '\0')
 			lstadd_dlist(&all.l_history, lstnewc(ft_strdup(line)));

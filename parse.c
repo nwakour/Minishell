@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/09 17:55:15 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/10 16:45:12 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*parse(t_all *all, char *line)
 
 	i = -1;
 	ref = strdup(line);
-	if (line[skip_space(line)] == PIP || line[skip_space(line)] == COLON)
+	if (line[skip_space(line)] == PIP)
 	{
 		all->error = 1;
 		return(ref);
@@ -40,22 +40,25 @@ char	*parse(t_all *all, char *line)
 		else if (ret == PIP)
 		{
 			ref[i] = PIP;
-			while (line[++i] == ' ')
-				ref[i] = SPACE;
-			if (line[i] == PIP || line[i] == COLON)
+			while (line[i + 1] == ' ')
+				ref[++i] = SPACE;
+			if (line[i + 1] == PIP)
+			{
 				all->error = 1;
+				i++;
+			}
 		}
-		else if (ret == COLON)
-		{
-			ref[i] = COLON;
-			i++;
-			while (line[++i] == ' ')
-				ref[i] = SPACE;
-			if (line[i] == PIP || line[i] == COLON)
-				all->error = 1;
-			else
-				i--;
-		}
+		// else if (ret == COLON)
+		// {
+		// 	ref[i] = COLON;
+		// 	i++;
+		// 	while (line[++i] == ' ')
+		// 		ref[i] = SPACE;
+		// 	if (line[i] == PIP || line[i] == COLON)
+		// 		all->error = 1;
+		// 	else
+		// 		i--;
+		// }
 		else if (ret == VAR)
 			handle_var(&i, &ref, line);
 		else if (ret == GREAT)
@@ -64,18 +67,24 @@ char	*parse(t_all *all, char *line)
 			{
 				ref[i] = GREATER;
 				ref[++i] = SKIP;
-				while (line[i + 1] && line[++i] == ' ')
-					ref[i] = SKIP;
-				if (line[i] == GREAT)
+				while (line[i + 1] && line[i + 1] == ' ')
+					ref[++i] = SKIP;
+				if (line[i + 1] == GREAT)
+				{
 					all->error = 1;
+					i++;
+				}
 			}
 			else
 			{
 				ref[i] = GREAT;
-				while (line[i + 1] && line[++i] == ' ')
-					ref[i] = SKIP;
-				if (line[i] == GREAT)
+				while (line[i + 1] && line[i + 1] == ' ')
+					ref[++i] = SKIP;
+				if (line[i + 1] == GREAT)
+				{
 					all->error = 1;
+					i++;
+				}
 			}
 		}
 		else if (ret == LESS)
@@ -84,18 +93,24 @@ char	*parse(t_all *all, char *line)
 			{
 				ref[i] = LESSER;
 				ref[++i] = SKIP;
-				while (line[i + 1] && line[++i] == ' ')
-					ref[i] = SKIP;
-				if (line[i] == LESS)
+				while (line[i + 1] && line[i + 1] == ' ')
+					ref[++i] = SKIP;
+				if (line[i + 1] == LESS)
+				{
 					all->error = 1;
+					i++;
+				}
 			}
 			else
 			{
 				ref[i] = LESS;
-				while (line[i + 1] && line[++i] == ' ')
-					ref[i] = SKIP;
-				if (line[i] == LESS)
+				while (line[i + 1] && line[i + 1] == ' ')
+					ref[++i] = SKIP;
+				if (line[i + 1] == LESS)
+				{
 					all->error = 1;
+					i++;
+				}
 			}
 		}
 		else
