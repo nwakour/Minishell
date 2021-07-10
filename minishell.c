@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/10 16:31:01 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/10 18:09:41 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,10 @@ int		main(int argc, char **argv, char **env)
 				else
 				{
 					all.pip = 0;
+					all.nextin = 0;
 					get_cmd(&all, line, ref_line);
+					new_func(&all, all.l_cmd->content);
+					all.l_cmd = NULL;
 				}
 			}
 			else if (all.error)

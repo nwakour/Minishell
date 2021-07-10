@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/10 16:45:12 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/10 18:13:42 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	get_pips(t_all *all, char *line, char *ref_line)
 {
 	char	**str;
 	char	**ref;
+	t_list *tmp;
 	int i;
 
 	str = ft_split_ref(line, ref_line, '|');
@@ -142,6 +143,20 @@ void	get_pips(t_all *all, char *line, char *ref_line)
 		// 	get_pips(all, tmp->content, tmp_ref->content);
 		// else
 	}
+	tmp = all->l_cmd;
+	while (tmp->next)
+	{
+		new_func(all, tmp->content);
+		tmp = tmp->next;
+	}
+	fd_files(all, ((t_cmd*)tmp->content));
+	if (((t_cmd*)tmp->content)->valid)
+	{
+		execute_cmd(all, tmp->content);
+	}
+	else
+		s_last(all, tmp->content);
+	all->l_cmd = NULL;
 	// if (l_colon)
 	// 		ft_lstclear(&l_colon, &free_content);
 	// if (l_colon_ref)
@@ -211,6 +226,7 @@ char *find_var(t_all *all, char *line, char *line_ref)
 	{
 		if (line_ref[i] == '$')
 		{
+		
 			// tmp = ft_strndup(line + j, i);
 			var = ft_strdup("$");
 			while (line_ref[++i] == 'v')

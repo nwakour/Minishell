@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/10 16:01:08 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/10 18:16:51 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 	redirs = str_n_char(ref_line, '>');
 	redirs += str_n_char(ref_line, '<');
 	redirs += str_n_char(ref_line, '?');
+	redirs += str_n_char(ref_line, '@');
 	args = 0;
 	while (str[args])
 		args++;
@@ -101,12 +102,17 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 	all->cmd->args = nb_args + args;
 	while (i > 0 && str[--i])
 	{
-		if (str_ref[i][0] == '<' || str_ref[i][0] == '>' || str_ref[i][0] == '?')
+		if (str_ref[i][0] == '<' || str_ref[i][0] == '>' || str_ref[i][0] == '?' || str_ref[i][0] == '@')
 		{
 			if (str_ref[i][0] == '?')
 			{
 				all->cmd->f_name[--redirs] = ft_strdup(str[i]);
 				all->cmd->f_name[redirs][0] = '?';
+			}
+			else if (str_ref[i][0] == '@')
+			{
+				all->cmd->f_name[--redirs] = ft_strdup(str[i]);
+				all->cmd->f_name[redirs][0] = '@';
 			}
 			else
 				all->cmd->f_name[--redirs] = ft_strdup(str[i]);
@@ -116,31 +122,42 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 		else
 			all->cmd->arg[--args] = ft_strdup(str[i]);
 	}
+	
 	i = -1;
 	while(all->cmd->cmd && all->cmd->cmd[++i])
 		 all->cmd->cmd[i] = ft_tolower(all->cmd->cmd[i]);
 	all->cmd->valid = check_cmd(all->cmd);
+	free(str);
+	free(str_ref);
+}
+
+void new_func(t_all *all, t_cmd *cmd)
+{
+	
 	//TODO: check for cmd->exec for file errors before executing
-	fd_files(all, all->cmd);
-	if (all->cmd->valid)
-		execute_cmd(all, all->cmd);
-	else if (all->cmd->exec && all->inx < all->pip)	
-		s_cmd(all, all->cmd);
-	else if (all->cmd->exec && (all->inx == all->pip || all->pip == 0))
-	{
-		//printf("here\n");
-		s_last(all, all->cmd);
-	}
-	if (all->cmd->fd > 1)
-		close(all->cmd->fd);
+	
+	fd_files(all, cmd);
+	if (cmd->valid)
+		execute_cmd(all, cmd);
+	else if (cmd->exec && all->pip)	
+		s_cmd(all, cmd);
+	else if (cmd->exec && !all->pip)
+		s_last(all, cmd);
+	// else if (cmd->exec && (all->inx == all->pip || all->pip == 0))
+	// {
+	// 	//printf("here\n");
+	// 	s_last(all, cmd);
+	// }
+	if (cmd->fd > 1)
+		close(cmd->fd);
 	// i = -1;
 	// while (str[++i])
 	// 	free(str[i]);
-	free(str);
+	//free(str);
 	// i = -1;
 	// while (str_ref[++i])
 	// 	free(str_ref[i]);
-	free(str_ref);
+	//free(str_ref);
 }
 
 void	execute_cmd(t_all *all, t_cmd *cmd)
