@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 14:53:16 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/07/09 19:44:11 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/10 15:20:27 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	s_perror(t_all *all, char *name, int err)
 	write(2, name, ft_strlen(name));
 	write(2, ": ", 2);
 	write(2, strerror(errno), len);
+	write(2, "\n", 1);
 	all->error = err;
 }
 
@@ -71,10 +72,10 @@ char	**s_env(t_all *all)
 	if (!env)
 		return (NULL);
 	tmp = all->l_env;
-	i = 0;
+	i = -1;
 	while (tmp)
 	{
-		env[i++] = s_join(((t_env*)tmp->content)->name, '=',((t_env*)tmp->content)->value);
+		env[++i] = s_join(((t_env*)tmp->content)->name, '=',((t_env*)tmp->content)->value);
 		tmp = tmp->next;	
 	}
 	env[i] = 0;
@@ -87,7 +88,7 @@ char	**s_args(t_cmd *cmd)
 	int i;
 
 	i = 0;
-	tmp = (char **)malloc((cmd->args + 1) * sizeof(char*));
+	tmp = (char **)malloc((cmd->args + 2) * sizeof(char*));
 	tmp[i] = cmd->cmd;
 	i++;
 	while (*cmd->arg)
@@ -100,10 +101,24 @@ char	**s_args(t_cmd *cmd)
 	return (tmp);
 }
 
+void	displayenv(t_all *all)
+{
+	char **tmp = s_env(all);
+	int i = 0;
+	
+	while (tmp[i])
+	{
+		write(2, tmp[i], ft_strlen(tmp[i]));
+		write(2, "\n", 1);
+		i++;
+	}
+}
+
 void	s_found(t_all *all, struct stat *st, char *file)
 {
-	//char **args = s_args(all->cmd);
-
+	char **args = s_args(all->cmd);
+	char **tmp = args;
+	
 	if (!lstat(file, st))
 	{
 		// write(2, "|", 1);
@@ -116,7 +131,8 @@ void	s_found(t_all *all, struct stat *st, char *file)
 		// 	write(2, "|", 1);
 		// 	args++;
 		// }
-		if (execve(file, s_args(all->cmd), s_env(all)) == -1)
+		//displayenv(all);
+		if (execve(file, tmp, s_env(all)) == -1)
 		{
 			s_perror(all, all->cmd->cmd, 126);
 			exit(126);
@@ -187,7 +203,7 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 
 void	s_last(t_all *all, t_cmd *cmd)
 {
-	printf("%s %d %d\n", cmd->cmd, cmd->infd, cmd->fd);
+	// printf("%s %d %d\n", cmd->cmd, cmd->infd, cmd->fd);
 	cmd->pid = fork();
 	if (cmd->pid < 0)
 		s_perror(all, "fork", 1);
