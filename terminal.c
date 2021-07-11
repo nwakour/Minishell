@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 18:42:51 by nwakour           #+#    #+#             */
-/*   Updated: 2021/06/05 14:46:07 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/11 19:18:54 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void z_handler()
 // }
 
 
-int terminal(t_all *all, char **line)
+int terminal(t_all *all, char **line, char *promt)
 {
 	char c;
 	t_dlist *tmp;
@@ -141,7 +141,7 @@ int terminal(t_all *all, char **line)
 	signal(SIGTSTP, z_handler);
 	signal(SIGTERM, dd_Handler);
 	signal(SIGQUIT, aa_handler);
-	write(1, "Minishell->>> ", 14);
+	ft_putstr_fd(promt, 1);
 	tmp = all->l_history;
 	while (1)
 	{

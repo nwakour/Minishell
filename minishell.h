@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/11 18:54:12 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/11 19:20:07 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ int		skip_space(char *str);
 void	save_history(t_all *all, char *line);
 
 /*				terminal			*/
-int		terminal(t_all *all, char **line);
+int	terminal(t_all *all, char **line, char *promt);
 int		init_term(t_tc_cmd *tccmd);
 
 /*				path				*/
