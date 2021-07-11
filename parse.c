@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/10 18:13:42 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/11 14:57:54 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,10 @@ char	*parse(t_all *all, char *line)
 		{
 			if (ref[i + 1] == LESS)
 			{
-				ref[i] = LESSER;
+				if (ref[i + 2 + skip_space(ref + i + 2)] == '\"' || ref[i + 2 + skip_space(ref + i + 2)] == '\'')
+					ref[i] = LESSER_Q;
+				else
+					ref[i] = LESSER;
 				ref[++i] = SKIP;
 				while (line[i + 1] && line[i + 1] == ' ')
 					ref[++i] = SKIP;
@@ -133,7 +136,7 @@ void	get_pips(t_all *all, char *line, char *ref_line)
 		i++;
 	all->pip = i;
 	i = -1;
-	all->inx = 1;
+	all->hdoc = 0;
 	all->nextin = 0;
 	while (str[++i] != NULL)
 	{
@@ -150,12 +153,18 @@ void	get_pips(t_all *all, char *line, char *ref_line)
 		tmp = tmp->next;
 	}
 	fd_files(all, ((t_cmd*)tmp->content));
-	if (((t_cmd*)tmp->content)->valid)
+	if (((t_cmd*)tmp->content)->valid == 1)
 	{
 		execute_cmd(all, tmp->content);
 	}
-	else
+	else if (((t_cmd*)tmp->content)->valid == 2)
 		s_last(all, tmp->content);
+	else if (!(((t_cmd*)tmp->content)->valid))
+	{
+		write(2, "\0", 1);
+		write(2, ": command not found\n", 20);
+		all->error = 127;
+	}
 	all->l_cmd = NULL;
 	// if (l_colon)
 	// 		ft_lstclear(&l_colon, &free_content);

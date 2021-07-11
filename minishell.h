@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/10 17:31:38 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/11 18:54:12 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # define LESS 60
 # define GREATER 63
 # define LESSER 64
-
+# define LESSER_Q 61
 typedef struct		s_cmd
 {
 	char	*cmd;
@@ -87,6 +87,7 @@ typedef struct		s_all
 	int		pip;
 	int		inx;
 	int		nextin;
+	int		hdoc;
 }					t_all;
 
 /*				minishell			*/
@@ -178,5 +179,6 @@ void	s_found(t_all *all, struct stat *st, char *file, t_cmd *cmd);
 void	s_exec(t_all *all, t_cmd *cmd);
 void	s_cmd(t_all *all, t_cmd *cmd);
 void	s_last(t_all *all, t_cmd *cmd);
+void	s_heredoc(t_all *all, t_cmd *cmd);
 
 #endif

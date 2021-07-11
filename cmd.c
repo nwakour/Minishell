@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/10 18:16:51 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/11 19:02:50 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		check_cmd(t_cmd *cmd)
 	else if (!ft_strcmp(cmd->cmd, "exit"))
 		return (1);
 	else
-		return (0);
+		return (2);
 }
 
 // static void			ft_free(char **str)
@@ -80,6 +80,7 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 	redirs += str_n_char(ref_line, '<');
 	redirs += str_n_char(ref_line, '?');
 	redirs += str_n_char(ref_line, '@');
+	redirs += str_n_char(ref_line, '=');
 	args = 0;
 	while (str[args])
 		args++;
@@ -102,7 +103,7 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 	all->cmd->args = nb_args + args;
 	while (i > 0 && str[--i])
 	{
-		if (str_ref[i][0] == '<' || str_ref[i][0] == '>' || str_ref[i][0] == '?' || str_ref[i][0] == '@')
+		if (str_ref[i][0] == '<' || str_ref[i][0] == '>' || str_ref[i][0] == '?' || str_ref[i][0] == '@' || str_ref[i][0] == '=')
 		{
 			if (str_ref[i][0] == '?')
 			{
@@ -113,6 +114,11 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 			{
 				all->cmd->f_name[--redirs] = ft_strdup(str[i]);
 				all->cmd->f_name[redirs][0] = '@';
+			}
+			else if (str_ref[i][0] == '=')
+			{
+				all->cmd->f_name[--redirs] = ft_strdup(str[i]);
+				all->cmd->f_name[redirs][0] = '=';
 			}
 			else
 				all->cmd->f_name[--redirs] = ft_strdup(str[i]);
@@ -126,9 +132,67 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 	i = -1;
 	while(all->cmd->cmd && all->cmd->cmd[++i])
 		 all->cmd->cmd[i] = ft_tolower(all->cmd->cmd[i]);
+	s_heredoc(all, all->cmd);
 	all->cmd->valid = check_cmd(all->cmd);
 	free(str);
 	free(str_ref);
+}
+
+char	*s_readdoc(t_all *all, char *limit, int expand)
+{
+	char	*line;
+	char	*file;
+	int	fd;
+	
+	expand = 0;
+	file = ft_strjoin("/tmp/s_", ft_itoa(all->hdoc));
+	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+	write(1, ">", 1);
+	get_next_line(0, &line);
+	while (ft_strcmp(line, limit))
+	{
+		//TODO: check expand for env variables
+		write(1, line, ft_strlen(line));
+		write(1, "\n", 1);
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+		write(1, ">", 1);
+		get_next_line(0, &line);
+	}
+	close(fd);
+	return (file);
+}
+
+void	s_heredoc(t_all *all, t_cmd *cmd)
+{
+	int	i;
+	char	*limit;
+	char	**tmp;
+	char	*name;
+
+	tmp = cmd->f_name;
+	i = 0;
+	while (tmp[i])
+	{
+		if (tmp[i][0] == '@')
+		{
+			limit = tmp[i] + 1;
+			name = s_readdoc(all, limit, 1);
+			free(tmp[i]);
+			tmp[i] = ft_strjoin("<", name);
+			all->hdoc++;
+		}
+		else if (tmp[i][0] == '=')
+		{
+			limit = tmp[i] + 1;
+			name = s_readdoc(all, limit, 0);
+			free(tmp[i]);
+			tmp[i] = ft_strjoin("<", name);
+			all->hdoc++;
+		}
+		i++;
+	}
 }
 
 void new_func(t_all *all, t_cmd *cmd)
@@ -137,12 +201,18 @@ void new_func(t_all *all, t_cmd *cmd)
 	//TODO: check for cmd->exec for file errors before executing
 	
 	fd_files(all, cmd);
-	if (cmd->valid)
+	if (cmd->valid == 1)
 		execute_cmd(all, cmd);
-	else if (cmd->exec && all->pip)	
+	else if (cmd->valid == 2 && cmd->exec && all->pip)	
 		s_cmd(all, cmd);
-	else if (cmd->exec && !all->pip)
+	else if (cmd->valid == 2 && cmd->exec && !all->pip)
 		s_last(all, cmd);
+	else if (!cmd->valid)
+	{
+		write(2, "\0", 1);
+		write(2, ": command not found\n", 20);
+		all->error = 127;
+	}
 	// else if (cmd->exec && (all->inx == all->pip || all->pip == 0))
 	// {
 	// 	//printf("here\n");
