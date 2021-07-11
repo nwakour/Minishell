@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/10 18:09:41 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/11 19:20:09 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int		main(int argc, char **argv, char **env)
 	{
 		all.error = 0;
 		line = ft_strdup("");
-		terminal(&all, &line);
+		terminal(&all, &line, "Minishell->>> ");
 		if (line[0] != '\0')
 		{
 			ref_line = parse(&all, line);
