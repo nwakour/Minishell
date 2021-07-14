@@ -1,25 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isprint.c                                       :+:      :+:    :+:   */
+/*   ft_isstingdigit.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/12 12:40:57 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/12 12:33:24 by nwakour          ###   ########.fr       */
+/*   Created: 2021/04/29 16:23:35 by nwakour           #+#    #+#             */
+/*   Updated: 2021/07/12 12:34:12 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isprint(int c)
+int	ft_isstingdigit(char *s)
 {
-	if (c >= 32 && c <= 126)
+	int	i;
+
+	i = -1;
+	if (s[0] == '-' || s[0] == '+')
 	{
-		return (1);
+		i++;
+		if (s[1] == '\0')
+			return (0);
 	}
-	else
+	while (s[++i])
 	{
-		return (0);
+		if (s[i] >= '0' && s[i] <= '9')
+			continue ;
+		else
+			return (0);
 	}
+	return (1);
 }

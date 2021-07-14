@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 18:42:51 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/11 19:18:54 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/14 13:12:15 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ int terminal(t_all *all, char **line, char *promt)
 			{
 				tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, ft_putc);
 				tputs(all->tccmd->dl, 1, ft_putc);
-				write(1,"Minishell->>> ", 14);
+				ft_putstr_fd(promt, 1);
 				if (tmp)
 				{
 					if (!tmp->prev && !help)
@@ -192,7 +192,7 @@ int terminal(t_all *all, char **line, char *promt)
 			{
 				tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, ft_putc);
 				tputs(all->tccmd->dl, 1, ft_putc);
-				write(1,"Minishell->>> ", 14);
+				ft_putstr_fd(promt, 1);
 				if (tmp && tmp->prev)
 				{
 					prev_node(&tmp);
@@ -228,7 +228,7 @@ int terminal(t_all *all, char **line, char *promt)
 					tputs(tgetstr("dc", NULL), 1, ft_putc);
 					tputs(tgetstr("ed", NULL), 1, ft_putc);
 					tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, ft_putc);
-					write(1,"Minishell->>> ", 14);
+					ft_putstr_fd(promt, 1);
 					(*line)[l - 1] = '\0';
 						write(1, *line, l - 1);
 				}
@@ -243,7 +243,7 @@ int terminal(t_all *all, char **line, char *promt)
 					tputs(tgetstr("dc", NULL), 1, ft_putc);
 					tputs(tgetstr("ed", NULL), 1, ft_putc);
 					tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, ft_putc);
-					write(1,"Minishell->>> ", 14);
+					ft_putstr_fd(promt, 1);
 					if (!edit)
 						s = ft_strdup(s);
 					s[l - 1] = '\0';
