@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+         #
+#    By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 19:06:53 by nwakour           #+#    #+#              #
-#    Updated: 2021/07/14 17:10:45 by hmahjour         ###   ########.fr        #
+#    Updated: 2021/07/14 19:12:34 by nwakour          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,9 +20,9 @@ OBJS			=	${SRCS:.c=.o}
 
 CC				=	gcc
 
-FLAGS           =	-Wall -Wextra -Werror -ltermcap
+FLAGS           =	-Wall -Wextra -Werror -ltermcap -lreadline
 
-READLINE		= -lreadline -L /Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include
+READLINE		=  -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include
 
 RM				=	rm -f
 
@@ -32,10 +32,11 @@ LIBFLAGS 		= 	-I ./libft -L ./libft -L . ./libft/*.c
 
 LIBFT_PATH 		= 	./libft
 
-all:			$(NAME) libft_all
+all:			libft_all $(NAME)
 
-$(NAME):	$(OBJS)
-				@$(CC) -o $(NAME) $(SRCS) $(INCLUDE) $(LIBFLAGS) $(FLAGS) $(READLINE)
+$(NAME):	$(SRCS)
+				@$(CC) $(FLAGS) -o $(NAME) $(SRCS) $(INCLUDE) $(LIBFLAGS)  $(READLINE)
+				@echo "Minishell was created successfully"
 
 clean:			libft_clean
 				@$(RM) $(OBJS)
