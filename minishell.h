@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 17:08:34 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/14 19:45:02 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct		s_all
 	int		inx;
 	int		nextin;
 	int		hdoc;
+	int		add;
 }					t_all;
 
 /*				minishell			*/

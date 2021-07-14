@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 15:33:49 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/14 19:53:17 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,16 +145,15 @@ char	*s_readdoc(t_all *all, char *limit, int expand)
 	int	fd;
 	
 	expand = 0;
+	all->add = 0;
 	file = ft_strjoin("/tmp/s_", ft_itoa(all->hdoc));
 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
-	line = ft_strdup("");
 	s_readline(all, &line, ">");
-	while (ft_strcmp(line, limit))
+	while (line && ft_strcmp(line, limit))
 	{
 		//TODO: check expand for env variables
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
-		line = ft_strdup("");
 		s_readline(all, &line, ">");
 	}
 	close(fd);
