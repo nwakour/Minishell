@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 17:13:32 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/14 19:45:36 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,16 +98,12 @@ int		main(int argc, char **argv, char **env)
 		all.error = 0;
 		line = ft_strdup("");
 		//terminal(&all, &line, "Minishell->>> ");
+		all.add = 1;
 		s_readline(&all, &line, "Minisheeesh-> ");
-		if (sigmanum == 1)
-		{
-			rl_replace_line("sheesh", 0);
-			continue;
-		}
 		if (line && line[0] != '\0')
 		{
 			ref_line = parse(&all, line);
-			printf("ref = %s\n", ref_line);
+			//printf("ref = %s\n", ref_line);
 			if (!all.error && line[0] != '\0')
 			{
 				if (ft_strchr(ref_line, '|'))
@@ -131,11 +127,11 @@ int		main(int argc, char **argv, char **env)
 				
 			}
 		}
-		// else
-		// {
-		// 	printf("exit\n");
-		// 	exit(0);
-		// }
+		else if (!line)
+		{
+			printf("exit\n");
+			exit(0);
+		}
 		if (line && line[0] != '\0')
 			lstadd_dlist(&all.l_history, lstnewc(ft_strdup(line)));
 	}
