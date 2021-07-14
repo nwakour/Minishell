@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:54:26 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/07/14 15:59:20 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/14 19:04:51 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	s_handle_c()
 }
 
 void	s_readline(t_all *all, char **line, char *prompt)
-{
+{  
 	(void)all;
 	signal(SIGINT, s_handle_c);
 	signal(SIGQUIT, SIG_IGN);
