@@ -1,25 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isprint.c                                       :+:      :+:    :+:   */
+/*   ft_strjoin_char.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/12 12:40:57 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/12 12:33:24 by nwakour          ###   ########.fr       */
+/*   Created: 2021/07/13 17:19:35 by nwakour           #+#    #+#             */
+/*   Updated: 2021/07/13 17:41:57 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isprint(int c)
+char	*ft_strjoin_char(char *s, char c)
 {
-	if (c >= 32 && c <= 126)
-	{
-		return (1);
-	}
-	else
-	{
+	int		i;
+	char	*str;
+
+	i = 0;
+	while (s[i])
+		i++;
+	str = (char *)malloc(sizeof(char) * (i + 2));
+	if (!str)
 		return (0);
-	}
+	i = -1;
+	while (s[++i])
+		str[i] = s[i];
+	str[i] = c;
+	str[i + 1] = '\0';
+	free(s);
+	return (str);
 }

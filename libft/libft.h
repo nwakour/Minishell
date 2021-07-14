@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 17:30:59 by nwakour           #+#    #+#             */
-/*   Updated: 2021/04/07 17:49:52 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/13 17:23:58 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 # include <limits.h>
 # include <fcntl.h>
 
-typedef struct		s_list
+typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
-}					t_list;
+}				t_list;
 
 int					ft_atoi(const char *str);
 long long			ft_atol(const char *str);
@@ -64,6 +64,7 @@ char				*ft_strtrim(char const *s1, char const *set);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
+char				*ft_strjoin_free(char *s1, char *s2);
 t_list				*ft_lstnew(void *content);
 t_list				*ft_lstlast(t_list *lst);
 char				*ft_strndup(const char *str, size_t size);
@@ -74,9 +75,9 @@ void				ft_lstdelone(t_list *lst, void (*del)(void*));
 void				ft_lstclear(t_list **lst, void (*del)(void*));
 void				ft_lstiter(t_list *lst, void (*f)(void*));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void*),
-								void (*del)(void*));
+						void (*del)(void*));
 void				ft_lstclear_one_if(t_list **list, void *ref,
-					int (*f)(), void (*del)(void*));
+						int (*f)(), void (*del)(void*));
 int					get_next_line(int fd, char **line);
 int					ft_struct_list(t_list **list, void **param, size_t size);
 void				ft_struct_bezero(void *param, size_t size);
@@ -85,5 +86,8 @@ void				ft_lstclear_last(t_list **list, void (*del)(void*));
 char				**ft_split_ref(char const *s, char const *ref, char c);
 char				*ft_strcutone(const char *str, size_t d);
 char				*ft_straddone(const char *str, size_t d, char c);
+int					ft_isstingdigit(char *s);
+int					ft_atoi_err(const char *str, int *len);
+char				*ft_strjoin_char(char *s, char c);
 
 #endif
