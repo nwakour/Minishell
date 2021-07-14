@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 14:53:16 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/07/10 18:11:53 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/11 19:27:42 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 
 void	s_last(t_all *all, t_cmd *cmd)
 {
-	printf("%s %d %d\n", cmd->cmd, cmd->infd, cmd->fd);
+	//printf("%s %d %d\n", cmd->cmd, cmd->infd, cmd->fd);
 	cmd->pid = fork();
 	if (cmd->pid < 0)
 		s_perror(all, "fork", 1);

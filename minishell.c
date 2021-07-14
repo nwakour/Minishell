@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/11 19:20:09 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/14 16:08:55 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,17 @@ int		main(int argc, char **argv, char **env)
 	init_term(all.tccmd);
 	while (1)
 	{
+		sigmanum = 0;
 		all.error = 0;
 		line = ft_strdup("");
-		terminal(&all, &line, "Minishell->>> ");
-		if (line[0] != '\0')
+		//terminal(&all, &line, "Minishell->>> ");
+		s_readline(&all, &line, "Minisheeesh-> ");
+		if (sigmanum == 1)
+		{
+			rl_replace_line("sheesh", 0);
+			continue;
+		}
+		if (line && line[0] != '\0')
 		{
 			ref_line = parse(&all, line);
 			printf("ref = %s\n", ref_line);
@@ -126,7 +133,12 @@ int		main(int argc, char **argv, char **env)
 				
 			}
 		}
-		if (line[0] != '\0')
+		// else
+		// {
+		// 	printf("exit\n");
+		// 	exit(0);
+		// }
+		if (line && line[0] != '\0')
 			lstadd_dlist(&all.l_history, lstnewc(ft_strdup(line)));
 	}
 	return (0);

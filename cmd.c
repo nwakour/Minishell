@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/11 19:21:48 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/14 15:33:49 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,20 +147,15 @@ char	*s_readdoc(t_all *all, char *limit, int expand)
 	expand = 0;
 	file = ft_strjoin("/tmp/s_", ft_itoa(all->hdoc));
 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
-	// write(1, ">", 1);
-	// get_next_line(0, &line);
 	line = ft_strdup("");
-	terminal(all, &line, ">");
+	s_readline(all, &line, ">");
 	while (ft_strcmp(line, limit))
 	{
 		//TODO: check expand for env variables
-		// write(1, line, ft_strlen(line));
-		// write(1, "\n", 1);
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		line = ft_strdup("");
-		// write(1, ">", 1);
-		terminal(all, &line, ">");
+		s_readline(all, &line, ">");
 	}
 	close(fd);
 	return (file);

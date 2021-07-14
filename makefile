@@ -6,7 +6,7 @@
 #    By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 19:06:53 by nwakour           #+#    #+#              #
-#    Updated: 2021/07/11 14:48:37 by hmahjour         ###   ########.fr        #
+#    Updated: 2021/07/14 16:20:17 by hmahjour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,11 +28,13 @@ SRC_LIBFT = libft/ft_bzero.c libft/ft_strlen.c libft/ft_calloc.c libft/ft_strncm
 	libft/ft_lstclear.c libft/ft_lstdelone.c libft/ft_lstiter.c libft/ft_lstlast.c libft/ft_lstclear_one_if.c\
 	libft/ft_lstmap.c libft/ft_lstsize.c libft/get_next_line.c libft/ft_array_char.c libft/ft_isspace.c libft/ft_atol.c\
 
-SRC_SHELL =	minishell.c builtins.c env.c fd_files.c handle_quotes.c make_ref.c parse.c helpers.c cmd.c history.c terminal.c path.c system.c
+SRC_SHELL =	minishell.c builtins.c env.c fd_files.c handle_quotes.c make_ref.c parse.c helpers.c cmd.c history.c terminal.c path.c system.c readline.c
 
 SRCS = ${SRC_SHELL} ${SRC_LIBFT}
 
 INCL = -Iincludes/
+
+READLINE = -lreadline -L /Users/$(USER)/.brew/opt/readline/lib -I /Users/$(USER)/.brew/opt/readline/include
 
 OBJS = ${SRCS:.c=.o}
 
@@ -41,7 +43,7 @@ FLAGS = -Wall -Wextra -Werror
 all : $(NAME)
 
 $(NAME) : ${OBJS}
-		gcc -fsanitize=address ${FLAGS} -o $(NAME) ${OBJS} -ltermcap
+		gcc -fsanitize=address ${FLAGS} ${READLINE} -o $(NAME) ${OBJS} -ltermcap
 
 .c.o : ${SRCS}
 		gcc -g ${FLAGS} -c ${INCL} $< -o ${<:.c=.o}

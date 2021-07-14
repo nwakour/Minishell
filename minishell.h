@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/11 19:20:07 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/14 15:59:00 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <time.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 # define OPEN_S_Q 1
 # define CLOSE_S_Q 2
@@ -38,6 +40,9 @@
 # define GREATER 63
 # define LESSER 64
 # define LESSER_Q 61
+
+int	sigmanum;
+
 typedef struct		s_cmd
 {
 	char	*cmd;
@@ -180,5 +185,7 @@ void	s_exec(t_all *all, t_cmd *cmd);
 void	s_cmd(t_all *all, t_cmd *cmd);
 void	s_last(t_all *all, t_cmd *cmd);
 void	s_heredoc(t_all *all, t_cmd *cmd);
+
+void	s_readline(t_all *all, char **line, char *prompt);
 
 #endif
