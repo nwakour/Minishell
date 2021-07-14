@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+         #
+#    By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 19:06:53 by nwakour           #+#    #+#              #
-#    Updated: 2021/07/14 16:57:27 by nwakour          ###   ########.fr        #
+#    Updated: 2021/07/14 17:10:45 by hmahjour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,15 +14,15 @@
 
 NAME			=	minishell
 
-SRCS			=	minishell.c builtins.c env.c fd_files.c handle_quotes.c make_ref.c parse.c helpers.c cmd.c history.c terminal.c path.c system.c
+SRCS			=	minishell.c builtins.c env.c fd_files.c handle_quotes.c make_ref.c parse.c helpers.c cmd.c history.c terminal.c path.c system.c readline.c
 
 OBJS			=	${SRCS:.c=.o}
 
 CC				=	gcc
 
-READLINE 		=	-lreadline -L /Users/$(USER)/.brew/opt/readline/lib -I /Users/$(USER)/.brew/opt/readline/include
-
 FLAGS           =	-Wall -Wextra -Werror -ltermcap
+
+READLINE		= -lreadline -L /Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include
 
 RM				=	rm -f
 

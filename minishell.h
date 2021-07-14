@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 15:59:00 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/14 17:08:34 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # define VAR 36
 # define TEXT 97
 # define PIP 124
-# define SPACE 32
+# define SPICE 32
 # define FLAG 45
 # define SKIP 48
 # define GREAT 62

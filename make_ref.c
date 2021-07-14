@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_ref.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:00:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/10 16:32:57 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/14 17:08:57 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		cor_char(char c)
 	// else if (c == ';')
 	// 	return (COLON);
 	else if (c == ' ')
-		return (SPACE);
+		return (SPICE);
 	else if (c == '|')
 		return (PIP);
 	else if (c == '-')

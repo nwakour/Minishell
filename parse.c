@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/11 14:57:54 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/14 17:09:50 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ char	*parse(t_all *all, char *line)
 			handle_d_quotes(all, &i, &ref, line);
 		else if (ret == FLAG)
 			ref[i] = FLAG;
-		else if (ret == SPACE)
-			ref[i] = SPACE;
+		else if (ret == SPICE)
+			ref[i] = SPICE;
 		else if (ret == PIP)
 		{
 			ref[i] = PIP;
 			while (line[i + 1] == ' ')
-				ref[++i] = SPACE;
+				ref[++i] = SPICE;
 			if (line[i + 1] == PIP)
 			{
 				all->error = 1;
@@ -53,7 +53,7 @@ char	*parse(t_all *all, char *line)
 		// 	ref[i] = COLON;
 		// 	i++;
 		// 	while (line[++i] == ' ')
-		// 		ref[i] = SPACE;
+		// 		ref[i] = SPICE;
 		// 	if (line[i] == PIP || line[i] == COLON)
 		// 		all->error = 1;
 		// 	else

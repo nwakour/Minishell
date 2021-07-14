@@ -6,12 +6,10 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 16:08:55 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/14 17:13:32 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#include "libft/libft.h"
 #include "minishell.h"
 
 void	read_data(t_all *all)
