@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 18:42:51 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 13:12:15 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/14 19:05:59 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ char getch(t_all *all)
 	return ch;
 }
 
+
+
 void c_Handler()
 {
     // signal(SIGINT, c_Handler);
@@ -148,7 +150,7 @@ int terminal(t_all *all, char **line, char *promt)
 		c = getch(all);
 		if (c == 4)
 		{
-			write(1, "ctrl + d\nMinishell->>> ", 24);
+			write(1, "ctrl + d\nMinishell> ", 24);
 			continue ;
 		}
 		if (c == 12)

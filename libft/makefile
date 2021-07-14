@@ -6,7 +6,7 @@
 #    By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/12 11:36:03 by nwakour           #+#    #+#              #
-#    Updated: 2021/07/14 11:48:00 by nwakour          ###   ########.fr        #
+#    Updated: 2021/07/14 19:13:03 by nwakour          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRCS =		ft_bzero.c ft_strlen.c ft_calloc.c ft_strncmp.c ft_strdup.c ft_strjoin_f
 			ft_lstclear.c ft_lstdelone.c ft_lstiter.c ft_lstlast.c ft_atoi_err.c\
 			ft_lstmap.c ft_lstsize.c get_next_line.c ft_array_char.c ft_isspace.c ft_atol.c\
 
-OBJS	=	$(SRCS:.c=.o)
+OBJS	=	${SRCS:.c=.o}
 
 CC		=	gcc
 
@@ -36,10 +36,11 @@ RM		=	rm -f
 
 all:		$(NAME)
 
-$(NAME):	$(OBJS)
+$(NAME):	$(SRCS)
 				@$(CC) -c $(SRCS) $(FLAGS)
 				@ar rc $(NAME) $(OBJS)
 				@ranlib $(NAME)
+				@echo "The library was created successfully"
 
 clean:
 			@$(RM) $(OBJS)
