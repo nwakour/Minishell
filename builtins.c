@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	ft_echo(char **arg, int fd)
+void	ft_echo(t_all *all, char **arg, int fd)
 {
 	int i;
 	int n;
@@ -40,6 +40,7 @@ void	ft_echo(char **arg, int fd)
 	}
 	if (!n)
 		ft_putstr_fd("\n", fd);
+	all->exits = 0;
 }
 
 int		ft_cd(t_all *all, char* path, int args)
@@ -56,7 +57,7 @@ int		ft_cd(t_all *all, char* path, int args)
 	if (args > 1)
 	{
 		printf("too many arguments\n");
-		return 0;
+		all->exits = (1);
 	}
 	if (path && path[0] == '~')
 	{
@@ -69,7 +70,10 @@ int		ft_cd(t_all *all, char* path, int args)
 	else
 		r = chdir(path);
 	if (r != 0)
+	{
 		printf("cd: no such file or directory: %s\n", path);
+		all->exits = 1;
+	}
 	else
 	{
 		env = (t_env*)malloc(sizeof(t_env));
@@ -242,9 +246,49 @@ void	ft_unset(t_all *all, char *var)
 	}
 }
 
-void	ft_exit(void)
+int		s_isnum(char *str)
+{
+	int ret;
+	int i;
+
+	ret = 1;
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+		{
+			ret = 0;
+			break;
+		}
+		i++;
+	}
+	return (ret);
+}
+
+void	ft_exit(t_all *all, t_cmd *cmd)
 {
 	// free(line);
 	// system("leaks minishell");
-	exit(0);
+	if (cmd->args == 0)
+		exit(all->exits);
+	if (cmd->args >= 1)
+	{
+		if (!s_isnum(cmd->arg[0]))
+		{
+			write(2, "exit\nexit: ", 11);
+			write(2, cmd->arg[0], ft_strlen(cmd->arg[0]));
+			write(2, ": numeric argument required",  26);
+			exit(255);
+		}
+		else if (cmd->args == 1)
+		{
+			exit(ft_atoi(cmd->arg[0]));
+		}
+		if (cmd->args > 1)
+		{
+			write(2, "exit: ", 5);
+			write(2, "too many arguments", 17);
+			all->exits = 1;
+		}
+	}
 }

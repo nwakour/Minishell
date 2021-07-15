@@ -21,7 +21,7 @@ void	s_perror(t_all *all, char *name, int err)
 	write(2, ": ", 2);
 	write(2, strerror(errno), len);
 	write(2, "\n", 1);
-	all->error = err;
+	all->exits = err;
 }
 
 void	s_wait(t_all *all, t_cmd *cmd)
@@ -30,7 +30,7 @@ void	s_wait(t_all *all, t_cmd *cmd)
 
 	waitpid(cmd->pid, &status, 0);
 	if (WEXITED)
-		all->error = WEXITSTATUS(status);
+		all->exits = WEXITSTATUS(status);
 }
 
 char	*s_join(char *name, char c, char *val)

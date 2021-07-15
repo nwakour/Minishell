@@ -89,6 +89,7 @@ typedef struct		s_all
 	struct termios *old;
 	struct termios *new;
 	int		error;
+	int		exits;
 	int		pip;
 	int		inx;
 	int		nextin;
@@ -102,14 +103,14 @@ void    export_parse(t_all *all, char *s);
 void	get_data(t_all *all, char* line, char *ref_line);
 
 /*				builtins			*/
-void	ft_echo(char **arg, int fd);
+void	ft_echo(t_all *all, char **arg, int fd);
 int		ft_cd(t_all *all, char* path, int args);
 void	ft_pwd(int fd);
 void	ft_export_na(t_all *all, int fd);
 void	ft_export_wa(t_all *all, t_env *var);
 void	ft_env(t_all *all, int fd);
 void	ft_unset(t_all *all, char *var);
-void	ft_exit(void);
+void	ft_exit(t_all *all, t_cmd *cmd);
 
 /*				parse				*/
 
