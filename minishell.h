@@ -41,7 +41,7 @@
 # define LESSER 64
 # define LESSER_Q 61
 
-int	sigmanum;
+int	g_child;
 
 typedef struct		s_cmd
 {
