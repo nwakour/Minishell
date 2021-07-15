@@ -135,5 +135,5 @@ int		main(int argc, char **argv, char **env)
 		if (line && line[0] != '\0')
 			lstadd_dlist(&all.l_history, lstnewc(ft_strdup(line)));
 	}
-	return (0);
+	return (all.exits);
 }

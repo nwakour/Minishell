@@ -241,7 +241,7 @@ void	execute_cmd(t_all *all, t_cmd *cmd)
 	}
 	else if (!ft_strcmp(cmd->cmd, "echo"))
 	{
-		ft_echo(cmd->arg, cmd->fd);
+		ft_echo(all, cmd->arg, cmd->fd);
 	}
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		ft_pwd(cmd->fd);
@@ -261,7 +261,7 @@ void	execute_cmd(t_all *all, t_cmd *cmd)
 	else if (!ft_strcmp(cmd->cmd, "env"))
 		ft_env(all, cmd->fd);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		ft_exit();
+		ft_exit(all, cmd);
 		// all->ex = 1;
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 	{

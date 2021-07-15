@@ -163,7 +163,7 @@ void	get_pips(t_all *all, char *line, char *ref_line)
 	{
 		write(2, "\0", 1);
 		write(2, ": command not found\n", 20);
-		all->error = 127;
+		all->exits = 127;
 	}
 	all->l_cmd = NULL;
 	// if (l_colon)
@@ -242,7 +242,7 @@ char *find_var(t_all *all, char *line, char *line_ref)
 				var = ft_strjoinchar(var, line[i]);
 			// j = i;
 			if (var && var[1] == '?' && var[2] == '\0')
-				value = ft_itoa(all->error);
+				value = ft_itoa(all->exits);
 			else
 				value = check_env(all->l_env, var);
 			if (value)
