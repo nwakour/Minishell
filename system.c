@@ -29,8 +29,22 @@ void	s_wait(t_all *all, t_cmd *cmd)
 	int	status;
 
 	waitpid(cmd->pid, &status, 0);
-	if (WEXITED)
+	g_child = 0;
+	if (WIFEXITED(status))
+	{
+		//write(2, "nooo\n", 5);
 		all->exits = WEXITSTATUS(status);
+	}
+	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+		{
+			all->exits = 130;
+			//write(2, "here\n", 5);
+		}
+		else if (WTERMSIG(status) == SIGQUIT)
+			all->exits = 131;
+	}
 }
 
 char	*s_join(char *name, char c, char *val)
@@ -40,7 +54,7 @@ char	*s_join(char *name, char c, char *val)
 	int j;
 	
 	res = (char *)malloc((ft_strlen(name) + ft_strlen(val) + 2) * sizeof(char));
-	if (!res)
+	if (!name || !val || !res)
 		return (NULL);
 	i = 0;
 	j = 0;
@@ -163,6 +177,12 @@ void	s_exec(t_all *all, t_cmd *cmd)
 	}
 	else
 	{
+		if (!paths)
+		{
+			write(2, cmd->cmd, ft_strlen(cmd->cmd));
+			write(2, ": command not found\n", 20);
+			exit(127);
+		}
 		file = s_join(*paths, '/', cmd->cmd);
 		while (*paths && lstat(file, &st))
 		{
@@ -183,6 +203,7 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 	cmd->pid = fork();
 	if (cmd->pid < 0)
 		s_perror(all, "fork", 1);
+	g_child = 1;
 	if (cmd->pid == 0)
 	{
 		dup2(cmd->infd, 0);
@@ -216,6 +237,7 @@ void	s_last(t_all *all, t_cmd *cmd)
 	cmd->pid = fork();
 	if (cmd->pid < 0)
 		s_perror(all, "fork", 1);
+	g_child = 1;
 	if (cmd->pid == 0)
 	{
 		dup2(cmd->infd, 0);

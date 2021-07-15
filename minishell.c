@@ -92,9 +92,9 @@ int		main(int argc, char **argv, char **env)
 	all.old = (struct termios *)malloc(sizeof(struct termios));
 	all.tccmd = (t_tc_cmd*)malloc(sizeof(t_tc_cmd));
 	init_term(all.tccmd);
+	g_child = 0;
 	while (1)
 	{
-		sigmanum = 0;
 		all.error = 0;
 		line = ft_strdup("");
 		//terminal(&all, &line, "Minishell->>> ");

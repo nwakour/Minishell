@@ -14,10 +14,18 @@
 
 void	s_handle_c()
 {
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();	
+	if (!g_child)
+	{	//write(2, "here\n", 5);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else
+	{
+		write(1, "\n", 1);
+		rl_on_new_line();
+	}
 }
 
 void	s_readline(t_all *all, char **line, char *prompt)
