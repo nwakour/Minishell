@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 17:09:50 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/15 16:09:44 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +241,10 @@ char *find_var(t_all *all, char *line, char *line_ref)
 			while (line_ref[++i] == 'v')
 				var = ft_strjoinchar(var, line[i]);
 			// j = i;
-			value = check_env(all->l_env, var);
+			if (var && var[1] == '?' && var[2] == '\0')
+				value = ft_itoa(all->error);
+			else
+				value = check_env(all->l_env, var);
 			if (value)
 				new_line = ft_strjoin(new_line, value);
 			i--;
