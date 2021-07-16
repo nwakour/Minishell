@@ -124,7 +124,6 @@ int		main(int argc, char **argv, char **env)
 			{
 				
 				ft_putstr_fd("syntax error\n", 1);
-				
 			}
 		}
 		else if (!line)

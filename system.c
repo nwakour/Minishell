@@ -194,10 +194,18 @@ void	s_exec(t_all *all, t_cmd *cmd)
 	}
 }
 
+void	s_check_exec(t_all *all, t_cmd *cmd)
+{
+	if (cmd->valid == 1)
+		execute_cmd(all, cmd);
+	else if (cmd->valid == 2 && cmd->exec && all->pip)	
+		s_exec(all, cmd);
+}
+
 void	s_cmd(t_all *all, t_cmd *cmd)
 {
 	int	fd[2]; // needs to be moved to big loop
-
+	
 	if (pipe(fd) < 0)
 		s_perror(all, "pipe", 1);
 	cmd->pid = fork();
@@ -219,7 +227,7 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 			close(fd[0]);
 		if (fd[1] != 1)
 			close(fd[1]);
-		s_exec(all, cmd);
+		s_check_exec(all, cmd);
 	}
 	s_wait(all, cmd);
 	close(fd[1]);

@@ -269,8 +269,10 @@ void	ft_exit(t_all *all, t_cmd *cmd)
 {
 	// free(line);
 	// system("leaks minishell");
-	if (cmd->args == 0 && !all->pip)
-		exit(all->exits);
+	if (cmd->args == 0)
+	{
+		exit(0);
+	}
 	if (cmd->args >= 1)
 	{
 		if (!s_isnum(cmd->arg[0]))
@@ -281,14 +283,12 @@ void	ft_exit(t_all *all, t_cmd *cmd)
 				write(2, "exit: ", 6);
 			write(2, cmd->arg[0], ft_strlen(cmd->arg[0]));
 			write(2, ": numeric argument required\n",  29);
-			if (!all->pip)
-				exit(255);
+			exit(255);
 		}
-		else if (cmd->args == 1)
+		if (s_isnum(cmd->arg[0]) && cmd->args == 1)
 		{
 			all->exits = ft_atoi(cmd->arg[0]);
-			if (!all->pip)
-				exit(all->exits);
+			exit(all->exits);
 		}
 		if (cmd->args > 1)
 		{
