@@ -138,6 +138,12 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 	free(str_ref);
 }
 
+// char	*s_expand(char *line)
+// {
+// 	char	*s_line;
+	
+// }
+
 char	*s_readdoc(t_all *all, char *limit, int expand)
 {
 	char	*line;
