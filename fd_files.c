@@ -26,25 +26,65 @@ void	fd_files(t_all *all, t_cmd *cmd)
 		while (cmd->f_name[++i])
 		{
 			if (cmd->f_name[i][0] == '?')
+			{
 				cmd->fd = open((cmd->f_name[i] + 1), O_RDWR | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+				if (cmd->out)
+					free(cmd->out);
+				cmd->out = ft_strdup(cmd->f_name[i] + 1);
+				cmd->append = 1;
+			}
 			else if (cmd->f_name[i][0] == '>')
+			{
 				cmd->fd = open((cmd->f_name[i] + 1), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+				if (cmd->out)
+					free(cmd->out);
+				cmd->out = ft_strdup(cmd->f_name[i] + 1);
+				cmd->append = 0;
+			}
 			else if (cmd->f_name[i][0] == '<')
 			{
 				cmd->infd = open((cmd->f_name[i] + 1), O_RDONLY);
+				if (cmd->in)
+					free(cmd->in);
+				cmd->in = ft_strdup(cmd->f_name[i] + 1);
+				cmd->link = 0;
 			}
 			else if (cmd->f_name[i][0] == '@')
-				;//
-			if (cmd->fd == -1)
+			{
+				cmd->infd = open((cmd->f_name[i] + 1), O_RDONLY);
+				if (cmd->in)
+					free(cmd->in);
+				cmd->in = ft_strdup(cmd->f_name[i] + 1);
+				cmd->link = 1;
+			}
+			if (cmd->fd == -1 || cmd->infd == -1)
 			{
 				s_perror(all, cmd->f_name[i], 1);
-				all->error = 1; // all->error can be used to save exit status if there's no parsing error
+				all->exits = 1; 
 				cmd->exec = 0;
 			}
+			if (cmd->fd > 1)
+				close(cmd->fd);
+			if (cmd->infd > 1)
+				close(cmd->infd);
 			// if (cmd->f_name[i + 1])
 			// 	close(cmd->fd);
 		}
+		s_cmd_files(cmd);
 	}
 	else
 		cmd->fd = 1;
+}
+
+void	s_cmd_files(t_cmd *cmd)
+{
+	if (cmd->append)
+	{
+		cmd->fd = open(cmd->out, O_RDWR | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+	}
+	else
+	{
+		cmd->fd = open(cmd->out, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+	}
+	cmd->infd = open(cmd->in, O_RDONLY);
 }

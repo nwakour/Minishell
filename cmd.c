@@ -205,9 +205,7 @@ void new_func(t_all *all, t_cmd *cmd)
 	fd_files(all, cmd);
 	if (cmd->valid == 1)
 		execute_cmd(all, cmd);
-	else if (cmd->valid == 2 && cmd->exec && all->pip)	
-		s_cmd(all, cmd);
-	else if (cmd->valid == 2 && cmd->exec && !all->pip)
+	else if (cmd->valid == 2 && cmd->exec)
 		s_last(all, cmd);
 	else if (!cmd->valid)
 	{
@@ -220,8 +218,8 @@ void new_func(t_all *all, t_cmd *cmd)
 	// 	//printf("here\n");
 	// 	s_last(all, cmd);
 	// }
-	if (cmd->fd > 1)
-		close(cmd->fd);
+	// if (cmd->fd > 1)
+	// 	close(cmd->fd);
 	// i = -1;
 	// while (str[++i])
 	// 	free(str[i]);

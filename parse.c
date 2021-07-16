@@ -149,17 +149,17 @@ void	get_pips(t_all *all, char *line, char *ref_line)
 	tmp = all->l_cmd;
 	while (tmp->next)
 	{
-		new_func(all, tmp->content);
+		fd_files(all, ((t_cmd*)tmp->content));
+		s_cmd(all, tmp->content);
+		//new_func(all, tmp->content);
 		tmp = tmp->next;
 	}
 	fd_files(all, ((t_cmd*)tmp->content));
-	if (((t_cmd*)tmp->content)->valid == 1)
+	if (((t_cmd*)tmp->content)->valid > 0)
 	{
-		execute_cmd(all, tmp->content);
-	}
-	else if (((t_cmd*)tmp->content)->valid == 2)
 		s_last(all, tmp->content);
-	else if (!(((t_cmd*)tmp->content)->valid))
+	}
+	else
 	{
 		write(2, "\0", 1);
 		write(2, ": command not found\n", 20);

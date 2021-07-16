@@ -49,6 +49,10 @@ typedef struct		s_cmd
 	char	**arg;
 	int		infd;
 	int		fd;
+	char	*in;
+	char	*out;
+	int		append;
+	int		link;
 	char	**f_name;
 	int		args;
 	int		valid;
@@ -189,5 +193,6 @@ void	s_last(t_all *all, t_cmd *cmd);
 void	s_heredoc(t_all *all, t_cmd *cmd);
 
 void	s_readline(t_all *all, char **line, char *prompt);
+void	s_cmd_files(t_cmd *cmd);
 
 #endif
