@@ -215,7 +215,7 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 	if (cmd->pid == 0)
 	{
 		dup2(cmd->infd, 0);
-		if (cmd->fd != 1)
+		if (cmd->out)
 			dup2(cmd->fd, 1);
 		else
 			dup2(fd[1], 1);
@@ -230,7 +230,8 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 		s_check_exec(all, cmd);
 	}
 	s_wait(all, cmd);
-	close(fd[1]);
+	if (fd[1] > 1)
+		close(fd[1]);
 	if (cmd->infd > 1)
 		close(cmd->infd);
 	if (cmd->fd > 1)
