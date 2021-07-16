@@ -223,9 +223,9 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 			close(cmd->infd);
 		if (cmd->fd > 1)
 			close(cmd->fd);
-		if (fd[0])
+		if (fd[0] > 1)
 			close(fd[0]);
-		if (fd[1] != 1)
+		if (fd[1] > 1)
 			close(fd[1]);
 		s_check_exec(all, cmd);
 	}
