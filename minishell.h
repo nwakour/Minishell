@@ -108,8 +108,8 @@ void	get_data(t_all *all, char* line, char *ref_line);
 
 /*				builtins			*/
 void	ft_echo(t_all *all, char **arg, int fd);
-int		ft_cd(t_all *all, char* path, int args);
-void	ft_pwd(int fd);
+void	ft_cd(t_all *all, char* path, int args);
+void	ft_pwd(t_all *all, int fd);
 void	ft_export_na(t_all *all, int fd);
 void	ft_export_wa(t_all *all, t_env *var);
 void	ft_env(t_all *all, int fd);
