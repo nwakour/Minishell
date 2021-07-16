@@ -41,6 +41,8 @@ void	ft_echo(t_all *all, char **arg, int fd)
 	if (!n)
 		ft_putstr_fd("\n", fd);
 	all->exits = 0;
+	if (all->pip)
+		exit(0);
 }
 
 int		ft_cd(t_all *all, char* path, int args)
