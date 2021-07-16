@@ -45,7 +45,7 @@ void	ft_echo(t_all *all, char **arg, int fd)
 		exit(0);
 }
 
-int		ft_cd(t_all *all, char* path, int args)
+void		ft_cd(t_all *all, char* path, int args)
 {
 	int r;
 	t_env *env;
@@ -55,11 +55,19 @@ int		ft_cd(t_all *all, char* path, int args)
 	env->value = getcwd(NULL, 0);
 	ft_export_wa(all, env);
 	if (args == 1 && !path)
-		return 0;
+	{
+		if (all->pip)
+			exit(0);
+		else
+			all->exits = 0;
+	}
 	if (args > 1)
 	{
 		printf("too many arguments\n");
-		all->exits = (1);
+		if (all->pip)
+			exit(1);
+		else
+			all->exits = 1;
 	}
 	if (path && path[0] == '~')
 	{
@@ -83,10 +91,16 @@ int		ft_cd(t_all *all, char* path, int args)
         env->value = getcwd(NULL, 0);
     	ft_export_wa(all, env);
 	}
-	return (r);
+	if (all->pip)
+		exit(r);
+	else
+		all->exits = r;
+	all->exits = 0;
+	if (all->pip)
+		exit(0);
 }
 
-void	ft_pwd(int fd)
+void	ft_pwd(t_all *all, int fd)
 {
 	char *s;
 
@@ -94,6 +108,9 @@ void	ft_pwd(int fd)
 	ft_putstr_fd(s, fd);
 	ft_putstr_fd("\n", fd);
 	free(s);
+	all->exits = 0;
+	if (all->pip)
+		exit(0);
 }
 
 t_list	*search_lst(t_list *list, t_env *var)

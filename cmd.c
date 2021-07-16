@@ -248,7 +248,7 @@ void	execute_cmd(t_all *all, t_cmd *cmd)
 		ft_echo(all, cmd->arg, cmd->fd);
 	}
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
-		ft_pwd(cmd->fd);
+		ft_pwd(all, cmd->fd);
 	else if (!ft_strcmp(cmd->cmd, "cd"))
 		ft_cd(all, cmd->arg[0], cmd->args);
 	else if (!ft_strcmp(cmd->cmd, "export"))
@@ -261,6 +261,9 @@ void	execute_cmd(t_all *all, t_cmd *cmd)
 		}
 		else
 			ft_export_na(all, cmd->fd);
+		all->exits = 0;
+		if (all->pip)
+			exit(0);
 	}
 	else if (!ft_strcmp(cmd->cmd, "env"))
 		ft_env(all, cmd->fd);
@@ -275,6 +278,9 @@ void	execute_cmd(t_all *all, t_cmd *cmd)
 			while (cmd->arg[++i])
 				ft_unset(all, cmd->arg[i]);
 		}
+		all->exits = 0;
+		if (all->pip)
+			exit(0);
 	}
 	else
 		read_data(all);
