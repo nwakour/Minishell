@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 17:30:59 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/13 17:23:58 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/17 15:54:04 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,6 @@ char				*ft_straddone(const char *str, size_t d, char c);
 int					ft_isstingdigit(char *s);
 int					ft_atoi_err(const char *str, int *len);
 char				*ft_strjoin_char(char *s, char c);
+char				*ft_str_revjoin_char(char c, char *s);
 
 #endif

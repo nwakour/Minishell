@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/17 15:25:08 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/17 16:05:04 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,25 +127,7 @@ void	get_cmd(t_all *all, char **line_mask)
 	while (i > 0 && split_mask[--i])
 	{
 		if (is_char_from_set(split_mask[i][MASK][0], "><?=@"))
-		{
-			if (split_mask[i][MASK][0] == '?')
-			{
-				all->cmd->f_name[--redirs] = split_mask[i][LINE];
-				all->cmd->f_name[redirs][0] = '?';
-			}
-			else if (split_mask[i][MASK][0] == '@')
-			{
-				all->cmd->f_name[--redirs] = split_mask[i][LINE];
-				all->cmd->f_name[redirs][0] = '@';
-			}
-			else if (split_mask[i][MASK][0] == '=')
-			{
-				all->cmd->f_name[--redirs] = split_mask[i][LINE];
-				all->cmd->f_name[redirs][0] = '=';
-			}
-			else
-				all->cmd->f_name[--redirs] = split_mask[i][LINE];
-		}
+			all->cmd->f_name[--redirs] = split_mask[i][LINE];
 		else if (i == 0 || (i != 0 && all->cmd->cmd == NULL && args == 0))
 			all->cmd->cmd = split_mask[i][LINE];
 		else
