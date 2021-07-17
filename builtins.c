@@ -56,18 +56,17 @@ void		ft_cd(t_all *all, char* path, int args)
 	ft_export_wa(all, env);
 	if (args == 1 && !path)
 	{
+		all->exits = 0;
 		if (all->pip)
 			exit(0);
-		else
-			all->exits = 0;
 	}
 	if (args > 1)
 	{
-		printf("too many arguments\n");
+		write(2, "cd: too many arguments\n", 23);
+		//printf("too many arguments\n");
+		all->exits = 1;
 		if (all->pip)
 			exit(1);
-		else
-			all->exits = 1;
 	}
 	if (path && path[0] == '~')
 	{
@@ -81,8 +80,15 @@ void		ft_cd(t_all *all, char* path, int args)
 		r = chdir(path);
 	if (r != 0)
 	{
-		printf("cd: no such file or directory: %s\n", path);
+		//printf("cd: no such file or directory: %s\n", path);
+		write(2, "cd: ", 4);
+		write(2, path, ft_strlen(path));
+		write(2, ": no such file or directory", 27);
+		
+		write(1, "\n", 1);
 		all->exits = 1;
+		if (all->pip)
+			exit(1);
 	}
 	else
 	{
@@ -90,14 +96,14 @@ void		ft_cd(t_all *all, char* path, int args)
         env->name = "PWD";
         env->value = getcwd(NULL, 0);
     	ft_export_wa(all, env);
+		all->exits = 0;
+		if (all->pip)
+			exit(0);
 	}
-	if (all->pip)
-		exit(r);
-	else
-		all->exits = r;
-	all->exits = 0;
-	if (all->pip)
-		exit(0);
+	
+	// all->exits = r;
+	// if (all->pip)
+	// 	exit(r);
 }
 
 void	ft_pwd(t_all *all, int fd)
