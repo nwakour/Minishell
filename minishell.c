@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 19:45:36 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/17 15:26:10 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,74 +65,61 @@ void    export_parse(t_all *all, char *s)
     ft_export_wa(all, env);
 }
 
-void	get_data(t_all *all, char *line, char *ref_line)
-{
-	if (!line)
-		return ;
-	if (ft_strchr(ref_line, ';'))
-		get_colons(all, line, ref_line);
-	else if (ft_strchr(ref_line, '|'))
-		get_pips(all, line, ref_line);
-	else
-	 	get_cmd(all, line, ref_line);
-}
+// void	get_data(t_all *all, char *line, char *ref_line)
+// {
+// 	if (!line)
+// 		return ;
+// 	if (ft_strchr(ref_line, ';'))
+// 		get_colons(all, line, ref_line);
+// 	else if (ft_strchr(ref_line, '|'))
+// 		get_pips(all, line, ref_line);
+// 	else
+// 	 	get_cmd(all, line, ref_line);
+// }
 
 int		main(int argc, char **argv, char **env)
 {
 	t_all	all;
-	char *ref_line;
-	char *line;
+	char **line_mask;
 
 	if (argc > 1)
 		return (0);
 	(void)argv;
-	(void)env;
 	ft_struct_bezero(&all, sizeof(t_all));
 	parce_env(&all, env);
-	all.old = (struct termios *)malloc(sizeof(struct termios));
-	all.tccmd = (t_tc_cmd*)malloc(sizeof(t_tc_cmd));
-	init_term(all.tccmd);
 	g_child = 0;
 	while (1)
 	{
 		all.error = 0;
-		line = ft_strdup("");
-		//terminal(&all, &line, "Minishell->>> ");
 		all.add = 1;
-		s_readline(&all, &line, "Minisheeesh-> ");
-		if (line && line[0] != '\0')
+		line_mask = s_readline(&all, "Minisheeesh-> ");
+		if (line_mask)
 		{
-			ref_line = parse(&all, line);
-			//printf("ref = %s\n", ref_line);
-			if (!all.error && line[0] != '\0')
+			parse(&all, line_mask);
+			if (!all.error)
 			{
-				if (ft_strchr(ref_line, '|'))
+				if (ft_strchr(line_mask[MASK], '|'))
 				{
-					all.pip = 1; 
-					get_pips(&all, line, ref_line);
+					all.pip = 1;
+					get_pips(&all, line_mask);
 				}
 				else
 				{
 					all.pip = 0;
 					all.nextin = 0;
-					get_cmd(&all, line, ref_line);
+					get_cmd(&all, line_mask);
 					new_func(&all, all.l_cmd->content);
 					all.l_cmd = NULL;
 				}
 			}
 			else if (all.error)
-			{
-				
 				ft_putstr_fd("syntax error\n", 1);
-			}
 		}
-		else if (!line)
+		else if (!line_mask)
 		{
 			printf("exit\n");
 			exit(0);
 		}
-		if (line && line[0] != '\0')
-			lstadd_dlist(&all.l_history, lstnewc(ft_strdup(line)));
 	}
 	return (all.exits);
 }

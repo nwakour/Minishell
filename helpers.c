@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:25:40 by nwakour           #+#    #+#             */
-/*   Updated: 2021/04/24 15:52:17 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/16 17:36:18 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,26 @@ int		str_n_char(char *str, char c)
 	{
 		if (str[i] == c)
 			nb++;
+	}
+	return (nb);
+}
+
+int		str_n_set(char *str, char *set)
+{
+	int i;
+	int j;
+	int nb;
+
+	i = -1;
+	nb = 0;
+	while (str[++i])
+	{
+		j = -1;
+		while (set[++j])
+		{
+			if (str[i] == set[j])
+				nb++;
+		}
 	}
 	return (nb);
 }
@@ -105,57 +125,4 @@ void	double_char_to_list(t_list **list, char **str)
 		else
 			ft_lstadd_back(list, ft_lstnew(str[i]));
 	}
-}
-
-void	lstadd_dlist(t_dlist **alst, t_dlist *new)
-{
-	// t_dlist	*last;
-
-	if (!new)
-		return ;
-	// last = *alst;
-	new->prev = NULL;
-	if ((*alst) == NULL)
-		(*alst) = new;
-	else
-	{
-		new->next = *alst;
-		(*alst)->prev = new;
-		*alst = new;
-	}
-	// if (alst)
-	// {
-	// 	new->next = *alst;
-	// 	(*alst)->prev = new;
-	// 	*alst = new;
-	// }
-	// else if (new)
-	// 	*alst = new;
-}
-
-void	next_node(t_dlist **list)
-{
-	if (!*list)
-		return ;
-	if ((*list)->next != NULL)
-		(*list) = (*list)->next;
-}
-void	prev_node(t_dlist **list)
-{
-	if (!*list)
-		return ;
-	if ((*list)->prev != NULL)
-		(*list) = (*list)->prev;
-}
-
-t_dlist	*lstnewc(void *cam)
-{
-	t_dlist	*p;
-	p = (t_dlist*)malloc(sizeof(t_dlist));
-	if (!p)
-		return (NULL);
-	p->cam = cam;
-	p->next = NULL;
-	p->prev = NULL;
-	return (p);
 }

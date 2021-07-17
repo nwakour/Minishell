@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/12 16:32:14 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 16:33:07 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/17 13:35:31 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_atoi_err(const char *str, int *len)
 		sum = (sum * 10) + str[i] - '0';
 		i++;
 	}
-	if (sum > INT_MAX || sum * sign < INT_MIN || i > 12)
+	if (sum * sign > INT_MAX || sum * sign < INT_MIN || i > 12)
 	{
 		*len = -1;
 		return (0);
