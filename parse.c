@@ -6,70 +6,58 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/15 16:09:44 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/17 15:31:09 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*parse(t_all *all, char *line)
+void    parse(t_all *all, char **line_mask)
 {
 	int i;
 	int ret;
-	char *ref;
 
 	i = -1;
-	ref = strdup(line);
-	if (line[skip_space(line)] == PIP)
+	line_mask[MASK] = strdup(line_mask[LINE]);
+	if (line_mask[LINE][skip_space(line_mask[LINE])] == PIP)
 	{
 		all->error = 1;
-		return(ref);
+		return ;
 	}
-	while (line[++i])
+	while (line_mask[LINE][++i])
 	{
-		if ((ret = cor_char(line[i])) == BACK_S)
-			skip_back_s(all, &i, &ref);
+		if ((ret = cor_char(line_mask[LINE][i])) == BACK_S)
+			skip_back_s(all, &i, &line_mask[MASK]);
 		else if (ret == OPEN_S_Q)
-			handle_s_quotes(all, &i, &ref, line);
+			handle_s_quotes(all, &i, &line_mask[MASK], line_mask[LINE]);
 		else if (ret == OPEN_D_Q)
-			handle_d_quotes(all, &i, &ref, line);
+			handle_d_quotes(all, &i, &line_mask[MASK], line_mask[LINE]);
 		else if (ret == FLAG)
-			ref[i] = FLAG;
+			line_mask[MASK][i] = FLAG;
 		else if (ret == SPICE)
-			ref[i] = SPICE;
+			line_mask[MASK][i] = SPICE;
 		else if (ret == PIP)
 		{
-			ref[i] = PIP;
-			while (line[i + 1] == ' ')
-				ref[++i] = SPICE;
-			if (line[i + 1] == PIP)
+			line_mask[MASK][i] = PIP;
+			while (line_mask[LINE][i + 1] == ' ')
+				line_mask[MASK][++i] = SPICE;
+			if (line_mask[LINE][i + 1] == PIP)
 			{
 				all->error = 1;
 				i++;
 			}
 		}
-		// else if (ret == COLON)
-		// {
-		// 	ref[i] = COLON;
-		// 	i++;
-		// 	while (line[++i] == ' ')
-		// 		ref[i] = SPICE;
-		// 	if (line[i] == PIP || line[i] == COLON)
-		// 		all->error = 1;
-		// 	else
-		// 		i--;
-		// }
 		else if (ret == VAR)
-			handle_var(&i, &ref, line);
+			handle_var(&i, &line_mask[MASK], line_mask[LINE]);
 		else if (ret == GREAT)
 		{
-			if (ref[i + 1] == GREAT)
+			if (line_mask[MASK][i + 1] == GREAT)
 			{
-				ref[i] = GREATER;
-				ref[++i] = SKIP;
-				while (line[i + 1] && line[i + 1] == ' ')
-					ref[++i] = SKIP;
-				if (line[i + 1] == GREAT)
+				line_mask[MASK][i] = GREATER;
+				line_mask[MASK][++i] = SKIP;
+				while (line_mask[LINE][i + 1] && line_mask[LINE][i + 1] == ' ')
+					line_mask[MASK][++i] = SKIP;
+				if (line_mask[LINE][i + 1] == GREAT)
 				{
 					all->error = 1;
 					i++;
@@ -77,10 +65,10 @@ char	*parse(t_all *all, char *line)
 			}
 			else
 			{
-				ref[i] = GREAT;
-				while (line[i + 1] && line[i + 1] == ' ')
-					ref[++i] = SKIP;
-				if (line[i + 1] == GREAT)
+				line_mask[MASK][i] = GREAT;
+				while (line_mask[LINE][i + 1] && line_mask[LINE][i + 1] == ' ')
+					line_mask[MASK][++i] = SKIP;
+				if (line_mask[LINE][i + 1] == GREAT)
 				{
 					all->error = 1;
 					i++;
@@ -89,16 +77,16 @@ char	*parse(t_all *all, char *line)
 		}
 		else if (ret == LESS)
 		{
-			if (ref[i + 1] == LESS)
+			if (line_mask[MASK][i + 1] == LESS)
 			{
-				if (ref[i + 2 + skip_space(ref + i + 2)] == '\"' || ref[i + 2 + skip_space(ref + i + 2)] == '\'')
-					ref[i] = LESSER_Q;
+				if (line_mask[MASK][i + 2 + skip_space(line_mask[MASK] + i + 2)] == '\"' || line_mask[MASK][i + 2 + skip_space(line_mask[MASK] + i + 2)] == '\'')
+					line_mask[MASK][i] = LESSER_Q;
 				else
-					ref[i] = LESSER;
-				ref[++i] = SKIP;
-				while (line[i + 1] && line[i + 1] == ' ')
-					ref[++i] = SKIP;
-				if (line[i + 1] == LESS)
+					line_mask[MASK][i] = LESSER;
+				line_mask[MASK][++i] = SKIP;
+				while (line_mask[LINE][i + 1] && line_mask[LINE][i + 1] == ' ')
+					line_mask[MASK][++i] = SKIP;
+				if (line_mask[LINE][i + 1] == LESS)
 				{
 					all->error = 1;
 					i++;
@@ -106,10 +94,10 @@ char	*parse(t_all *all, char *line)
 			}
 			else
 			{
-				ref[i] = LESS;
-				while (line[i + 1] && line[i + 1] == ' ')
-					ref[++i] = SKIP;
-				if (line[i + 1] == LESS)
+				line_mask[MASK][i] = LESS;
+				while (line_mask[LINE][i + 1] && line_mask[LINE][i + 1] == ' ')
+					line_mask[MASK][++i] = SKIP;
+				if (line_mask[LINE][i + 1] == LESS)
 				{
 					all->error = 1;
 					i++;
@@ -117,34 +105,29 @@ char	*parse(t_all *all, char *line)
 			}
 		}
 		else
-			ref[i] = TEXT;
+			line_mask[MASK][i] = TEXT;
 	}
-	return (ref);
 }
 
-void	get_pips(t_all *all, char *line, char *ref_line)
+void	get_pips(t_all *all, char **line_mask)
 {
-	char	**str;
-	char	**ref;
-	t_list *tmp;
+	char	***split_mask;
+	// char	**ref;
+	t_list	*tmp;
 	int i;
 
-	str = ft_split_ref(line, ref_line, '|');
-	ref = ft_split(ref_line, '|');
+	split_mask = ft_split_mask(line_mask, '|');
 	i = 0;
-	while (str[i] != NULL)
+	while (split_mask[i])
 		i++;
 	all->pip = i;
 	i = -1;
 	all->hdoc = 0;
 	all->nextin = 0;
-	while (str[++i] != NULL)
+	while (split_mask[++i])
 	{
-		get_cmd(all, ft_strdup(str[i]), ft_strdup(ref[i]));
+		get_cmd(all, split_mask[i]);
 		all->inx++;
-		// if (ft_strchr(tmp_ref->content, '|'))
-		// 	get_pips(all, tmp->content, tmp_ref->content);
-		// else
 	}
 	tmp = all->l_cmd;
 	while (tmp->next)
@@ -182,65 +165,24 @@ void	get_pips(t_all *all, char *line, char *ref_line)
 	// }
 }
 
-void	get_colons(t_all *all, char *line, char *line_ref)
-{
-	char	**str;
-	char	**ref;
-	t_list	*l_pip;
-	t_list	*l_pip_ref;
-	t_list	*tmp;
-	t_list	*tmp_ref;
-
-	l_pip = NULL;
-	l_pip_ref = NULL;
-	str = ft_split_ref(line, line_ref, '|');
-	ref = ft_split(line_ref, '|');
-	double_char_to_list(&l_pip, str);
-	double_char_to_list(&l_pip_ref, ref);
-	all->pip = ft_lstsize(l_pip);
-	tmp = l_pip;
-	tmp_ref = l_pip_ref;
-	all->inx = 1;
-	all->nextin = 0;
-	while (tmp)
-	{
-		get_cmd(all, tmp->content, tmp_ref->content);
-		tmp = tmp->next;
-		tmp_ref = tmp_ref->next;
-		all->inx++;
-	}
-	if (l_pip)
-			ft_lstclear(&l_pip, &free_content);
-	if (l_pip_ref)
-			ft_lstclear(&l_pip_ref, &free_content);
-	if (ref)
-		free(ref);
-	if (str)
-		free(str);
-}
-
-char *find_var(t_all *all, char *line, char *line_ref)
+void	find_var(t_all *all, char **line_mask)
 {
 	char *new_line;
-	// char *tmp;
 	char *var;
 	char *value;
 	int i;
-	// int j;
 
 	i = -1;
-	// j = 0;
 	new_line = ft_strdup("");
-	while (line_ref[++i] != '\0')
+	if (!new_line)
+		return ;
+	while (line_mask[MASK][++i] != '\0')
 	{
-		if (line_ref[i] == '$')
+		if (line_mask[MASK][i] == '$')
 		{
-		
-			// tmp = ft_strndup(line + j, i);
 			var = ft_strdup("$");
-			while (line_ref[++i] == 'v')
-				var = ft_strjoinchar(var, line[i]);
-			// j = i;
+			while (line_mask[MASK][++i] == 'v')
+				var = ft_strjoinchar(var, line_mask[LINE][i]);
 			if (var && var[1] == '?' && var[2] == '\0')
 				value = ft_itoa(all->exits);
 			else
@@ -250,12 +192,8 @@ char *find_var(t_all *all, char *line, char *line_ref)
 			i--;
 		}
 		else
-		{
-			new_line = ft_strjoinchar(new_line, line[i]);
-			// if (j != 0)
-			// 	j++;
-		}
+			new_line = ft_strjoinchar(new_line, line_mask[LINE][i]);
 	}
-	free(line);
-	return (new_line);
+	free(line_mask[LINE]);
+	line_mask[LINE] = new_line;
 }

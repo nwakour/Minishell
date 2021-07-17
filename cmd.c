@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 19:53:17 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/17 15:25:08 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,29 +60,52 @@ int args_nb(char *ref)
 	return nb;
 }
 
-void	get_cmd(t_all *all, char *line, char *ref_line)
+char	***ft_split_mask(char **line_mask, char c)
 {
-	char	**str;
-	char	**str_ref;
+	char **tmp_line;
+	char **tmp_mask;
+	char ***split_mask;
+	int i;
+
+    if (!line_mask)
+        return (NULL);
+	tmp_line = ft_split_ref(line_mask[LINE], line_mask[MASK], c);
+	tmp_mask = ft_split(line_mask[MASK], c);
+	i = 0;
+	while (tmp_line[i])
+		i++;
+	split_mask = (char ***)malloc(sizeof(char**) * (i + 1));
+	if(!split_mask)
+		return (NULL);
+	i = -1;
+	while (tmp_line[++i])
+	{
+		split_mask[i] = (char **)malloc(sizeof(char*) * 2);
+		if (!split_mask[i])
+			return (NULL);
+		split_mask[i][LINE] = tmp_line[i];
+		split_mask[i][MASK] = tmp_mask[i];
+	}
+	split_mask[i] = NULL;
+	return (split_mask);
+}
+
+void	get_cmd(t_all *all, char **line_mask)
+{
+	char	***split_mask;
 	int		args;
 	int		redirs;
 	int		i;
 	int		nb_args;
 
-	line = find_var(all, line, ref_line);
-	ref_line = parse(all, line);
-	nb_args = args_nb(ref_line);
-	remove_zero_ref(&line, &ref_line);
-	str = ft_split_ref(line, ref_line, ' ');
-	str_ref = ft_split(ref_line, ' ');
-	// flags = str_n_char(ref_line, '-');
-	redirs = str_n_char(ref_line, '>');
-	redirs += str_n_char(ref_line, '<');
-	redirs += str_n_char(ref_line, '?');
-	redirs += str_n_char(ref_line, '@');
-	redirs += str_n_char(ref_line, '=');
+	find_var(all, line_mask);
+	parse(all, line_mask);
+	nb_args = args_nb(line_mask[MASK]);
+	line_mask = remove_zero_ref(line_mask);
+	split_mask = ft_split_mask(line_mask, ' ');
+	redirs = str_n_set(line_mask[MASK], "><?=@");
 	args = 0;
-	while (str[args])
+	while (split_mask[args])
 		args++;
 	i = args;
 	args = args - redirs - 1;
@@ -101,41 +124,44 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 		all->cmd->arg[args] = 0;
 	}
 	all->cmd->args = nb_args + args;
-	while (i > 0 && str[--i])
+	while (i > 0 && split_mask[--i])
 	{
-		if (str_ref[i][0] == '<' || str_ref[i][0] == '>' || str_ref[i][0] == '?' || str_ref[i][0] == '@' || str_ref[i][0] == '=')
+		if (is_char_from_set(split_mask[i][MASK][0], "><?=@"))
 		{
-			if (str_ref[i][0] == '?')
+			if (split_mask[i][MASK][0] == '?')
 			{
-				all->cmd->f_name[--redirs] = ft_strdup(str[i]);
+				all->cmd->f_name[--redirs] = split_mask[i][LINE];
 				all->cmd->f_name[redirs][0] = '?';
 			}
-			else if (str_ref[i][0] == '@')
+			else if (split_mask[i][MASK][0] == '@')
 			{
-				all->cmd->f_name[--redirs] = ft_strdup(str[i]);
+				all->cmd->f_name[--redirs] = split_mask[i][LINE];
 				all->cmd->f_name[redirs][0] = '@';
 			}
-			else if (str_ref[i][0] == '=')
+			else if (split_mask[i][MASK][0] == '=')
 			{
-				all->cmd->f_name[--redirs] = ft_strdup(str[i]);
+				all->cmd->f_name[--redirs] = split_mask[i][LINE];
 				all->cmd->f_name[redirs][0] = '=';
 			}
 			else
-				all->cmd->f_name[--redirs] = ft_strdup(str[i]);
+				all->cmd->f_name[--redirs] = split_mask[i][LINE];
 		}
 		else if (i == 0 || (i != 0 && all->cmd->cmd == NULL && args == 0))
-			all->cmd->cmd = ft_strdup(str[i]);
+			all->cmd->cmd = split_mask[i][LINE];
 		else
-			all->cmd->arg[--args] = ft_strdup(str[i]);
+			all->cmd->arg[--args] = split_mask[i][LINE];
 	}
-	
+	i = -1;
+	while (split_mask[++i])
+		free(split_mask[i]);
+	free(split_mask);
 	i = -1;
 	while(all->cmd->cmd && all->cmd->cmd[++i])
 		 all->cmd->cmd[i] = ft_tolower(all->cmd->cmd[i]);
 	s_heredoc(all, all->cmd);
 	all->cmd->valid = check_cmd(all->cmd);
-	free(str);
-	free(str_ref);
+	// free(str);
+	// free(str_ref);
 }
 
 // char	*s_expand(char *line)
@@ -146,7 +172,7 @@ void	get_cmd(t_all *all, char *line, char *ref_line)
 
 char	*s_readdoc(t_all *all, char *limit, int expand)
 {
-	char	*line;
+	char	**line_mask;
 	char	*file;
 	int	fd;
 	
@@ -154,13 +180,13 @@ char	*s_readdoc(t_all *all, char *limit, int expand)
 	all->add = 0;
 	file = ft_strjoin("/tmp/s_", ft_itoa(all->hdoc));
 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
-	s_readline(all, &line, ">");
-	while (line && ft_strcmp(line, limit))
+	line_mask = s_readline(all, ">");
+	while (line_mask && ft_strcmp(line_mask[LINE], limit))
 	{
 		//TODO: check expand for env variables
-		write(fd, line, ft_strlen(line));
+		write(fd, line_mask[LINE], ft_strlen(line_mask[LINE]));
 		write(fd, "\n", 1);
-		s_readline(all, &line, ">");
+		line_mask = s_readline(all, ">");
 	}
 	close(fd);
 	return (file);

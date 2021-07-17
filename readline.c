@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:54:26 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/07/14 19:45:47 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/17 15:32:34 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,21 @@ void	s_handle_q()
 	}
 }
 
-void	s_readline(t_all *all, char **line, char *prompt)
+char	**s_readline(t_all *all, char *prompt)
 {
-	(void)all;
+	char **line_mask;
+
 	signal(SIGINT, s_handle_c);
 	signal(SIGQUIT, s_handle_q);
-	*line = readline(prompt);
-	if (*line && **line && all->add)
-		add_history(*line);
+	line_mask = (char**)malloc(sizeof(char *) * 2);
+	if (!line_mask)
+		return (NULL);
+	line_mask[LINE] = readline(prompt);
+	if (line_mask[LINE] && line_mask[LINE][0] != '\0' && all->add)
+	{
+		add_history(line_mask[LINE]);
+		return (line_mask);
+	}
+	free(line_mask);
+	return (NULL);
 }

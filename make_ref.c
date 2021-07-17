@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_ref.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:00:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 17:08:57 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/17 14:56:49 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,8 @@ int		cor_char(char c)
 		return (OPEN_D_Q);
 	else if (c == '\'')
 		return (OPEN_S_Q);
-	// else if (c == '\\')
-	// 	return (BACK_S);
 	else if (c == '$')
 		return (VAR);
-	// else if (c == ';')
-	// 	return (COLON);
 	else if (c == ' ')
 		return (SPICE);
 	else if (c == '|')
@@ -63,51 +59,69 @@ void	skip_back_s_in_q(t_all *all, int *i, char **ref_line)
 		(*ref_line)[*i] = TEXT;
 }
 
-void	remove_zero_ref(char **s, char **ref)
+// int	ft_find_from_set(char *str, char *set)
+// {
+// 	int i;
+// 	int j;
+
+// 	i = -1;
+// 	while (str[++i])
+// 	{
+// 		j = -1;
+// 		while (set[++j])
+// 		{
+// 			if (str[i] == set[j])
+// 				return (1);
+// 		}
+// 	}
+// 	return 0;
+// }
+
+int	is_char_from_set(char c, char *set)
+{
+	int i;
+
+	i = -1;
+	while (set[++i])
+	{
+		if (set[i] == c)
+			return (1);
+	}
+	return (0);
+}
+
+char	**remove_zero_ref(char **line_mask)
 {
 	int		zeros;
 	int		i;
 	int		len;
-	char	*new_s;
-	char	*new_ref;
-	int		j;
+	char	**new_line_mask;
 
-	if (!*s || !*ref || ((len = ft_strlen(*s)) != (int)ft_strlen(*ref)))
-		return ;
+	
+	if (!line_mask)
+		return (line_mask);
 	i = -1;
-	zeros = 0;
-	while ((*ref)[++i] != '\0')
-	{
-		if ((*ref)[i] == '0' || (*ref)[i] == '1' || (*ref)[i] == '2' || (*ref)[i] == '3' || (*ref)[i] == '4')
-			zeros++;
-	}
+	zeros = str_n_set(line_mask[MASK], "01234");
 	if (!zeros)
-		return ;
-	len -= zeros;
+		return (line_mask);
+	len = ft_strlen(line_mask[MASK]) - zeros;
 	i = -1;
-	if (!(new_s = ((char*)malloc((len) * sizeof(char)))))
-		return ;
-	if (!(new_ref = ((char*)malloc((len) * sizeof(char)))))
-		return ;
-	j = 0;
-	while ((*s)[++i] != '\0')
+	new_line_mask = (char **)malloc(sizeof(char *) * 2);
+	if (!new_line_mask)
+		return (line_mask);
+	new_line_mask[LINE] = NULL;
+	new_line_mask[MASK] = NULL;
+	while (line_mask[LINE][++i] != '\0')
 	{
-		if ((*ref)[i] != '0' && (*ref)[i] != '1' && (*ref)[i] != '2' && (*ref)[i] != '3' && (*ref)[i] != '4')
+		if (!is_char_from_set(line_mask[MASK][i], "01234"))
 		{
-			new_ref[j] = (*ref)[i];
-			if ((*ref)[i] == 's')
-				new_s[j] = ' ';
+			new_line_mask[MASK] = ft_strjoin_char(new_line_mask[MASK], line_mask[MASK][i]);
+			if (line_mask[MASK][i] == 's')
+				new_line_mask[LINE] = ft_strjoin_char(new_line_mask[LINE], ' ');
 			else
-				new_s[j] = (*s)[i];
-			j++;
+				new_line_mask[LINE] = ft_strjoin_char(new_line_mask[LINE], line_mask[LINE][i]);
 		}
 	}
-	new_ref[j] = '\0';
-	new_s[j] = '\0';
-	// if (*s)
-	// 	free(*s);
-	// if (*ref)
-	// 	free(*ref);
-	*s = new_s;
-	*ref = new_ref;
+	
+	return (new_line_mask);
 }

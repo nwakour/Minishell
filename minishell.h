@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/14 19:45:02 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/07/17 15:34:34 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@
 # define GREATER 63
 # define LESSER 64
 # define LESSER_Q 61
+
+# define LINE 0
+# define MASK 1
 
 int	g_child;
 
@@ -85,13 +88,10 @@ typedef struct		s_tc_cmd
 typedef struct		s_all
 {
 	t_list	*l_cmd;
-	t_dlist	*l_history;
 	t_list	*l_env;
 	t_env	*env;
 	t_cmd	*cmd;
 	t_tc_cmd	*tccmd;
-	struct termios *old;
-	struct termios *new;
 	int		error;
 	int		exits;
 	int		pip;
@@ -118,17 +118,17 @@ void	ft_exit(t_all *all, t_cmd *cmd);
 
 /*				parse				*/
 
-char	*parse(t_all *all, char *line);
+void    parse(t_all *all, char **line_mask);
 void	get_colons(t_all *all, char *line, char *ref_line);
-void	get_pips(t_all *all, char *line, char *line_ref);
+void	get_pips(t_all *all, char **line_mask);
 void	free_all(t_all *all);
-char	*find_var(t_all *all, char *line, char *line_ref);
+void	find_var(t_all *all, char **line_mask);
 
 /*				make_ref			*/
 
 int		cor_char(char c);
 void	skip_back_s(t_all *all, int *i, char **ref_line);
-void	remove_zero_ref(char **s, char **ref);
+char	**remove_zero_ref(char **line_mask);
 void	skip_back_s_in_q(t_all *all, int *i, char **ref_line);
 
 /*				handle quotes		*/
@@ -148,7 +148,7 @@ char	*check_env(t_list *list, char *str);
 
 int		check_cmd(t_cmd *cmd);
 int		args_nb(char *ref);
-void	get_cmd(t_all *all, char *line, char *ref_line);
+void	get_cmd(t_all *all, char **line_mask);
 void	execute_cmd(t_all *all, t_cmd *cmd);
 void	new_func(t_all *all, t_cmd *cmd);
 
@@ -192,7 +192,10 @@ void	s_cmd(t_all *all, t_cmd *cmd);
 void	s_last(t_all *all, t_cmd *cmd);
 void	s_heredoc(t_all *all, t_cmd *cmd);
 
-void	s_readline(t_all *all, char **line, char *prompt);
+char	**s_readline(t_all *all, char *prompt);
 void	s_cmd_files(t_cmd *cmd);
 
+char	***ft_split_mask(char **line_mask, char c);
+int		is_char_from_set(char c, char *set);
+int		str_n_set(char *str, char *set);
 #endif
