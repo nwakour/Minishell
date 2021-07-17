@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:54:26 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/07/17 15:32:34 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/07/17 15:40:25 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char	**s_readline(t_all *all, char *prompt)
 	if (!line_mask)
 		return (NULL);
 	line_mask[LINE] = readline(prompt);
+	line_mask[MASK] = NULL;
 	if (line_mask[LINE] && line_mask[LINE][0] != '\0' && all->add)
 	{
 		add_history(line_mask[LINE]);
