@@ -25,6 +25,25 @@ void	s_handle_c()
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
+		rl_replace_line("", 0);
+	}
+}
+
+void	s_handle_q()
+{
+	//write(2, ft_itoa(g_child), ft_strlen(ft_itoa(g_child)));
+	if (g_child)
+	{
+		//write(2, "here\n", 5);
+		write(1, "Quit: 3\n", 8);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		//rl_redisplay();
+	}
+	else
+	{
+		rl_on_new_line();
+		rl_redisplay();
 	}
 }
 
@@ -32,7 +51,7 @@ void	s_readline(t_all *all, char **line, char *prompt)
 {
 	(void)all;
 	signal(SIGINT, s_handle_c);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, s_handle_q);
 	*line = readline(prompt);
 	if (*line && **line && all->add)
 		add_history(*line);
