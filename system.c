@@ -215,10 +215,13 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 	if (cmd->pid == 0)
 	{
 		dup2(cmd->infd, 0);
-		if (cmd->out)
+		if (cmd->fd != 1)
 			dup2(cmd->fd, 1);
 		else
+		{
+			write(2, "here yoyo\n", 10);
 			dup2(fd[1], 1);
+		}
 		if (cmd->infd > 1)
 			close(cmd->infd);
 		if (cmd->fd > 1)
@@ -229,7 +232,7 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 			close(fd[1]);
 		s_check_exec(all, cmd);
 	}
-	s_wait(all, cmd);
+	//s_wait(all, cmd);
 	if (fd[1] > 1)
 		close(fd[1]);
 	if (cmd->infd > 1)
@@ -257,7 +260,7 @@ void	s_last(t_all *all, t_cmd *cmd)
 			close(cmd->fd);
 		s_exec(all, cmd);
 	}
-	s_wait(all, cmd);
+	//s_wait(all, cmd);
 	if (cmd->infd > 1)
 			close(cmd->infd);
 	if (cmd->fd > 1)

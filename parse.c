@@ -148,6 +148,15 @@ void	get_pips(t_all *all, char **line_mask)
 		write(2, ": command not found\n", 20);
 		all->exits = 127;
 	}
+	// NEW
+	tmp = all->l_cmd;
+	while (tmp)
+	{
+		s_wait(all, ((t_cmd*)tmp->content));
+		tmp = tmp->next;
+	}
+
+	// NEW
 	all->l_cmd = NULL;
 	// if (l_colon)
 	// 		ft_lstclear(&l_colon, &free_content);

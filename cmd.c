@@ -160,22 +160,35 @@ char	*s_readdoc(t_all *all, char *limit, int expand)
 	char	**line_mask;
 	char	*file;
 	int	fd;
+	//int	pid;
 	
 	expand = 0;
 	all->add = 0;
 	file = ft_strjoin("/tmp/s_", ft_itoa(all->hdoc));
 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
-	line_mask = s_readline(all, ">");
-	//printf("%s\n", line_mask[LINE]);
-	while (line_mask && ft_strcmp(line_mask[LINE], limit))
-	{
-		//TODO: check expand for env variables
-		//write(2, "yoooo\n", 6);
-		write(fd, line_mask[LINE], ft_strlen(line_mask[LINE]));
-		write(fd, "\n", 1);
+	//TODO: fork here
+	// pid = fork();
+	// if (pid < 0)
+	// 	s_perror(all, "fork", 1);
+	// g_child = 1;
+	// if (pid == 0)
+	// {
 		line_mask = s_readline(all, ">");
-	}
-	close(fd);
+		//printf("%s\n", line_mask[LINE]);
+		while (line_mask && ft_strcmp(line_mask[LINE], limit))
+		{
+			//TODO: check expand for env variables
+			//write(2, "yoooo\n", 6);
+			write(fd, line_mask[LINE], ft_strlen(line_mask[LINE]));
+			write(fd, "\n", 1);
+			line_mask = s_readline(all, ">");
+		}
+		close(fd);
+		//exit(0);
+	// }
+	// waitpid(pid, NULL, 0);
+	// g_child = 0;
+	// exit child here
 	return (file);
 }
 
@@ -193,7 +206,7 @@ void	s_heredoc(t_all *all, t_cmd *cmd)
 		if (tmp[i][0] == '@' || tmp[i][0] == '=')
 		{
 			limit = tmp[i] + 1;
-			if (tmp[i][0] == '@')
+			if (tmp[i][0] == '=')
 				name = s_readdoc(all, limit, 1);
 			else
 				name = s_readdoc(all, limit, 0);

@@ -38,8 +38,8 @@
 # define GREAT 62
 # define LESS 60
 # define GREATER 63
-# define LESSER 64
-# define LESSER_Q 61
+# define LESSER 61
+# define LESSER_Q 64
 
 # define LINE 0
 # define MASK 1
