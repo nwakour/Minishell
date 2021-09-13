@@ -6,7 +6,7 @@
 #    By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 19:06:53 by nwakour           #+#    #+#              #
-#    Updated: 2021/07/17 14:33:55 by nwakour          ###   ########.fr        #
+#    Updated: 2021/09/13 15:14:17 by nwakour          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ OBJS			=	${SRCS:.c=.o}
 
 CC				=	gcc
 
-FLAGS           =	-Wall -Wextra -Werror -ltermcap -lreadline -fsanitize=address
+FLAGS           =	-Wall -Wextra -Werror -ltermcap -lreadline -g -fsanitize=address
 
 READLINE		=  -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include
 

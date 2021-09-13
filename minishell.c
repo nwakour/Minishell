@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/17 15:40:57 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/09/13 15:43:05 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int		main(int argc, char **argv, char **env)
 		all.error = 0;
 		all.add = 1;
 		line_mask = s_readline(&all, "Minisheeesh-> ");
-		if (line_mask)
+		if (line_mask && line_mask[LINE] && line_mask[LINE][0] != '\0')
 		{
 			parse(&all, line_mask);
 			if (!all.error)
