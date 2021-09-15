@@ -6,101 +6,101 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 10:57:41 by nwakour           #+#    #+#             */
-/*   Updated: 2021/05/26 17:46:56 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/09/15 14:21:31 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_var_in_q(int *i, char** ref_line, char *line)
+void	handle_var_in_q(char **line_mask, int *i)
 {
-	if (line[*i + 1] == ' ')
-		(*ref_line)[*i] = TEXT;
-	else  if ((line[*i + 1] >= 'A' && line[*i + 1] <= 'Z')
-		|| (line[*i + 1] >= 'a' && line[*i + 1] <= 'z') || (line[*i + 1] == '_'))
+	if (line_mask[LINE][*i + 1] == ' ')
+		line_mask[MASK][*i] = TEXT;
+	else  if (ft_isalpha(line_mask[LINE][*i + 1]) ||
+		(line_mask[LINE][*i + 1] == '_'))
 	{
-		(*ref_line)[*i] = VAR;
-		while ((line[++*i] >= 'A' && line[*i] <= 'Z')
-			|| (line[*i] >= 'a' && line[*i] <= 'z') || (line[*i] == '_'))
-			(*ref_line)[*i] = 'v';
-		--*i;
+		line_mask[MASK][*i] = VAR;
+		while (ft_isalpha(line_mask[LINE][++(*i)]) ||
+		(line_mask[LINE][*i] == '_'))
+			line_mask[MASK][*i] = 'v';
+		--(*i);
 	}
 	else
 	{
-		(*ref_line)[*i] = VAR;
-		(*ref_line)[++*i] = 'v';
+		line_mask[MASK][*i] = VAR;
+		line_mask[MASK][++*i] = 'v';
 	}
 }
-void	handle_var(int *i, char **ref_line, char *line)
+
+void	handle_var(char **line_mask, int *i)
 {
-	if (line[*i + 1] == ' ')
-		(*ref_line)[*i] = TEXT;
-	else if (line[*i + 1] == '\\')
+	if (line_mask[LINE][*i + 1] == ' ')
+		line_mask[MASK][*i] = TEXT;
+	else if (line_mask[LINE][*i + 1] == '\\')
+		line_mask[MASK][*i] = TEXT;
+	else  if (ft_isalpha(line_mask[LINE][*i + 1]) ||
+		(line_mask[LINE][*i + 1] == '_'))
 	{
-		(*ref_line)[*i] = TEXT;
-		// (*ref_line)[++*i] = SKIP;
+		line_mask[MASK][*i] = VAR;
+		while (ft_isalpha(line_mask[LINE][++(*i)]) ||
+		(line_mask[LINE][*i] == '_'))
+			line_mask[MASK][*i] = 'v';
+		--(*i);
 	}
-	else  if ((line[*i + 1] >= 'A' && line[*i + 1] <= 'Z')
-		|| (line[*i + 1] >= 'a' && line[*i + 1] <= 'z') || (line[*i + 1] == '_'))
-	{
-		(*ref_line)[*i] = VAR;
-		while ((line[++*i] >= 'A' && line[*i] <= 'Z')
-			|| (line[*i] >= 'a' && line[*i] <= 'z') || (line[*i] == '_'))
-			(*ref_line)[*i] = 'v';
-		--*i;
-	}
-	else if (line[*i + 1] == '\0' || line[*i + 1] == ' ' || line[*i + 1] == '$')
-		(*ref_line)[*i] = TEXT;
+	else if (line_mask[LINE][*i + 1] == '\0' || line_mask[LINE][*i + 1] == ' ' || line_mask[LINE][*i + 1] == '$')
+		line_mask[MASK][*i] = TEXT;
 	else
 	{
-		(*ref_line)[*i] = VAR;
-		(*ref_line)[++*i] = 'v';
+		line_mask[MASK][*i] = VAR;
+		line_mask[MASK][++*i] = 'v';
 	}
 }
-void	handle_d_quotes(t_all *all, int *i, char** ref_line, char *line)
+
+void	handle_d_quotes(t_all *all, char **line_mask, int *i)
 {
-	if (line[*i] == '\"' && line[(*i) + 1] == '\"' && (line[(*i) - 1] == ' ' || line[(*i) + 2] == ' '))
+	if (line_mask[LINE][*i] == '\"' && line_mask[LINE][(*i) + 1] == '\"'
+		&& (line_mask[LINE][(*i) - 1] == ' ' || line_mask[LINE][(*i) + 2] == ' '))
 	{
-		(*ref_line)[*i] = SKIP;
-		(*ref_line)[++(*i)] = 's';
+		line_mask[MASK][*i] = SKIP;
+		line_mask[MASK][++(*i)] = 's';
 		return ;
 	}
-	(*ref_line)[*i] = OPEN_D_Q + 48;
-	while (line[++*i] != '\0')
+	line_mask[MASK][*i] = OPEN_D_Q + 48;
+	while (line_mask[LINE][++(*i)] != '\0')
 	{
-		if (line[*i] == VAR)
-		 	handle_var(i, ref_line, line);
-		else if (line[*i] == '\\')
-			skip_back_s_in_q(all, i, ref_line);
-		else if (line[*i] == '\"')
+		if (line_mask[LINE][*i] == VAR)
+		 	handle_var_in_q(line_mask, i);
+		else if (line_mask[LINE][*i] == '\\')
+			skip_back_s_in_q(all, line_mask[MASK], i);
+		else if (line_mask[LINE][*i] == '\"')
 		{
-			(*ref_line)[*i] = CLOSE_D_Q + 48;
+			line_mask[MASK][*i] = CLOSE_D_Q + 48;
 			return ;
 		}
 		else
-			(*ref_line)[*i] = TEXT;
+			line_mask[MASK][*i] = TEXT;
 	}
 	all->error = 1;
 }
 
-void	handle_s_quotes(t_all *all, int *i, char** ref_line, char *line)
+void	handle_s_quotes(t_all *all, char **line_mask, int *i)
 {
-	if (line[*i] == '\'' && line[(*i) + 1] == '\'' && (line[(*i) - 1] == ' ' || line[(*i) + 2] == ' '))
+	if (line_mask[LINE][*i] == '\'' && line_mask[LINE][(*i) + 1] == '\'' && (line_mask[LINE][(*i) - 1] == ' ' || line_mask[LINE][(*i) + 2] == ' '))
 	{
-		(*ref_line)[*i] = SKIP;
-		(*ref_line)[++(*i)] = 's';
+		line_mask[MASK][*i] = SKIP;
+		line_mask[MASK][++(*i)] = 's';
 		return ;
 	}
-	(*ref_line)[*i] = OPEN_S_Q + 48;
-	while (line[++*i] != '\0')
+	line_mask[MASK][*i] = OPEN_S_Q + 48;
+	while (line_mask[LINE][++(*i)] != '\0')
 	{
-		if (line[*i] == '\'')
+		if (line_mask[LINE][*i] == '\'')
 		{
-			(*ref_line)[*i] = CLOSE_S_Q + 48;
+			line_mask[MASK][*i] = CLOSE_S_Q + 48;
 			return ;
 		}
 		else
-			(*ref_line)[*i] = TEXT;
+			line_mask[MASK][*i] = TEXT;
 	}
 	all->error = 1;
 }

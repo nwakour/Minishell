@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/17 16:13:45 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/09/15 14:40:06 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ char	*s_readdoc(t_all *all, char *limit, int expand)
 	int	fd;
 	//int	pid;
 	
-	expand = 0;
+	// expand = 0;
 	all->add = 0;
 	file = ft_strjoin("/tmp/s_", ft_itoa(all->hdoc));
 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
@@ -174,7 +174,7 @@ char	*s_readdoc(t_all *all, char *limit, int expand)
 	// if (pid == 0)
 	// {
 		line_mask = s_readline(all, ">");
-		//printf("%s\n", line_mask[LINE]);
+		parse_heredoc(all, line_mask, expand);
 		while (line_mask && ft_strcmp(line_mask[LINE], limit))
 		{
 			//TODO: check expand for env variables
@@ -182,6 +182,7 @@ char	*s_readdoc(t_all *all, char *limit, int expand)
 			write(fd, line_mask[LINE], ft_strlen(line_mask[LINE]));
 			write(fd, "\n", 1);
 			line_mask = s_readline(all, ">");
+			parse_heredoc(all, line_mask, expand);
 		}
 		close(fd);
 		//exit(0);

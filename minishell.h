@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/17 15:34:34 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/09/15 14:41:58 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,21 +123,23 @@ void	get_colons(t_all *all, char *line, char *ref_line);
 void	get_pips(t_all *all, char **line_mask);
 void	free_all(t_all *all);
 void	find_var(t_all *all, char **line_mask);
-
+void	handle_great(t_all *all, char **line_mask, int *i);
+void	handle_less(t_all *all, char **line_mask, int *i);
+void    parse_heredoc(t_all *all, char **line_mask, int expand);
 /*				make_ref			*/
 
 int		cor_char(char c);
-void	skip_back_s(t_all *all, int *i, char **ref_line);
+void	skip_back_s(t_all *all, char *mask, int *i);
+void	skip_back_s_in_q(t_all *all, char *mask, int *i);
+int		is_char_from_set(char c, char *set);
 char	**remove_zero_ref(char **line_mask);
-void	skip_back_s_in_q(t_all *all, int *i, char **ref_line);
 
 /*				handle quotes		*/
 
-void	handle_d_quotes(t_all *all, int *i, char** ref_line, char *line);
-void	handle_var(int *i, char** ref_line, char *line);
-void	handle_s_quotes(t_all *all, int *i, char** ref_line, char *line);
-void	handle_var_in_q(int *i, char** ref_line, char *line);
-
+void	handle_s_quotes(t_all *all, char **line_mask, int *i);
+void	handle_d_quotes(t_all *all, char **line_mask, int *i);
+void	handle_var(char **line_mask, int *i);
+void	handle_var_in_q(char **line_mask, int *i);
 
 /*				env					*/
 

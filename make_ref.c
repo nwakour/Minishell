@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:00:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/17 14:56:49 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/09/15 14:14:15 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,29 +34,29 @@ int		cor_char(char c)
 		return (TEXT);
 }
 
-void	skip_back_s(t_all *all, int *i, char **ref_line)
+void	skip_back_s(t_all *all, char *mask, int *i)
 {
-	(*ref_line)[*i] = SKIP;
+	mask[*i] = SKIP;
 	*i += 1;
-	if ((*ref_line)[*i] != '\0')
-		(*ref_line)[*i] = TEXT;
+	if (mask[*i] != '\0')
+		mask[*i] = TEXT;
 	else
 		all->error = 1;
 }
 
-void	skip_back_s_in_q(t_all *all, int *i, char **ref_line)
+void	skip_back_s_in_q(t_all *all, char *mask, int *i)
 {
-	if ((*ref_line)[(*i) + 1] == '$' || (*ref_line)[(*i) + 1] == '\\' || (*ref_line)[(*i) + 1] == '\"')
+	if (mask[(*i) + 1] == '$' || mask[(*i) + 1] == '\\' || mask[(*i) + 1] == '\"')
 	{
-		(*ref_line)[*i] = SKIP;
+		mask[*i] = SKIP;
 		*i += 1;
-		if ((*ref_line)[*i] != '\0')
-			(*ref_line)[*i] = TEXT;
+		if (mask[*i] != '\0')
+			mask[*i] = TEXT;
 		else
 			all->error = 1;
 	}
 	else
-		(*ref_line)[*i] = TEXT;
+		mask[*i] = TEXT;
 }
 
 // int	ft_find_from_set(char *str, char *set)

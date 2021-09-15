@@ -6,11 +6,69 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/17 15:31:09 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/09/15 14:40:26 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	handle_great(t_all *all, char **line_mask, int *i)
+{
+	if (line_mask[MASK][(*i) + 1] == GREAT)
+	{
+		line_mask[MASK][(*i)] = GREATER;
+		line_mask[MASK][++(*i)] = SKIP;
+		while (line_mask[LINE][(*i) + 1] && line_mask[LINE][(*i) + 1] == ' ')
+			line_mask[MASK][++(*i)] = SKIP;
+		if (line_mask[LINE][(*i) + 1] == GREAT)
+		{
+			all->error = 1;
+			(*i)++;
+		}
+	}
+	else
+	{
+		line_mask[MASK][(*i)] = GREAT;
+		while (line_mask[LINE][(*i) + 1] && line_mask[LINE][(*i) + 1] == ' ')
+			line_mask[MASK][++(*i)] = SKIP;
+		if (line_mask[LINE][(*i) + 1] == GREAT)
+		{
+			all->error = 1;
+			(*i)++;
+		}
+	}
+}
+
+void	handle_less(t_all *all, char **line_mask, int *i)
+{
+	if (line_mask[MASK][(*i) + 1] == LESS)
+	{
+		if (line_mask[MASK][(*i) + 2 + skip_space(line_mask[MASK] + (*i) + 2)] == '\"'
+			|| line_mask[MASK][(*i) + 2 + skip_space(line_mask[MASK] + (*i) + 2)] == '\'')
+			line_mask[MASK][(*i)] = LESSER_Q;
+		else
+			line_mask[MASK][(*i)] = LESSER;
+		line_mask[MASK][++(*i)] = SKIP;
+		while (line_mask[LINE][(*i) + 1] && line_mask[LINE][(*i) + 1] == ' ')
+			line_mask[MASK][++(*i)] = SKIP;
+		if (line_mask[LINE][(*i) + 1] == LESS)
+		{
+			all->error = 1;
+			(*i)++;
+		}
+	}
+	else
+	{
+		line_mask[MASK][(*i)] = LESS;
+		while (line_mask[LINE][(*i) + 1] && line_mask[LINE][(*i) + 1] == ' ')
+			line_mask[MASK][++(*i)] = SKIP;
+		if (line_mask[LINE][(*i) + 1] == LESS)
+		{
+			all->error = 1;
+			(*i)++;
+		}
+	}
+}
 
 void    parse(t_all *all, char **line_mask)
 {
@@ -27,11 +85,11 @@ void    parse(t_all *all, char **line_mask)
 	while (line_mask[LINE][++i])
 	{
 		if ((ret = cor_char(line_mask[LINE][i])) == BACK_S)
-			skip_back_s(all, &i, &line_mask[MASK]);
+			skip_back_s(all, line_mask[MASK], &i);
 		else if (ret == OPEN_S_Q)
-			handle_s_quotes(all, &i, &line_mask[MASK], line_mask[LINE]);
+			handle_s_quotes(all, line_mask, &i);
 		else if (ret == OPEN_D_Q)
-			handle_d_quotes(all, &i, &line_mask[MASK], line_mask[LINE]);
+			handle_d_quotes(all, line_mask, &i);
 		else if (ret == FLAG)
 			line_mask[MASK][i] = FLAG;
 		else if (ret == SPICE)
@@ -48,62 +106,11 @@ void    parse(t_all *all, char **line_mask)
 			}
 		}
 		else if (ret == VAR)
-			handle_var(&i, &line_mask[MASK], line_mask[LINE]);
+			handle_var(line_mask, &i);
 		else if (ret == GREAT)
-		{
-			if (line_mask[MASK][i + 1] == GREAT)
-			{
-				line_mask[MASK][i] = GREATER;
-				line_mask[MASK][++i] = SKIP;
-				while (line_mask[LINE][i + 1] && line_mask[LINE][i + 1] == ' ')
-					line_mask[MASK][++i] = SKIP;
-				if (line_mask[LINE][i + 1] == GREAT)
-				{
-					all->error = 1;
-					i++;
-				}
-			}
-			else
-			{
-				line_mask[MASK][i] = GREAT;
-				while (line_mask[LINE][i + 1] && line_mask[LINE][i + 1] == ' ')
-					line_mask[MASK][++i] = SKIP;
-				if (line_mask[LINE][i + 1] == GREAT)
-				{
-					all->error = 1;
-					i++;
-				}
-			}
-		}
+			handle_great(all, line_mask, &i);
 		else if (ret == LESS)
-		{
-			if (line_mask[MASK][i + 1] == LESS)
-			{
-				if (line_mask[MASK][i + 2 + skip_space(line_mask[MASK] + i + 2)] == '\"' || line_mask[MASK][i + 2 + skip_space(line_mask[MASK] + i + 2)] == '\'')
-					line_mask[MASK][i] = LESSER_Q;
-				else
-					line_mask[MASK][i] = LESSER;
-				line_mask[MASK][++i] = SKIP;
-				while (line_mask[LINE][i + 1] && line_mask[LINE][i + 1] == ' ')
-					line_mask[MASK][++i] = SKIP;
-				if (line_mask[LINE][i + 1] == LESS)
-				{
-					all->error = 1;
-					i++;
-				}
-			}
-			else
-			{
-				line_mask[MASK][i] = LESS;
-				while (line_mask[LINE][i + 1] && line_mask[LINE][i + 1] == ' ')
-					line_mask[MASK][++i] = SKIP;
-				if (line_mask[LINE][i + 1] == LESS)
-				{
-					all->error = 1;
-					i++;
-				}
-			}
-		}
+			handle_less(all, line_mask, &i);
 		else
 			line_mask[MASK][i] = TEXT;
 	}
@@ -112,7 +119,6 @@ void    parse(t_all *all, char **line_mask)
 void	get_pips(t_all *all, char **line_mask)
 {
 	char	***split_mask;
-	// char	**ref;
 	t_list	*tmp;
 	int i;
 
@@ -205,4 +211,22 @@ void	find_var(t_all *all, char **line_mask)
 	}
 	free(line_mask[LINE]);
 	line_mask[LINE] = new_line;
+}
+
+void    parse_heredoc(t_all *all, char **line_mask, int expand)
+{
+	int i;
+
+	if (!line_mask || line_mask[LINE][0] == '\0')
+		return ;
+	line_mask[MASK] = ft_strdup(line_mask[LINE]);
+	i = -1;
+	while (line_mask[LINE][++i])
+	{
+		if (expand && line_mask[LINE][i] == '$')
+			handle_var_in_q(line_mask, &i);
+		else
+			line_mask[MASK][i] = TEXT;
+	}
+	find_var(all, line_mask);
 }
