@@ -260,7 +260,8 @@ void	s_last(t_all *all, t_cmd *cmd)
 			close(cmd->fd);
 		s_exec(all, cmd);
 	}
-	//s_wait(all, cmd);
+	if (!all->pip)
+		s_wait(all, cmd);
 	if (cmd->infd > 1)
 			close(cmd->infd);
 	if (cmd->fd > 1)
