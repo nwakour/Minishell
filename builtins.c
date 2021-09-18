@@ -17,7 +17,9 @@ void	ft_echo(t_all *all, char **arg, int fd)
 	int i;
 	int n;
 	int f;
+	int hh;
 
+	hh = fd;
 	i = 0;
 	f = 0;
 	n = 0;
@@ -42,13 +44,13 @@ void	ft_echo(t_all *all, char **arg, int fd)
 		else
 				f = 1;
 		if (f == 1)
-			printf("%s\n", arg[i])/*ft_putstr_fd(arg[i], fd)*/;
+			printf("%s", arg[i])/*ft_putstr_fd(arg[i], fd)*/;
 		i++;
 		if (f == 1 && arg[i] && arg[i][0] != '\0')
 			printf(" ")/*ft_putstr_fd(" ", fd)*/;
 	}
 	if (!n)
-		ft_putstr_fd("\n", fd);
+		printf("\n");
 	all->exits = 0;
 	if (all->pip)
 		exit(0);
@@ -118,10 +120,13 @@ void		ft_cd(t_all *all, char* path, int args)
 void	ft_pwd(t_all *all, int fd)
 {
 	char *s;
+	int hh;
 
+	hh = fd;
 	s = getcwd(NULL, 0);
-	ft_putstr_fd(s, fd);
-	ft_putstr_fd("\n", fd);
+	//ft_putstr_fd(s, fd);
+	//ft_putstr_fd("\n", fd);
+	printf("%s\n", s);
 	free(s);
 	all->exits = 0;
 	if (all->pip)
@@ -157,22 +162,44 @@ void	ft_export_wa(t_all *all, t_env *var)
 		ft_lstadd_back(&all->l_env, ft_lstnew(var));
 }
 
+// void	print_export(t_list *list, int fd)
+// {
+// 	t_list *l;
+	
+// 	l = list;
+// 	while (l)
+// 	{
+// 		ft_putstr_fd("declare -x ", fd);
+// 		ft_putstr_fd(((t_env*)l->content)->name, fd);
+// 		if (((t_env*)l->content)->value)
+// 		{
+// 			ft_putstr_fd("=\"", fd);
+// 			ft_putstr_fd(((t_env*)l->content)->value, fd);
+// 			ft_putstr_fd("\"", fd);
+// 		}
+// 		ft_putstr_fd("\n", fd);	
+// 		l = l->next;
+// 	}
+// }
+
 void	print_export(t_list *list, int fd)
 {
 	t_list *l;
+	int hh;
 	
+	hh = fd;
 	l = list;
 	while (l)
 	{
-		ft_putstr_fd("declare -x ", fd);
-		ft_putstr_fd(((t_env*)l->content)->name, fd);
+		printf("declare -x ");
+		printf("%s", ((t_env*)l->content)->name);
 		if (((t_env*)l->content)->value)
 		{
-			ft_putstr_fd("=\"", fd);
-			ft_putstr_fd(((t_env*)l->content)->value, fd);
-			ft_putstr_fd("\"", fd);
+			printf("=\"");
+			printf("%s", ((t_env*)l->content)->value);
+			printf("\"");
 		}
-		ft_putstr_fd("\n", fd);	
+		printf("\n");	
 		l = l->next;
 	}
 }
@@ -180,16 +207,18 @@ void	print_export(t_list *list, int fd)
 void	print_env(t_list *list, int fd)
 {
 	t_list *l;
+	int hh;
 	
+	hh = fd;
 	l = list;
 	while (l)
 	{
 		if (((t_env*)l->content)->value)
 		{
-			ft_putstr_fd(((t_env*)l->content)->name, fd);
-			ft_putstr_fd("=", fd);
-			ft_putstr_fd(((t_env*)l->content)->value, fd);
-			ft_putstr_fd("\n", fd);	
+			printf("%s", ((t_env*)l->content)->name);
+			printf("=");
+			printf("%s", ((t_env*)l->content)->value);
+			printf("\n");	
 		}
 		l = l->next;
 	}
