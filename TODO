@@ -6,3 +6,5 @@ SHLVL should import same envs as the precedent one
 deleting envs in a higher shlvl shouldnt impact the precedent one
 
 EXPORT + key value without "=" sign
+
+env | wc
