@@ -44,13 +44,28 @@ void	ft_echo(t_all *all, char **arg, int fd)
 		else
 				f = 1;
 		if (f == 1)
-			printf("%s", arg[i])/*ft_putstr_fd(arg[i], fd)*/;
+		{
+			if (all->pip)
+				printf("%s", arg[i]);
+			else
+				ft_putstr_fd(arg[i], fd);
+		}
 		i++;
 		if (f == 1 && arg[i] && arg[i][0] != '\0')
-			printf(" ")/*ft_putstr_fd(" ", fd)*/;
+		{
+			if (all->pip)
+				printf(" ");
+			else
+				ft_putstr_fd(" ", fd);
+		}
 	}
 	if (!n)
-		printf("\n");
+	{
+		if (all->pip)
+			printf("\n");
+		else
+			ft_putstr_fd("\n", fd);
+	}
 	all->exits = 0;
 	if (all->pip)
 		exit(0);
@@ -124,9 +139,13 @@ void	ft_pwd(t_all *all, int fd)
 
 	hh = fd;
 	s = getcwd(NULL, 0);
-	//ft_putstr_fd(s, fd);
-	//ft_putstr_fd("\n", fd);
-	printf("%s\n", s);
+	if (!all->pip)
+	{
+		ft_putstr_fd(s, fd);
+		ft_putstr_fd("\n", fd);
+	}
+	else
+		printf("%s\n", s);
 	free(s);
 	all->exits = 0;
 	if (all->pip)
@@ -162,25 +181,25 @@ void	ft_export_wa(t_all *all, t_env *var)
 		ft_lstadd_back(&all->l_env, ft_lstnew(var));
 }
 
-// void	print_export(t_list *list, int fd)
-// {
-// 	t_list *l;
+void	print_export_fd(t_list *list, int fd)
+{
+	t_list *l;
 	
-// 	l = list;
-// 	while (l)
-// 	{
-// 		ft_putstr_fd("declare -x ", fd);
-// 		ft_putstr_fd(((t_env*)l->content)->name, fd);
-// 		if (((t_env*)l->content)->value)
-// 		{
-// 			ft_putstr_fd("=\"", fd);
-// 			ft_putstr_fd(((t_env*)l->content)->value, fd);
-// 			ft_putstr_fd("\"", fd);
-// 		}
-// 		ft_putstr_fd("\n", fd);	
-// 		l = l->next;
-// 	}
-// }
+	l = list;
+	while (l)
+	{
+		ft_putstr_fd("declare -x ", fd);
+		ft_putstr_fd(((t_env*)l->content)->name, fd);
+		if (((t_env*)l->content)->value)
+		{
+			ft_putstr_fd("=\"", fd);
+			ft_putstr_fd(((t_env*)l->content)->value, fd);
+			ft_putstr_fd("\"", fd);
+		}
+		ft_putstr_fd("\n", fd);	
+		l = l->next;
+	}
+}
 
 void	print_export(t_list *list, int fd)
 {
@@ -224,6 +243,26 @@ void	print_env(t_list *list, int fd)
 	}
 }
 
+void	print_env_fd(t_list *list, int fd)
+{
+	t_list *l;
+	int hh;
+	
+	hh = fd;
+	l = list;
+	while (l)
+	{
+		if (((t_env*)l->content)->value)
+		{
+			ft_putstr_fd(((t_env*)l->content)->name, fd);
+			ft_putstr_fd("=", fd);
+			ft_putstr_fd(((t_env*)l->content)->value, fd);
+			ft_putstr_fd("\n", fd);	
+		}
+		l = l->next;
+	}
+}
+
 void	alpha_sort(t_list *list)
 {
 	t_list *b;
@@ -253,7 +292,11 @@ void	ft_export_na(t_all *all, int fd)
 	
 	list = all->l_env;
 	alpha_sort(list);
-	print_export(list, fd);
+	if (all->pip)
+		print_export(list, fd);
+	else
+		print_export_fd(list, fd);
+	
 }
 
 void	ft_env(t_all *all, int fd)
@@ -261,7 +304,10 @@ void	ft_env(t_all *all, int fd)
 	t_list *list;
 	
 	list = all->l_env;
-	print_env(list, fd);
+	if (all->pip)
+		print_env(list, fd);
+	else
+		print_env_fd(list, fd);
 }
 
 t_list	*search_lst_unset(t_list *list, char *var, t_list **before)
@@ -356,7 +402,7 @@ void	ft_exit(t_all *all, t_cmd *cmd)
 		if (cmd->args > 1)
 		{
 			write(2, "exit: ", 5);
-			write(2, "too many arguments", 17);
+			write(2, "too many arguments\n", 18);
 			all->exits = 1;
 		}
 	}

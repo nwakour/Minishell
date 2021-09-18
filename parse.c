@@ -139,6 +139,7 @@ void	get_pips(t_all *all, char **line_mask)
 	while (tmp->next)
 	{
 		fd_files(all, ((t_cmd*)tmp->content));
+		// check cmd_exec
 		s_cmd(all, tmp->content);
 		//new_func(all, tmp->content);
 		tmp = tmp->next;
