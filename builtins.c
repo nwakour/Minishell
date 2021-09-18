@@ -21,6 +21,15 @@ void	ft_echo(t_all *all, char **arg, int fd)
 	i = 0;
 	f = 0;
 	n = 0;
+	// finding file name of fd
+	// char filepath[200];
+	// if (fcntl(fd, F_GETPATH, filepath) != -1)
+	// {
+	// 	printf("filepath: %s\n", filepath);
+	// }
+	// else
+	// 	printf("FAIL\n");
+	// end fd
 	while (arg[i])
 	{
 		if (f == 0 && arg[i][0] == '-' && arg[i][1] == 'n')
@@ -33,10 +42,10 @@ void	ft_echo(t_all *all, char **arg, int fd)
 		else
 				f = 1;
 		if (f == 1)
-			ft_putstr_fd(arg[i], fd);
+			printf("%s\n", arg[i])/*ft_putstr_fd(arg[i], fd)*/;
 		i++;
 		if (f == 1 && arg[i] && arg[i][0] != '\0')
-			ft_putstr_fd(" ", fd);
+			printf(" ")/*ft_putstr_fd(" ", fd)*/;
 	}
 	if (!n)
 		ft_putstr_fd("\n", fd);

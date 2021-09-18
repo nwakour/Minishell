@@ -219,7 +219,7 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 			dup2(cmd->fd, 1);
 		else
 		{
-			write(2, "here yoyo\n", 10);
+			//write(2, "here yoyo\n", 10);
 			dup2(fd[1], 1);
 		}
 		if (cmd->infd > 1)
