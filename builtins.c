@@ -17,9 +17,7 @@ void	ft_echo(t_all *all, char **arg, int fd)
 	int i;
 	int n;
 	int f;
-	int hh;
 
-	hh = fd;
 	i = 0;
 	f = 0;
 	n = 0;

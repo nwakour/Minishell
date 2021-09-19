@@ -223,7 +223,7 @@ void new_func(t_all *all, t_cmd *cmd)
 {
 	
 	//TODO: check for cmd->exec for file errors before executing
-	
+	//check 
 	fd_files(all, cmd);
 	if (cmd->valid == 1 && cmd->exec)
 		execute_cmd(all, cmd);

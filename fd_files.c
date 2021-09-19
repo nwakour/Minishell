@@ -56,7 +56,7 @@ void	fd_files(t_all *all, t_cmd *cmd)
 				s_perror(all, cmd->f_name[i], 1);
 				all->exits = 1; 
 				cmd->exec = 0;
-				break;
+				//break;
 			}
 		}
 	}
