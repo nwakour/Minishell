@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_files.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:06:22 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/11 14:28:11 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/09/19 15:40:10 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	fd_files(t_all *all, t_cmd *cmd)
 	cmd->exec = 1;
 	cmd->fd = 1;
 	cmd->infd = all->nextin;
-	if (cmd->f_name[0])
+	if (cmd->f_name && cmd->f_name[0])
 	{
 		i = -1;
 		while (cmd->f_name[++i])

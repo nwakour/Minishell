@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:25:40 by nwakour           #+#    #+#             */
-/*   Updated: 2021/07/16 17:36:18 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/09/19 15:39:26 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int		str_n_set(char *str, char *set)
 
 	i = -1;
 	nb = 0;
+	if (!str || !set)
+		return (0);
 	while (str[++i])
 	{
 		j = -1;

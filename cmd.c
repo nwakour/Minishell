@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/09/15 14:40:06 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/09/19 15:41:02 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	***ft_split_mask(char **line_mask, char c)
 	char ***split_mask;
 	int i;
 
-    if (!line_mask)
+    if (!line_mask || !line_mask[LINE] || !line_mask[MASK])
         return (NULL);
 	tmp_line = ft_split_ref(line_mask[LINE], line_mask[MASK], c);
 	tmp_mask = ft_split(line_mask[MASK], c);
@@ -105,13 +105,13 @@ void	get_cmd(t_all *all, char **line_mask)
 	split_mask = ft_split_mask(line_mask, ' ');
 	redirs = str_n_set(line_mask[MASK], "><?=@");
 	args = 0;
-	while (split_mask[args])
+	while (split_mask && split_mask[args])
 		args++;
 	i = args;
 	args = args - redirs - 1;
 	if (args < 0)
 		args = 0;
-	if (!i || !ft_struct_list(&all->l_cmd, (void**)&all->cmd, sizeof(t_cmd)))
+	if (!ft_struct_list(&all->l_cmd, (void**)&all->cmd, sizeof(t_cmd)) || !i)
 		return ;
 	if (redirs >= 0)
 	{
