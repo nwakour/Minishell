@@ -223,10 +223,19 @@ void new_func(t_all *all, t_cmd *cmd)
 {
 	
 	//TODO: check for cmd->exec for file errors before executing
-	//check 
+	//check
+	cmd->in = dup(0);
+	cmd->out = dup(1);
 	fd_files(all, cmd);
+	if (!cmd->exec)
+		exit(all->exits);
 	if (cmd->valid == 1 && cmd->exec)
+	{
+		s_dup(cmd);
 		execute_cmd(all, cmd);
+		dup2(cmd->in, 0);
+		dup2(cmd->out, 1);
+	}
 	else if (cmd->valid == 2 && cmd->exec)
 		s_last(all, cmd);
 	else if (!cmd->valid)
@@ -267,7 +276,7 @@ void	execute_cmd(t_all *all, t_cmd *cmd)
 	}
 	else if (!ft_strcmp(cmd->cmd, "echo"))
 	{
-		ft_echo(all, cmd->arg, cmd->fd);
+		ft_echo(all, cmd->arg);
 	}
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		ft_pwd(all, cmd->fd);

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	ft_echo(t_all *all, char **arg, int fd)
+void	ft_echo(t_all *all, char **arg)
 {
 	int i;
 	int n;
@@ -21,15 +21,6 @@ void	ft_echo(t_all *all, char **arg, int fd)
 	i = 0;
 	f = 0;
 	n = 0;
-	// finding file name of fd
-	// char filepath[200];
-	// if (fcntl(fd, F_GETPATH, filepath) != -1)
-	// {
-	// 	printf("filepath: %s\n", filepath);
-	// }
-	// else
-	// 	printf("FAIL\n");
-	// end fd
 	while (arg[i])
 	{
 		if (f == 0 && arg[i][0] == '-' && arg[i][1] == 'n')
@@ -42,28 +33,13 @@ void	ft_echo(t_all *all, char **arg, int fd)
 		else
 				f = 1;
 		if (f == 1)
-		{
-			if (all->pip)
-				printf("%s", arg[i]);
-			else
-				ft_putstr_fd(arg[i], fd);
-		}
+			write(1, arg[i], ft_strlen(arg[i]));
 		i++;
 		if (f == 1 && arg[i] && arg[i][0] != '\0')
-		{
-			if (all->pip)
-				printf(" ");
-			else
-				ft_putstr_fd(" ", fd);
-		}
+			write(1, " ", 1);
 	}
 	if (!n)
-	{
-		if (all->pip)
-			printf("\n");
-		else
-			ft_putstr_fd("\n", fd);
-	}
+		write(1, "\n", 1);
 	all->exits = 0;
 	if (all->pip)
 		exit(0);
@@ -137,13 +113,7 @@ void	ft_pwd(t_all *all, int fd)
 
 	hh = fd;
 	s = getcwd(NULL, 0);
-	if (!all->pip)
-	{
-		ft_putstr_fd(s, fd);
-		ft_putstr_fd("\n", fd);
-	}
-	else
-		printf("%s\n", s);
+	printf("%s\n", s);
 	free(s);
 	all->exits = 0;
 	if (all->pip)
@@ -179,25 +149,25 @@ void	ft_export_wa(t_all *all, t_env *var)
 		ft_lstadd_back(&all->l_env, ft_lstnew(var));
 }
 
-void	print_export_fd(t_list *list, int fd)
-{
-	t_list *l;
+// void	print_export_fd(t_list *list, int fd)
+// {
+// 	t_list *l;
 	
-	l = list;
-	while (l)
-	{
-		ft_putstr_fd("declare -x ", fd);
-		ft_putstr_fd(((t_env*)l->content)->name, fd);
-		if (((t_env*)l->content)->value)
-		{
-			ft_putstr_fd("=\"", fd);
-			ft_putstr_fd(((t_env*)l->content)->value, fd);
-			ft_putstr_fd("\"", fd);
-		}
-		ft_putstr_fd("\n", fd);	
-		l = l->next;
-	}
-}
+// 	l = list;
+// 	while (l)
+// 	{
+// 		ft_putstr_fd("declare -x ", fd);
+// 		ft_putstr_fd(((t_env*)l->content)->name, fd);
+// 		if (((t_env*)l->content)->value)
+// 		{
+// 			ft_putstr_fd("=\"", fd);
+// 			ft_putstr_fd(((t_env*)l->content)->value, fd);
+// 			ft_putstr_fd("\"", fd);
+// 		}
+// 		ft_putstr_fd("\n", fd);	
+// 		l = l->next;
+// 	}
+// }
 
 void	print_export(t_list *list, int fd)
 {
@@ -208,15 +178,15 @@ void	print_export(t_list *list, int fd)
 	l = list;
 	while (l)
 	{
-		printf("declare -x ");
-		printf("%s", ((t_env*)l->content)->name);
+		write(1, "declare -x ", 11);
+		write(1, ((t_env*)l->content)->name, ft_strlen(((t_env*)l->content)->name));
 		if (((t_env*)l->content)->value)
 		{
-			printf("=\"");
-			printf("%s", ((t_env*)l->content)->value);
-			printf("\"");
+			write(1, "=\"", 2);
+			write(1, ((t_env*)l->content)->value, ft_strlen(((t_env*)l->content)->value));
+			write(1, "\"", 1);
 		}
-		printf("\n");	
+		write(1, "\n", 1);	
 		l = l->next;
 	}
 }
@@ -232,34 +202,34 @@ void	print_env(t_list *list, int fd)
 	{
 		if (((t_env*)l->content)->value)
 		{
-			printf("%s", ((t_env*)l->content)->name);
-			printf("=");
-			printf("%s", ((t_env*)l->content)->value);
-			printf("\n");	
+			write(1, ((t_env*)l->content)->name, ft_strlen(((t_env*)l->content)->name));
+			write(1, "=", 1);
+			write(1, ((t_env*)l->content)->value, ft_strlen(((t_env*)l->content)->value));
+			write(1, "\n", 1);
 		}
 		l = l->next;
 	}
 }
 
-void	print_env_fd(t_list *list, int fd)
-{
-	t_list *l;
-	int hh;
+// void	print_env_fd(t_list *list, int fd)
+// {
+// 	t_list *l;
+// 	int hh;
 	
-	hh = fd;
-	l = list;
-	while (l)
-	{
-		if (((t_env*)l->content)->value)
-		{
-			ft_putstr_fd(((t_env*)l->content)->name, fd);
-			ft_putstr_fd("=", fd);
-			ft_putstr_fd(((t_env*)l->content)->value, fd);
-			ft_putstr_fd("\n", fd);	
-		}
-		l = l->next;
-	}
-}
+// 	hh = fd;
+// 	l = list;
+// 	while (l)
+// 	{
+// 		if (((t_env*)l->content)->value)
+// 		{
+// 			ft_putstr_fd(((t_env*)l->content)->name, fd);
+// 			ft_putstr_fd("=", fd);
+// 			ft_putstr_fd(((t_env*)l->content)->value, fd);
+// 			ft_putstr_fd("\n", fd);	
+// 		}
+// 		l = l->next;
+// 	}
+// }
 
 void	alpha_sort(t_list *list)
 {
@@ -290,11 +260,7 @@ void	ft_export_na(t_all *all, int fd)
 	
 	list = all->l_env;
 	alpha_sort(list);
-	if (all->pip)
-		print_export(list, fd);
-	else
-		print_export_fd(list, fd);
-	
+	print_export(list, fd);
 }
 
 void	ft_env(t_all *all, int fd)
@@ -302,10 +268,9 @@ void	ft_env(t_all *all, int fd)
 	t_list *list;
 	
 	list = all->l_env;
+	print_env(list, fd);
 	if (all->pip)
-		print_env(list, fd);
-	else
-		print_env_fd(list, fd);
+		exit(0);
 }
 
 t_list	*search_lst_unset(t_list *list, char *var, t_list **before)

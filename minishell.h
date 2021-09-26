@@ -52,8 +52,8 @@ typedef struct		s_cmd
 	char	**arg;
 	int		infd;
 	int		fd;
-	char	*in;
-	char	*out;
+	char	in;
+	char	out;
 	int		append;
 	int		link;
 	char	**f_name;
@@ -107,7 +107,7 @@ void    export_parse(t_all *all, char *s);
 void	get_data(t_all *all, char* line, char *ref_line);
 
 /*				builtins			*/
-void	ft_echo(t_all *all, char **arg, int fd);
+void	ft_echo(t_all *all, char **arg);
 void	ft_cd(t_all *all, char* path, int args);
 void	ft_pwd(t_all *all, int fd);
 void	ft_export_na(t_all *all, int fd);
@@ -200,4 +200,5 @@ void	s_cmd_files(t_cmd *cmd);
 char	***ft_split_mask(char **line_mask, char c);
 int		is_char_from_set(char c, char *set);
 int		str_n_set(char *str, char *set);
+void	s_dup(t_cmd *cmd);
 #endif
