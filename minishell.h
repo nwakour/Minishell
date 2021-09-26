@@ -109,11 +109,13 @@ void	get_data(t_all *all, char* line, char *ref_line);
 /*				builtins			*/
 void	ft_echo(t_all *all, char **arg);
 void	ft_cd(t_all *all, char* path, int args);
-void	ft_pwd(t_all *all, int fd);
-void	ft_export_na(t_all *all, int fd);
+void	ft_pwd(t_all *all);
+void	ft_export(t_all *all, t_cmd *cmd);
+void	ft_export_na(t_all *all);
 void	ft_export_wa(t_all *all, t_env *var);
-void	ft_env(t_all *all, int fd);
-void	ft_unset(t_all *all, char *var);
+void	ft_env(t_all *all);
+void	ft_unset_co(t_all *all, char *var);
+void	ft_unset(t_all *all, t_cmd *cmd);
 void	ft_exit(t_all *all, t_cmd *cmd);
 
 /*				parse				*/

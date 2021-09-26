@@ -244,27 +244,11 @@ void new_func(t_all *all, t_cmd *cmd)
 		write(2, ": command not found\n", 20);
 		all->error = 127;
 	}
-	// else if (cmd->exec && (all->inx == all->pip || all->pip == 0))
-	// {
-	// 	//printf("here\n");
-	// 	s_last(all, cmd);
-	// }
-	// if (cmd->fd > 1)
-	// 	close(cmd->fd);
-	// i = -1;
-	// while (str[++i])
-	// 	free(str[i]);
-	//free(str);
-	// i = -1;
-	// while (str_ref[++i])
-	// 	free(str_ref[i]);
-	//free(str_ref);
 }
 
 void	execute_cmd(t_all *all, t_cmd *cmd)
 {
 	int flag;
-	int i;
 
 	flag = 0;
 	if (!cmd->cmd && cmd->fd)
@@ -275,44 +259,19 @@ void	execute_cmd(t_all *all, t_cmd *cmd)
 		ft_putstr_fd(": command not found\n", 1);
 	}
 	else if (!ft_strcmp(cmd->cmd, "echo"))
-	{
 		ft_echo(all, cmd->arg);
-	}
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
-		ft_pwd(all, cmd->fd);
+		ft_pwd(all);
 	else if (!ft_strcmp(cmd->cmd, "cd"))
 		ft_cd(all, cmd->arg[0], cmd->args);
 	else if (!ft_strcmp(cmd->cmd, "export"))
-	{
-		if (cmd->arg[0])
-		{
-			i = -1;
-			while (cmd->arg[++i])
-				export_parse(all, cmd->arg[i]);
-		}
-		else
-			ft_export_na(all, cmd->fd);
-		all->exits = 0;
-		if (all->pip)
-			exit(0);
-	}
+		ft_export(all, cmd);
 	else if (!ft_strcmp(cmd->cmd, "env"))
-		ft_env(all, cmd->fd);
+		ft_env(all);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
 		ft_exit(all, cmd);
-		// all->ex = 1;
 	else if (!ft_strcmp(cmd->cmd, "unset"))
-	{
-		if (cmd->arg[0])
-		{
-			i = -1;
-			while (cmd->arg[++i])
-				ft_unset(all, cmd->arg[i]);
-		}
-		all->exits = 0;
-		if (all->pip)
-			exit(0);
-	}
+		ft_unset(all, cmd);
 	else
 		read_data(all);
 }

@@ -63,7 +63,6 @@ void		ft_cd(t_all *all, char* path, int args)
 	if (args > 1)
 	{
 		write(2, "cd: too many arguments\n", 23);
-		//printf("too many arguments\n");
 		all->exits = 1;
 		if (all->pip)
 			exit(1);
@@ -80,7 +79,6 @@ void		ft_cd(t_all *all, char* path, int args)
 		r = chdir(path);
 	if (r != 0)
 	{
-		//printf("cd: no such file or directory: %s\n", path);
 		write(2, "cd: ", 4);
 		write(2, path, ft_strlen(path));
 		write(2, ": no such file or directory", 27);
@@ -106,14 +104,13 @@ void		ft_cd(t_all *all, char* path, int args)
 	// 	exit(r);
 }
 
-void	ft_pwd(t_all *all, int fd)
+void	ft_pwd(t_all *all)
 {
 	char *s;
-	int hh;
 
-	hh = fd;
 	s = getcwd(NULL, 0);
-	printf("%s\n", s);
+	write(1, s, ft_strlen(s));
+	write(1, "\n", 1);
 	free(s);
 	all->exits = 0;
 	if (all->pip)
@@ -149,32 +146,10 @@ void	ft_export_wa(t_all *all, t_env *var)
 		ft_lstadd_back(&all->l_env, ft_lstnew(var));
 }
 
-// void	print_export_fd(t_list *list, int fd)
-// {
-// 	t_list *l;
-	
-// 	l = list;
-// 	while (l)
-// 	{
-// 		ft_putstr_fd("declare -x ", fd);
-// 		ft_putstr_fd(((t_env*)l->content)->name, fd);
-// 		if (((t_env*)l->content)->value)
-// 		{
-// 			ft_putstr_fd("=\"", fd);
-// 			ft_putstr_fd(((t_env*)l->content)->value, fd);
-// 			ft_putstr_fd("\"", fd);
-// 		}
-// 		ft_putstr_fd("\n", fd);	
-// 		l = l->next;
-// 	}
-// }
-
-void	print_export(t_list *list, int fd)
+void	print_export(t_list *list)
 {
 	t_list *l;
-	int hh;
-	
-	hh = fd;
+
 	l = list;
 	while (l)
 	{
@@ -191,12 +166,10 @@ void	print_export(t_list *list, int fd)
 	}
 }
 
-void	print_env(t_list *list, int fd)
+void	print_env(t_list *list)
 {
 	t_list *l;
-	int hh;
-	
-	hh = fd;
+
 	l = list;
 	while (l)
 	{
@@ -210,26 +183,6 @@ void	print_env(t_list *list, int fd)
 		l = l->next;
 	}
 }
-
-// void	print_env_fd(t_list *list, int fd)
-// {
-// 	t_list *l;
-// 	int hh;
-	
-// 	hh = fd;
-// 	l = list;
-// 	while (l)
-// 	{
-// 		if (((t_env*)l->content)->value)
-// 		{
-// 			ft_putstr_fd(((t_env*)l->content)->name, fd);
-// 			ft_putstr_fd("=", fd);
-// 			ft_putstr_fd(((t_env*)l->content)->value, fd);
-// 			ft_putstr_fd("\n", fd);	
-// 		}
-// 		l = l->next;
-// 	}
-// }
 
 void	alpha_sort(t_list *list)
 {
@@ -254,21 +207,38 @@ void	alpha_sort(t_list *list)
 	}
 }
 
-void	ft_export_na(t_all *all, int fd)
+void	ft_export_na(t_all *all)
 {
 	t_list *list;
 	
 	list = all->l_env;
 	alpha_sort(list);
-	print_export(list, fd);
+	print_export(list);
 }
 
-void	ft_env(t_all *all, int fd)
+void	ft_env(t_all *all)
 {
 	t_list *list;
 	
 	list = all->l_env;
-	print_env(list, fd);
+	print_env(list);
+	if (all->pip)
+		exit(0);
+}
+
+void	ft_export(t_all *all, t_cmd *cmd)
+{
+	int	i;
+
+	if (cmd->arg[0])
+	{
+		i = -1;
+		while (cmd->arg[++i])
+			export_parse(all, cmd->arg[i]);
+	}
+	else
+		ft_export_na(all);
+	all->exits = 0;
 	if (all->pip)
 		exit(0);
 }
@@ -295,7 +265,7 @@ t_list	*search_lst_unset(t_list *list, char *var, t_list **before)
 	return (f);
 }
 
-void	ft_unset(t_all *all, char *var)
+void	ft_unset_co(t_all *all, char *var)
 {
 	t_list	*list;
 	t_list	*f;
@@ -316,6 +286,21 @@ void	ft_unset(t_all *all, char *var)
 		free(f->content);
 		free(f);
 	}
+}
+
+void	ft_unset(t_all *all, t_cmd *cmd)
+{
+	int	i;
+
+	if (cmd->arg[0])
+		{
+			i = -1;
+			while (cmd->arg[++i])
+				ft_unset_co(all, cmd->arg[i]);
+		}
+		all->exits = 0;
+		if (all->pip)
+			exit(0);
 }
 
 int		s_isnum(char *str)
