@@ -63,6 +63,11 @@ char	**s_readline(t_all *all, char *prompt)
 		add_history(line_mask[LINE]);
 		return (line_mask);
 	}
+	if (!line_mask[LINE])
+	{
+		write(1, "exit", 5);
+		exit(all->exits);
+	}
 	// if (line_mask[LINE][0] == '\0')
 	// 	line_mask[LINE] = NULL;
 	return (line_mask);

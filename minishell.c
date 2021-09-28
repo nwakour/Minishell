@@ -87,6 +87,7 @@ int		main(int argc, char **argv, char **env)
 	(void)argv;
 	ft_struct_bezero(&all, sizeof(t_all));
 	parce_env(&all, env);
+	all.envp = s_env(&all);
 	g_child = 0;
 	while (1)
 	{

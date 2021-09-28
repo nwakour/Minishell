@@ -1,12 +1,18 @@
-env variables :
-starts with alpha or underscore
-contain alpha\digit\underscore in the middle
+//env variables :
+//starts with alpha or underscore
+//contain alpha\digit\underscore in the middle
 
 SHLVL should import same envs as the precedent one
 deleting envs in a higher shlvl shouldnt impact the precedent one
 
-EXPORT + key value without "=" sign
+//EXPORT + key value without "=" sign
 
-env | wc
+//env | wc
 
 hahahahaha
+
+ctrl D
+
+exec command after looking in path
+
+fix export

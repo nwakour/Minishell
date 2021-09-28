@@ -221,9 +221,6 @@ void	s_heredoc(t_all *all, t_cmd *cmd)
 
 void new_func(t_all *all, t_cmd *cmd)
 {
-	
-	//TODO: check for cmd->exec for file errors before executing
-	//check
 	cmd->in = dup(0);
 	cmd->out = dup(1);
 	fd_files(all, cmd);

@@ -92,6 +92,7 @@ typedef struct		s_all
 	t_env	*env;
 	t_cmd	*cmd;
 	t_tc_cmd	*tccmd;
+	char	**envp;
 	int		error;
 	int		exits;
 	int		pip;

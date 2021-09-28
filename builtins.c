@@ -154,11 +154,13 @@ void	print_export(t_list *list)
 	while (l)
 	{
 		write(1, "declare -x ", 11);
-		write(1, ((t_env*)l->content)->name, ft_strlen(((t_env*)l->content)->name));
+		write(1, ((t_env*)l->content)->name, 
+		ft_strlen(((t_env*)l->content)->name));
 		if (((t_env*)l->content)->value)
 		{
 			write(1, "=\"", 2);
-			write(1, ((t_env*)l->content)->value, ft_strlen(((t_env*)l->content)->value));
+			write(1, ((t_env*)l->content)->value, 
+			ft_strlen(((t_env*)l->content)->value));
 			write(1, "\"", 1);
 		}
 		write(1, "\n", 1);	
@@ -175,9 +177,11 @@ void	print_env(t_list *list)
 	{
 		if (((t_env*)l->content)->value)
 		{
-			write(1, ((t_env*)l->content)->name, ft_strlen(((t_env*)l->content)->name));
+			write(1, ((t_env*)l->content)->name, 
+			ft_strlen(((t_env*)l->content)->name));
 			write(1, "=", 1);
-			write(1, ((t_env*)l->content)->value, ft_strlen(((t_env*)l->content)->value));
+			write(1, ((t_env*)l->content)->value, 
+			ft_strlen(((t_env*)l->content)->value));
 			write(1, "\n", 1);
 		}
 		l = l->next;
@@ -195,7 +199,8 @@ void	alpha_sort(t_list *list)
 		b = list->next;
 		while (b != NULL)
 		{
-			if(ft_strcmp(((t_env*)list->content)->name, ((t_env*)b->content)->name) > 0)
+			if(ft_strcmp(((t_env*)list->content)->name, 
+			((t_env*)b->content)->name) > 0)
 			{
 				tmp = list->content;
 				list->content = b->content;
@@ -222,6 +227,9 @@ void	ft_env(t_all *all)
 	
 	list = all->l_env;
 	print_env(list);
+	if (all->envp)
+		free(all->envp);
+	all->envp = s_env(all);
 	if (all->pip)
 		exit(0);
 }
@@ -238,6 +246,9 @@ void	ft_export(t_all *all, t_cmd *cmd)
 	}
 	else
 		ft_export_na(all);
+	if (all->envp)
+		free(all->envp);
+	all->envp = s_env(all);
 	all->exits = 0;
 	if (all->pip)
 		exit(0);
