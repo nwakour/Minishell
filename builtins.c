@@ -118,18 +118,11 @@ void		ft_cd(t_all *all, char* path, int args)
 	int r;
 	t_env *env;
 
-	// write(2, ft_itoa(args), ft_strlen(ft_itoa(args)));
-	// if (!path)
-	// 	write(2, "null\n", 5);
-	// else
-	// 	write(2, "pos\n", 4);
 	r = 0;
 	ft_oldpwd(all);
+	all->exits = 0;
 	if (args == 1 && !path)
-	{
-		all->exits = 0;
 		return ;
-	}
 	if (args > 1)
 	{
 		write(2, "cd: too many arguments\n", 23);
@@ -153,14 +146,14 @@ void		ft_cd(t_all *all, char* path, int args)
 		write(2, ": no such file or directory\n", 28);
 		all->exits = 1;
 	}
-	else
-	{
-		env = (t_env*)malloc(sizeof(t_env));
-        env->name = "PWD";
-        env->value = getcwd(NULL, 0);
-    	ft_export_wa(all, env);
-		all->exits = 0;
-	}
+	// else
+	// {
+	// 	env = (t_env*)malloc(sizeof(t_env));
+    //     env->name = "PWD";
+    //     env->value = getcwd(NULL, 0);
+    // 	ft_export_wa(all, env);
+	// 	all->exits = 0;
+	// }
 	
 	// all->exits = r;
 	// if (all->pip)
@@ -391,12 +384,8 @@ int		s_isnum(char *str)
 
 void	ft_exit(t_all *all, t_cmd *cmd)
 {
-	// free(line);
-	// system("leaks minishell");
 	if (cmd->args == 0)
-	{
 		exit(0);
-	}
 	if (cmd->args >= 1)
 	{
 		if (!s_isnum(cmd->arg[0]))
