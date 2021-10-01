@@ -109,6 +109,7 @@ void	get_data(t_all *all, char* line, char *ref_line);
 
 /*				builtins			*/
 void	ft_echo(t_all *all, char **arg);
+int		n_flag(char **arg, int i);
 void	ft_cd(t_all *all, char* path, int args);
 void	ft_pwd(t_all *all);
 void	ft_export(t_all *all, t_cmd *cmd);
@@ -173,6 +174,7 @@ t_dlist	*lstnewc(void *cam);
 void	free_char(char **s);
 int		skip_char(char *str, char c);
 int		skip_space(char *str);
+
 
 /*				history				*/
 void	save_history(t_all *all, char *line);

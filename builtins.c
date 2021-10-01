@@ -84,15 +84,47 @@ void	ft_echo(t_all *all, char **arg)
 // 	all->exits = 0;
 // }
 
+void	ft_oldpwd(t_all *all)
+{
+	t_list *tmp;
+
+	tmp = all->l_env;
+	while (tmp)
+	{
+		if (!(ft_strcmp(((t_env*)tmp->content)->name, "OLDPWD")))
+		{
+			free(((t_env*)tmp->content)->value);
+			((t_env*)tmp->content)->value = getcwd(NULL, 0);
+			break;
+		}
+		tmp = tmp->next;
+	}
+}
+
+void		ft_cd_home(t_all *all)
+{
+	int ret;
+
+	ret = chdir(getenv("HOME"));
+	if (ret != 0)
+	{
+		write(2, "cd: HOME not set\n", 18);
+		all->exits = 1;
+	}
+}
+
 void		ft_cd(t_all *all, char* path, int args)
 {
 	int r;
 	t_env *env;
 
-	env = (t_env*)malloc(sizeof(t_env));
-	env->name = "OLD_PWD";
-	env->value = getcwd(NULL, 0);
-	ft_export_wa(all, env);
+	// write(2, ft_itoa(args), ft_strlen(ft_itoa(args)));
+	// if (!path)
+	// 	write(2, "null\n", 5);
+	// else
+	// 	write(2, "pos\n", 4);
+	r = 0;
+	ft_oldpwd(all);
 	if (args == 1 && !path)
 	{
 		all->exits = 0;
@@ -104,23 +136,21 @@ void		ft_cd(t_all *all, char* path, int args)
 		all->exits = 1;
 		return ;
 	}
-	if (path && path[0] == '~')
+	if (!path)
+		ft_cd_home(all);
+	else if (path && path[0] == '~')
 	{
 		r = chdir(getenv("HOME"));
 		if (path[1] && path[1] == '/' && path[2])
 			r = chdir(path + 2);
-	}
-	else if (!path)
-		r = chdir(getenv("HOME"));
+	}	
 	else
 		r = chdir(path);
 	if (r != 0)
 	{
 		write(2, "cd: ", 4);
 		write(2, path, ft_strlen(path));
-		write(2, ": no such file or directory", 27);
-		
-		write(1, "\n", 1);
+		write(2, ": no such file or directory\n", 28);
 		all->exits = 1;
 	}
 	else
