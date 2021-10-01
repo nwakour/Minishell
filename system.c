@@ -197,7 +197,10 @@ void	s_exec(t_all *all, t_cmd *cmd)
 void	s_check_exec(t_all *all, t_cmd *cmd)
 {
 	if (cmd->valid == 1)
+	{
 		execute_cmd(all, cmd);
+		exit(all->exits);
+	}
 	else if (cmd->valid == 2 && cmd->exec && all->pip)	
 		s_exec(all, cmd);
 }

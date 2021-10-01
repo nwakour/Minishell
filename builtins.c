@@ -12,38 +12,77 @@
 
 #include "minishell.h"
 
+int	s_tern(int cond, int iftrue, int iffalse)
+{
+	if (cond)
+		return (iftrue);
+	else
+		return (iffalse);
+}
+
+int		n_flag(char **arg, int i)
+{
+	return (arg[i] && arg[i][0] == '-' && arg[i][1] == 'n' &&
+	arg[i][skip_char(arg[i] + 1, 'n') + 1] == '\0');
+}
+
 void	ft_echo(t_all *all, char **arg)
 {
 	int i;
 	int n;
-	int f;
 
 	i = 0;
-	f = 0;
 	n = 0;
+	if (n_flag(arg, 0))
+	{
+		n = 1;
+		i++;
+	}
 	while (arg[i])
 	{
-		if (f == 0 && arg[i][0] == '-' && arg[i][1] == 'n')
+		if (!n_flag(arg, i))
 		{
-			if (arg[i][skip_char(arg[i] + 1, 'n') + 1] == '\0')
-				n = 1;
-			else
-				f = 1;
-		}
-		else
-				f = 1;
-		if (f == 1)
 			write(1, arg[i], ft_strlen(arg[i]));
+			if (arg[i+1] && arg[i+1][0] != '\0')
+				write(1, " ", 1);
+		}
 		i++;
-		if (f == 1 && arg[i] && arg[i][0] != '\0')
-			write(1, " ", 1);
 	}
 	if (!n)
 		write(1, "\n", 1);
 	all->exits = 0;
-	if (all->pip)
-		exit(0);
 }
+
+// void	ft_echo(t_all *all, char **arg)
+// {
+// 	int i;
+// 	int n;
+// 	int f;
+
+// 	i = 0;
+// 	f = 0;
+// 	n = 0;
+// 	while (arg[i])
+// 	{
+// 		if (f == 0 && arg[i][0] == '-' && arg[i][1] == 'n')
+// 		{
+// 			if (arg[i][skip_char(arg[i] + 1, 'n') + 1] == '\0')
+// 				n = 1;
+// 			else
+// 				f = 1;
+// 		}
+// 		else
+// 				f = 1;
+// 		if (f == 1)
+// 			write(1, arg[i], ft_strlen(arg[i]));
+// 		i++;
+// 		if (f == 1 && arg[i] && arg[i][0] != '\0')
+// 			write(1, " ", 1);
+// 	}
+// 	if (!n)
+// 		write(1, "\n", 1);
+// 	all->exits = 0;
+// }
 
 void		ft_cd(t_all *all, char* path, int args)
 {
@@ -57,20 +96,18 @@ void		ft_cd(t_all *all, char* path, int args)
 	if (args == 1 && !path)
 	{
 		all->exits = 0;
-		if (all->pip)
-			exit(0);
+		return ;
 	}
 	if (args > 1)
 	{
 		write(2, "cd: too many arguments\n", 23);
 		all->exits = 1;
-		if (all->pip)
-			exit(1);
+		return ;
 	}
 	if (path && path[0] == '~')
 	{
 		r = chdir(getenv("HOME"));
-		if (path [1] && path[1] == '/' && path[2])
+		if (path[1] && path[1] == '/' && path[2])
 			r = chdir(path + 2);
 	}
 	else if (!path)
@@ -85,8 +122,6 @@ void		ft_cd(t_all *all, char* path, int args)
 		
 		write(1, "\n", 1);
 		all->exits = 1;
-		if (all->pip)
-			exit(1);
 	}
 	else
 	{
@@ -95,8 +130,6 @@ void		ft_cd(t_all *all, char* path, int args)
         env->value = getcwd(NULL, 0);
     	ft_export_wa(all, env);
 		all->exits = 0;
-		if (all->pip)
-			exit(0);
 	}
 	
 	// all->exits = r;
@@ -113,8 +146,6 @@ void	ft_pwd(t_all *all)
 	write(1, "\n", 1);
 	free(s);
 	all->exits = 0;
-	if (all->pip)
-		exit(0);
 }
 
 t_list	*search_lst(t_list *list, t_env *var)
@@ -230,8 +261,7 @@ void	ft_env(t_all *all)
 	if (all->envp)
 		free(all->envp);
 	all->envp = s_env(all);
-	if (all->pip)
-		exit(0);
+	all->exits = 0;
 }
 
 void	ft_export(t_all *all, t_cmd *cmd)
@@ -250,8 +280,6 @@ void	ft_export(t_all *all, t_cmd *cmd)
 		free(all->envp);
 	all->envp = s_env(all);
 	all->exits = 0;
-	if (all->pip)
-		exit(0);
 }
 
 t_list	*search_lst_unset(t_list *list, char *var, t_list **before)
@@ -304,14 +332,12 @@ void	ft_unset(t_all *all, t_cmd *cmd)
 	int	i;
 
 	if (cmd->arg[0])
-		{
-			i = -1;
-			while (cmd->arg[++i])
-				ft_unset_co(all, cmd->arg[i]);
-		}
-		all->exits = 0;
-		if (all->pip)
-			exit(0);
+	{
+		i = -1;
+		while (cmd->arg[++i])
+			ft_unset_co(all, cmd->arg[i]);
+	}
+	all->exits = 0;
 }
 
 int		s_isnum(char *str)

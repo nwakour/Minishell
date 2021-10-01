@@ -204,4 +204,5 @@ char	***ft_split_mask(char **line_mask, char c);
 int		is_char_from_set(char c, char *set);
 int		str_n_set(char *str, char *set);
 void	s_dup(t_cmd *cmd);
+int		s_tern(int cond, int iftrue, int iffalse);
 #endif
