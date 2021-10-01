@@ -92,8 +92,7 @@ char	**s_env(t_all *all)
 		env[++i] = s_join(((t_env*)tmp->content)->name, '=',((t_env*)tmp->content)->value);
 		tmp = tmp->next;
 	}
-	//env[i-1] = ft_strdup("laarbi=spoody"); 
-	env[i] = 0;
+	env[i+1] = 0;
 	return (env);
 }
 
@@ -136,7 +135,7 @@ void	s_found(t_all *all, struct stat *st, char *file, t_cmd *cmd)
 	
 	if (!lstat(file, st))
 	{
-		displayenv(all);
+		//displayenv(all);
 		if (execve(file, tmp, all->envp) == -1)
 		{
 			s_perror(all, cmd->cmd, 126);
@@ -145,7 +144,7 @@ void	s_found(t_all *all, struct stat *st, char *file, t_cmd *cmd)
 	}
 	else if (!lstat(cmd->cmd, st))
 	{
-		displayenv(all);
+		//displayenv(all);
 		if (execve(cmd->cmd, tmp, all->envp) == -1)
 		{
 			s_perror(all, cmd->cmd, 126);
@@ -169,7 +168,7 @@ void	s_exec(t_all *all, t_cmd *cmd)
 	paths = s_paths(all);
 	if (cmd->cmd && cmd->cmd[0] == '/')
 	{
-		displayenv(all);
+		//displayenv(all);
 		if (execve(cmd->cmd, s_args(cmd), all->envp) == -1)
 		{
 			s_perror(all, cmd->cmd, 126);

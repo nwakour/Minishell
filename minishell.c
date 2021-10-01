@@ -33,36 +33,48 @@ void	read_data(t_all *all)
 	}
 }
 
-void    export_parse(t_all *all, char *s)
+int    export_parse(t_all *all, char *s)
 {
     int     i;
     t_env   *env;
 
     i = -1;
+	if (s[0] && !ft_isalpha(s[0]) && s[0] != '_')
+	{
+		write(1, "export: `", 8);
+		write(1, s, ft_strlen(s));
+		write(1, "': not a valid identifier\n", 26);
+		return (1);
+	}
 	while (s[++i] && s[i] != '=')
 	{
-		if (s[i] == 96 || s[i] < '0' || (s[i] > '9' && s[i] < 'A')
-			|| (s[i] > 'Z' && s[i] < '_') || s[i] > 'z')
+		if (!ft_isalpha(s[i]) && !ft_isdigit(s[i]) && s[i] != '_')
 		{
-			printf("export: `%s': not a valid identifier\n", s);
-    		return ;
+			write(1, "export: `", 8);
+			write(1, s, ft_strlen(s));
+			write(1, "': not a valid identifier\n", 26);
+			return (1);
     	}
 	}
-	i = 0;
-    while(s[i] && s[i] != '=')
-        i++;
-    env = (t_env*)malloc(sizeof(t_env));
-    if (s[i])
-    {
-        env->name = ft_strndup(s, i);
-        env->value = ft_strdup(s + i + 1);
-    }
-    else
-    {
-        env->name = ft_strdup(s);
-        env->value = NULL;
-    }
-    ft_export_wa(all, env);
+	// i = 0;
+    // while(s[i] && s[i] != '=')
+    //     i++;
+	if (s[i] == '=')
+	{
+		env = (t_env*)malloc(sizeof(t_env));
+		if (s[i])
+		{
+			env->name = ft_strndup(s, i);
+			env->value = ft_strdup(s + i + 1);
+		}
+		else
+		{
+			env->name = ft_strdup(s);
+			env->value = NULL;
+		}
+		ft_export_wa(all, env);
+	}
+	return (0);
 }
 
 // void	get_data(t_all *all, char *line, char *ref_line)

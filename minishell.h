@@ -104,7 +104,7 @@ typedef struct		s_all
 
 /*				minishell			*/
 void	read_data(t_all *all);
-void    export_parse(t_all *all, char *s);
+int    export_parse(t_all *all, char *s);
 void	get_data(t_all *all, char* line, char *ref_line);
 
 /*				builtins			*/
