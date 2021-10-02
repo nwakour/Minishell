@@ -30,9 +30,11 @@ void	ft_echo(t_all *all, char **arg)
 {
 	int i;
 	int n;
+	int f;
 
 	i = 0;
 	n = 0;
+	f = 0;
 	if (n_flag(arg, 0))
 	{
 		n = 1;
@@ -40,11 +42,12 @@ void	ft_echo(t_all *all, char **arg)
 	}
 	while (arg[i])
 	{
-		if (!n_flag(arg, i))
+		if (!n_flag(arg, i) || (n_flag(arg, i) && f))
 		{
 			write(1, arg[i], ft_strlen(arg[i]));
 			if (arg[i+1] && arg[i+1][0] != '\0')
 				write(1, " ", 1);
+			f = 1;
 		}
 		i++;
 	}
@@ -84,14 +87,14 @@ void	ft_echo(t_all *all, char **arg)
 // 	all->exits = 0;
 // }
 
-void	ft_oldpwd(t_all *all)
+void	ft_update_pwd(t_all *all, char *var)
 {
 	t_list *tmp;
 
 	tmp = all->l_env;
 	while (tmp)
 	{
-		if (!(ft_strcmp(((t_env*)tmp->content)->name, "OLDPWD")))
+		if (!(ft_strcmp(((t_env*)tmp->content)->name, var)))
 		{
 			free(((t_env*)tmp->content)->value);
 			((t_env*)tmp->content)->value = getcwd(NULL, 0);
@@ -116,10 +119,10 @@ void		ft_cd_home(t_all *all)
 void		ft_cd(t_all *all, char* path, int args)
 {
 	int r;
-	t_env *env;
+	// t_env *env;
 
 	r = 0;
-	ft_oldpwd(all);
+	ft_update_pwd(all, "OLDPWD");
 	all->exits = 0;
 	if (args == 1 && !path)
 		return ;
@@ -146,7 +149,8 @@ void		ft_cd(t_all *all, char* path, int args)
 		write(2, ": no such file or directory\n", 28);
 		all->exits = 1;
 	}
-	// else
+	else
+		ft_update_pwd(all, "PWD");
 	// {
 	// 	env = (t_env*)malloc(sizeof(t_env));
     //     env->name = "PWD";

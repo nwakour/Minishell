@@ -16,3 +16,31 @@ ctrl D
 exec command after looking in path
 
 fix export
+
+ctrl C should set return value to 1
+
+///exit value shouldn't change with newline
+
+
+update PWD in ft_cd
+
+
+
+this bs
+bash-3.2$ mkdir test 
+bash-3.2$ cd test 
+bash-3.2$ rm -r test 
+rm: test: No such file or directory
+bash-3.2$ rm -r ../test 
+bash-3.2$ cd .
+cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+bash-3.2$ pwd
+/Users/hmahjour/Desktop/minienv/test/.
+bash-3.2$ 
+bash-3.2$ 
+
+
+
+more bs but this I don't have to fix yaaaaaay
+echo "sleep 1\necho lol" > srpt.sh
+>la ls | >la sh srpt.sh

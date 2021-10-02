@@ -213,7 +213,7 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 		s_perror(all, "pipe", 1);
 	cmd->pid = fork();
 	if (cmd->pid < 0)
-		s_perror(all, "fork", 1);
+		s_perror(all, "fork", 1); //exit
 	g_child = 1;
 	if (cmd->pid == 0)
 	{
