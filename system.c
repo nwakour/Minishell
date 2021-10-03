@@ -264,9 +264,9 @@ void	s_last(t_all *all, t_cmd *cmd)
 			close(cmd->fd);
 		s_exec(all, cmd);
 	}
-	g_child = 0;
 	if (!all->pip)
 		s_wait(all, cmd);
+	g_child = 0;
 	if (cmd->infd > 1)
 			close(cmd->infd);
 	if (cmd->fd > 1)
