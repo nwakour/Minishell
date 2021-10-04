@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/09/19 15:41:02 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/04 04:53:50 by tenshi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,6 @@ int		check_cmd(t_cmd *cmd)
 		return (2);
 }
 
-// static void			ft_free(char **str)
-// {
-// 	while (*str != NULL)
-// 	{
-// 		free(*str);
-// 		str++;
-// 	}
-// 	free(str);
-// }
-
 int args_nb(char *ref)
 {
 	int i;
@@ -53,100 +43,77 @@ int args_nb(char *ref)
 	nb = 0;
 	while (ref[i] != '\0')
 	{
-		if ((ref[i] == '1' && ref[i + 1] == '2') || (ref[i] == '3' && ref[i + 1] == '4'))
+		if ((ref[i] == '1' && ref[i + 1] == '2')
+		|| (ref[i] == '3' && ref[i + 1] == '4'))
 			nb++;
 		i++;
 	}
 	return nb;
 }
 
-char	***ft_split_mask(char **line_mask, char c)
+void ft_split_mask(char *split_mask[][2], char **line_mask, char c)
 {
 	char **tmp_line;
 	char **tmp_mask;
-	char ***split_mask;
 	int i;
 
-    if (!line_mask || !line_mask[LINE] || !line_mask[MASK])
-        return (NULL);
+    if (!line_mask[LINE] || !line_mask[MASK])
+		return ;
 	tmp_line = ft_split_ref(line_mask[LINE], line_mask[MASK], c);
 	tmp_mask = ft_split(line_mask[MASK], c);
-	i = 0;
-	while (tmp_line[i])
-		i++;
-	split_mask = (char ***)malloc(sizeof(char**) * (i + 1));
-	if(!split_mask)
-		return (NULL);
 	i = -1;
 	while (tmp_line[++i])
 	{
-		split_mask[i] = (char **)malloc(sizeof(char*) * 2);
-		if (!split_mask[i])
-			return (NULL);
 		split_mask[i][LINE] = tmp_line[i];
 		split_mask[i][MASK] = tmp_mask[i];
 	}
-	split_mask[i] = NULL;
-	return (split_mask);
+	free(tmp_line);
+	free(tmp_mask);
 }
 
-void	get_cmd(t_all *all, char **line_mask)
+void	get_cmd(t_all *all, char **line_mask, int size)
 {
-	char	***split_mask;
+	char	*split_mask[size][2];
 	int		args;
 	int		redirs;
 	int		i;
 	int		nb_args;
 
-	find_var(all, line_mask);
-	parse(all, line_mask);
 	nb_args = args_nb(line_mask[MASK]);
-	line_mask = remove_zero_ref(line_mask);
-	split_mask = ft_split_mask(line_mask, ' ');
+	remove_zero_ref(line_mask);
+	ft_split_mask(split_mask, line_mask, ' ');
 	redirs = str_n_set(line_mask[MASK], "><?=@");
-	args = 0;
-	while (split_mask && split_mask[args])
-		args++;
-	i = args;
-	args = args - redirs - 1;
+	i = size;
+	args = size - redirs - 1;
 	if (args < 0)
 		args = 0;
-	if (!ft_struct_list(&all->l_cmd, (void**)&all->cmd, sizeof(t_cmd)) || !i)
+	if (!ft_struct_list(&all->l_cmd, (void**)&all->cmd, sizeof(t_cmd))
+		|| size == 1)
 		return ;
 	if (redirs >= 0)
-	{
-		all->cmd->f_name = (char**)(malloc((redirs + 1) * sizeof(char*)));
-		all->cmd->f_name[redirs] = 0;
-	}
+		all->cmd->f_name = (char **)ft_calloc(redirs + 1, sizeof(char*));
 	if (args >= 0)
-	{
-		all->cmd->arg = (char**)(malloc((args + 1) * sizeof(char*)));
-		all->cmd->arg[args] = 0;
-	}
+		all->cmd->arg = (char **)ft_calloc(args + 1, sizeof(char*));
 	all->cmd->args = nb_args + args;
-	while (i > 0 && split_mask[--i])
+	while (size > 0 && split_mask[--size])
 	{
-		if (is_char_from_set(split_mask[i][MASK][0], "><?=@"))
+		if (is_char_from_set(split_mask[size][MASK][0], "><?=@"))
 		{
-			split_mask[i][LINE][0] = split_mask[i][MASK][0];
-			all->cmd->f_name[--redirs] = split_mask[i][LINE];
+			split_mask[size][LINE][0] = split_mask[size][MASK][0];
+			all->cmd->f_name[--redirs] = split_mask[size][LINE];
 		}
-		else if (i == 0 || (i != 0 && all->cmd->cmd == NULL && args == 0))
-			all->cmd->cmd = split_mask[i][LINE];
+		else if (size == 0 || (size != 0 && all->cmd->cmd == NULL && args == 0))
+			all->cmd->cmd = split_mask[size][LINE];
 		else
-			all->cmd->arg[--args] = split_mask[i][LINE];
+			all->cmd->arg[--args] = split_mask[size][LINE];
 	}
-	i = -1;
-	while (split_mask[++i])
-		free(split_mask[i]);
-	free(split_mask);
+	while (i && split_mask[i] && i--)
+		free(split_mask[i][MASK]);
 	i = -1;
 	while(all->cmd->cmd && all->cmd->cmd[++i])
 		 all->cmd->cmd[i] = ft_tolower(all->cmd->cmd[i]);
 	s_heredoc(all, all->cmd);
 	all->cmd->valid = check_cmd(all->cmd);
-	// free(str);
-	// free(str_ref);
 }
 
 // char	*s_expand(char *line)
@@ -157,7 +124,7 @@ void	get_cmd(t_all *all, char **line_mask)
 
 char	*s_readdoc(t_all *all, char *limit, int expand)
 {
-	char	**line_mask;
+	char	*line_mask[2];
 	char	*file;
 	int	fd;
 	//int	pid;
@@ -173,15 +140,15 @@ char	*s_readdoc(t_all *all, char *limit, int expand)
 	// g_child = 1;
 	// if (pid == 0)
 	// {
-		line_mask = s_readline(all, ">");
+		line_mask[LINE] = s_readline(all, ">");
 		parse_heredoc(all, line_mask, expand);
-		while (line_mask && ft_strcmp(line_mask[LINE], limit))
+		while (line_mask[LINE] && ft_strcmp(line_mask[LINE], limit))
 		{
 			//TODO: check expand for env variables
 			//write(2, "yoooo\n", 6);
 			write(fd, line_mask[LINE], ft_strlen(line_mask[LINE]));
 			write(fd, "\n", 1);
-			line_mask = s_readline(all, ">");
+			line_mask[LINE] = s_readline(all, ">");
 			parse_heredoc(all, line_mask, expand);
 		}
 		close(fd);
@@ -245,9 +212,6 @@ void new_func(t_all *all, t_cmd *cmd)
 
 void	execute_cmd(t_all *all, t_cmd *cmd)
 {
-	int flag;
-
-	flag = 0;
 	if (!cmd->cmd && cmd->fd)
 		return ;
 	else if (!(cmd->valid))
@@ -269,6 +233,4 @@ void	execute_cmd(t_all *all, t_cmd *cmd)
 		ft_exit(all, cmd);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 		ft_unset(all, cmd);
-	else
-		read_data(all);
 }

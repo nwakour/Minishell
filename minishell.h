@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/09/15 14:41:58 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/04 04:27:31 by tenshi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <termios.h>
 # include <signal.h>
 # include <errno.h>
+# include <sys/wait.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <time.h>
@@ -50,13 +51,13 @@ typedef struct		s_cmd
 {
 	char	*cmd;
 	char	**arg;
+	char	**f_name;
 	int		infd;
 	int		fd;
 	char	in;
 	char	out;
 	int		append;
 	int		link;
-	char	**f_name;
 	int		args;
 	int		valid;
 	int		pid;
@@ -76,14 +77,14 @@ typedef struct          s_dlist
     struct s_dlist      *next;
 }                       t_dlist;
 
-typedef struct		s_tc_cmd
-{
-	char			*cl;
-	char			*dl;
-	char			*le;
-	char			*nd;
+// typedef struct		s_tc_cmd
+// {
+// 	char			*cl;
+// 	char			*dl;
+// 	char			*le;
+// 	char			*nd;
 
-}					t_tc_cmd;
+// }					t_tc_cmd;
 
 typedef struct		s_all
 {
@@ -91,7 +92,7 @@ typedef struct		s_all
 	t_list	*l_env;
 	t_env	*env;
 	t_cmd	*cmd;
-	t_tc_cmd	*tccmd;
+	// t_tc_cmd	*tccmd;
 	char	**envp;
 	int		error;
 	int		exits;
@@ -124,8 +125,8 @@ void	ft_exit(t_all *all, t_cmd *cmd);
 
 void    parse(t_all *all, char **line_mask);
 void	get_colons(t_all *all, char *line, char *ref_line);
-void	get_pips(t_all *all, char **line_mask);
-void	free_all(t_all *all);
+void	get_pips(t_all *all, char **line_mask, int size);
+void	free_all(t_all *all, char *line_mask[]);
 void	find_var(t_all *all, char **line_mask);
 void	handle_great(t_all *all, char **line_mask, int *i);
 void	handle_less(t_all *all, char **line_mask, int *i);
@@ -136,7 +137,7 @@ int		cor_char(char c);
 void	skip_back_s(t_all *all, char *mask, int *i);
 void	skip_back_s_in_q(t_all *all, char *mask, int *i);
 int		is_char_from_set(char c, char *set);
-char	**remove_zero_ref(char **line_mask);
+void	remove_zero_ref(char **line_mask);
 
 /*				handle quotes		*/
 
@@ -154,7 +155,7 @@ char	*check_env(t_list *list, char *str);
 
 int		check_cmd(t_cmd *cmd);
 int		args_nb(char *ref);
-void	get_cmd(t_all *all, char **line_mask);
+void	get_cmd(t_all *all, char **line_mask, int size);
 void	execute_cmd(t_all *all, t_cmd *cmd);
 void	new_func(t_all *all, t_cmd *cmd);
 
@@ -174,14 +175,14 @@ t_dlist	*lstnewc(void *cam);
 void	free_char(char **s);
 int		skip_char(char *str, char c);
 int		skip_space(char *str);
-
+int 	spl_nb(char *s, char c);
 
 /*				history				*/
 void	save_history(t_all *all, char *line);
 
 /*				terminal			*/
 int	terminal(t_all *all, char **line, char *promt);
-int		init_term(t_tc_cmd *tccmd);
+// int		init_term(t_tc_cmd *tccmd);
 
 /*				path				*/
 char	*find_path(t_all *all);
@@ -199,10 +200,10 @@ void	s_cmd(t_all *all, t_cmd *cmd);
 void	s_last(t_all *all, t_cmd *cmd);
 void	s_heredoc(t_all *all, t_cmd *cmd);
 
-char	**s_readline(t_all *all, char *prompt);
+char	*s_readline(t_all *all, char *prompt);
 void	s_cmd_files(t_cmd *cmd);
 
-char	***ft_split_mask(char **line_mask, char c);
+void 	ft_split_mask(char *split_mask[][2], char **line_mask, char c);
 int		is_char_from_set(char c, char *set);
 int		str_n_set(char *str, char *set);
 void	s_dup(t_cmd *cmd);

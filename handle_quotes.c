@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 10:57:41 by nwakour           #+#    #+#             */
-/*   Updated: 2021/09/19 15:39:00 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/04 04:33:15 by tenshi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ void	handle_var(char **line_mask, int *i)
 			line_mask[MASK][*i] = 'v';
 		--(*i);
 	}
-	else if (line_mask[LINE][*i + 1] == '\0' || line_mask[LINE][*i + 1] == ' ' || line_mask[LINE][*i + 1] == '$')
+	else if (line_mask[LINE][*i + 1] == '\0' || line_mask[LINE][*i + 1] == ' '
+			|| line_mask[LINE][*i + 1] == '$')
 		line_mask[MASK][*i] = TEXT;
 	else
 	{
@@ -59,7 +60,8 @@ void	handle_var(char **line_mask, int *i)
 void	handle_d_quotes(t_all *all, char **line_mask, int *i)
 {
 	if (line_mask[LINE][*i] == '\"' && line_mask[LINE][(*i) + 1] == '\"'
-		&& (((*i != 0) && (line_mask[LINE][(*i) - 1] == ' ')) || (line_mask[LINE][(*i) + 1] 
+		&& (((*i != 0) && (line_mask[LINE][(*i) - 1] == ' '))
+		|| (line_mask[LINE][(*i) + 1] 
 		&&	line_mask[LINE][(*i) + 2] && line_mask[LINE][(*i) + 2] == ' ')))
 	{
 		line_mask[MASK][*i] = SKIP;
@@ -87,7 +89,8 @@ void	handle_d_quotes(t_all *all, char **line_mask, int *i)
 void	handle_s_quotes(t_all *all, char **line_mask, int *i)
 {
 	if (line_mask[LINE][*i] == '\'' && line_mask[LINE][(*i) + 1] == '\''
-		&& (((*i != 0) && (line_mask[LINE][(*i) - 1] == ' ')) || (line_mask[LINE][(*i) + 1] 
+		&& (((*i != 0) && (line_mask[LINE][(*i) - 1] == ' '))
+		|| (line_mask[LINE][(*i) + 1] 
 		&&	line_mask[LINE][(*i) + 2] && line_mask[LINE][(*i) + 2] == ' ')))
 	{
 		line_mask[MASK][*i] = SKIP;

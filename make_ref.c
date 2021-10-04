@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_ref.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:00:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/09/15 14:14:15 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/04 04:48:42 by tenshi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	skip_back_s(t_all *all, char *mask, int *i)
 
 void	skip_back_s_in_q(t_all *all, char *mask, int *i)
 {
-	if (mask[(*i) + 1] == '$' || mask[(*i) + 1] == '\\' || mask[(*i) + 1] == '\"')
+	if (mask[(*i) + 1] == '$' || mask[(*i) + 1] == '\\'
+		|| mask[(*i) + 1] == '\"')
 	{
 		mask[*i] = SKIP;
 		*i += 1;
@@ -82,6 +83,8 @@ int	is_char_from_set(char c, char *set)
 	int i;
 
 	i = -1;
+	if (!set)
+		return (0);
 	while (set[++i])
 	{
 		if (set[i] == c)
@@ -90,38 +93,47 @@ int	is_char_from_set(char c, char *set)
 	return (0);
 }
 
-char	**remove_zero_ref(char **line_mask)
+int spl_nb(char *s, char c)
 {
-	int		zeros;
-	int		i;
-	int		len;
-	char	**new_line_mask;
+	int i;
+	int nb;
 
-	
-	if (!line_mask)
-		return (line_mask);
 	i = -1;
-	zeros = str_n_set(line_mask[MASK], "01234");
-	if (!zeros)
-		return (line_mask);
-	len = ft_strlen(line_mask[MASK]) - zeros;
+	nb = 0;
+	while (s[++i] && s[i] == c);
+	if (!s[i])
+		return (nb);
+	while (s[++i])
+	{
+		if (s[i] == c && s[i + 1] != c && s[i + 1] != '\0')
+			nb++;
+	}
+	return (nb);
+}
+
+void 	remove_zero_ref(char **line_mask)
+{
+	int		i;
+	char	*nw_line_mask[2] = {0};
+
+	if (!line_mask[LINE] || !str_n_set(line_mask[MASK], "01234"))
+		return ;
 	i = -1;
-	new_line_mask = (char **)malloc(sizeof(char *) * 2);
-	if (!new_line_mask)
-		return (line_mask);
-	new_line_mask[LINE] = NULL;
-	new_line_mask[MASK] = NULL;
 	while (line_mask[LINE][++i] != '\0')
 	{
 		if (!is_char_from_set(line_mask[MASK][i], "01234"))
 		{
-			new_line_mask[MASK] = ft_strjoin_char(new_line_mask[MASK], line_mask[MASK][i]);
+			nw_line_mask[MASK] = ft_strjoin_char(nw_line_mask[MASK],
+				line_mask[MASK][i]);
 			if (line_mask[MASK][i] == 's')
-				new_line_mask[LINE] = ft_strjoin_char(new_line_mask[LINE], ' ');
+				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE], ' ');
 			else
-				new_line_mask[LINE] = ft_strjoin_char(new_line_mask[LINE], line_mask[LINE][i]);
+				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE],
+					line_mask[LINE][i]);
 		}
 	}
-	
-	return (new_line_mask);
+	free(line_mask[LINE]);
+	free(line_mask[MASK]);
+	line_mask[LINE] = nw_line_mask[LINE];
+	line_mask[MASK] = nw_line_mask[MASK];
 }

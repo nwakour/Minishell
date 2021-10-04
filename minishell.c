@@ -3,34 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/09/13 15:43:05 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/04 05:01:09 by tenshi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	read_data(t_all *all)
+void	free_array(char **array)
 {
-	t_list	*tmp;
-	t_cmd	*cmd;
-	int		i;
+	int i;
+
+	if (!(array))
+		return ;
+	i = -1;
+	while (array[++i])
+	{
+		free(array[i]);
+		array[i] = NULL;
+	}
+	free(array);
+}
+
+void	free_all(t_all *all, char *line_mask[])
+{
+	t_list *tmp;
 
 	tmp = all->l_cmd;
 	while (tmp)
 	{
-		cmd = (t_cmd*)tmp->content;
-		printf("cmd = %s\n", cmd->cmd);
-		// i = -1;
-		// while (cmd->flag[++i])
-		// 	printf("flags = %s\n", cmd->flag[i]);
-		i = -1;
-		while (cmd->arg[++i])
-			printf("args = %s\n", cmd->arg[i]);
+		all->cmd = (t_cmd*)tmp->content;
+		if (all->cmd)
+		{
+			free(all->cmd->cmd);
+			all->cmd->cmd = NULL;
+			free_array(all->cmd->arg);
+			all->cmd->arg = NULL;
+			free_array(all->cmd->f_name);
+			all->cmd->f_name = NULL;
+		}
 		tmp = tmp->next;
 	}
+	ft_lstclear(&all->l_cmd, &free_content);
+	free(line_mask[LINE]);
+	line_mask[LINE] = NULL;
+	free(line_mask[MASK]);
+	line_mask[MASK] = NULL;
+	all->l_cmd = NULL;
+	all->cmd = NULL;
 }
 
 int    export_parse(t_all *all, char *s)
@@ -56,9 +78,6 @@ int    export_parse(t_all *all, char *s)
 			return (1);
     	}
 	}
-	// i = 0;
-    // while(s[i] && s[i] != '=')
-    //     i++;
 	if (s[i] == '=')
 	{
 		env = (t_env*)malloc(sizeof(t_env));
@@ -77,22 +96,10 @@ int    export_parse(t_all *all, char *s)
 	return (0);
 }
 
-// void	get_data(t_all *all, char *line, char *ref_line)
-// {
-// 	if (!line)
-// 		return ;
-// 	if (ft_strchr(ref_line, ';'))
-// 		get_colons(all, line, ref_line);
-// 	else if (ft_strchr(ref_line, '|'))
-// 		get_pips(all, line, ref_line);
-// 	else
-// 	 	get_cmd(all, line, ref_line);
-// }
-
 int		main(int argc, char **argv, char **env)
 {
 	t_all	all;
-	char **line_mask;
+	char *line_mask[2] = {0};
 
 	if (argc > 1)
 		return (0);
@@ -105,34 +112,36 @@ int		main(int argc, char **argv, char **env)
 	{
 		all.error = 0;
 		all.add = 1;
-		line_mask = s_readline(&all, "Minisheeesh-> ");
-		if (line_mask && line_mask[LINE] && line_mask[LINE][0] != '\0')
+		line_mask[LINE] = s_readline(&all, "Minisheeesh-> ");
+		if (line_mask[LINE] && line_mask[LINE][0] != '\0')
 		{
+			parse(&all, line_mask);
+			find_var(&all, line_mask);
 			parse(&all, line_mask);
 			if (!all.error)
 			{
 				if (ft_strchr(line_mask[MASK], '|'))
 				{
 					all.pip = 1;
-					get_pips(&all, line_mask);
+					get_pips(&all, line_mask, spl_nb(line_mask[MASK],'|') + 1);
 				}
 				else
 				{
 					all.pip = 0;
 					all.nextin = 0;
-					get_cmd(&all, line_mask);
+					get_cmd(&all, line_mask, spl_nb(line_mask[MASK],' ') + 1);
 					new_func(&all, all.l_cmd->content);
-					all.l_cmd = NULL;
 				}
 			}
 			else if (all.error)
 				ft_putstr_fd("syntax error\n", 1);
 		}
-		else if (!line_mask)
-		{
-			printf("exit\n");
-			exit(0);
-		}
+		// else if (!line_mask) //! what is this for?
+		// {
+		// 	printf("exit\n");
+		// 	exit(0);
+		// }
+		free_all(&all, line_mask);
 	}
 	return (all.exits);
 }

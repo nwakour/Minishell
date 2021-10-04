@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/09/15 14:40:26 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/04 04:27:20 by tenshi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ void    parse(t_all *all, char **line_mask)
 	int ret;
 
 	i = -1;
+	if (line_mask[MASK])
+		free(line_mask[MASK]);
 	line_mask[MASK] = strdup(line_mask[LINE]);
 	if (line_mask[LINE][skip_space(line_mask[LINE])] == PIP)
 	{
@@ -116,23 +118,22 @@ void    parse(t_all *all, char **line_mask)
 	}
 }
 
-void	get_pips(t_all *all, char **line_mask)
+void	get_pips(t_all *all, char **line_mask, int size)
 {
-	char	***split_mask;
+	char	*split_mask[size][2];
 	t_list	*tmp;
 	int i;
 
-	split_mask = ft_split_mask(line_mask, '|');
-	i = 0;
-	while (split_mask[i])
-		i++;
-	all->pip = i;
+	ft_split_mask(split_mask, line_mask, '|');
+	all->pip = size;
 	i = -1;
 	all->hdoc = 0;
 	all->nextin = 0;
-	while (split_mask[++i])
+	while (++i < size)
 	{
-		get_cmd(all, split_mask[i]);
+		get_cmd(all, split_mask[i], spl_nb(split_mask[i][MASK],' ') + 1);
+		free(split_mask[i][MASK]);
+		free(split_mask[i][LINE]);
 		all->inx++;
 	}
 	tmp = all->l_cmd;
@@ -164,7 +165,7 @@ void	get_pips(t_all *all, char **line_mask)
 	}
 
 	// NEW
-	all->l_cmd = NULL;
+	// all->l_cmd = NULL;
 	// if (l_colon)
 	// 		ft_lstclear(&l_colon, &free_content);
 	// if (l_colon_ref)
@@ -218,7 +219,7 @@ void    parse_heredoc(t_all *all, char **line_mask, int expand)
 {
 	int i;
 
-	if (!line_mask || line_mask[LINE][0] == '\0')
+	if (!line_mask[LINE] || line_mask[LINE][0] == '\0')
 		return ;
 	line_mask[MASK] = ft_strdup(line_mask[LINE]);
 	i = -1;
