@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   system.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 14:53:16 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/07/11 19:27:42 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/06 04:34:50 by tenshi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	s_perror(t_all *all, char *name, int err)
 {
-	int len;
+	int	len;
 
 	len = ft_strlen(strerror(errno));
 	write(2, name, ft_strlen(name));
@@ -31,28 +31,70 @@ void	s_wait(t_all *all, t_cmd *cmd)
 	waitpid(cmd->pid, &status, 0);
 	g_child = 0;
 	if (WIFEXITED(status))
-	{
-		//write(2, "nooo\n", 5);
 		all->exits = WEXITSTATUS(status);
-	}
 	else if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGINT)
-		{
 			all->exits = 130;
-			//write(2, "here\n", 5);
-		}
 		else if (WTERMSIG(status) == SIGQUIT)
 			all->exits = 131;
 	}
 }
 
+char	**s_env(t_all *all)
+{
+	char	**env;
+	t_list	*tmp;
+	int		i;
+	int		sz;
+
+	sz = ft_lstsize(all->l_env) + 1;
+	env = (char **)malloc(sz * sizeof(char *));
+	if (!env)
+		return (NULL);
+	tmp = all->l_env;
+	i = -1;
+	while (tmp)
+	{
+		env[++i] = s_join(((t_env *)tmp->content)->name,
+				'=', ((t_env *)tmp->content)->value);
+		tmp = tmp->next;
+	}
+	env[i + 1] = 0;
+	return (env);
+}
+
+void	s_last(t_all *all, t_cmd *cmd)
+{
+	cmd->pid = fork();
+	if (cmd->pid < 0)
+		s_perror(all, "fork", 1);
+	g_child = 1;
+	if (cmd->pid == 0)
+	{
+		dup2(cmd->infd, 0);
+		dup2(cmd->fd, 1);
+		if (cmd->infd > 1)
+			close(cmd->infd);
+		if (cmd->fd > 1)
+			close(cmd->fd);
+		s_exec(all, cmd);
+	}
+	if (!all->pip)
+		s_wait(all, cmd);
+	g_child = 0;
+	if (cmd->infd > 1)
+		close(cmd->infd);
+	if (cmd->fd > 1)
+		close(cmd->fd);
+}
+
 char	*s_join(char *name, char c, char *val)
 {
 	char	*res;
-	int	i;
-	int j;
-	
+	int		i;
+	int		j;
+
 	res = (char *)malloc((ft_strlen(name) + ft_strlen(val) + 2) * sizeof(char));
 	if (!name || !val || !res)
 		return (NULL);
@@ -72,203 +114,4 @@ char	*s_join(char *name, char c, char *val)
 	}
 	res[i + j] = '\0';
 	return (res);
-}
-
-char	**s_env(t_all *all)
-{
-	char	**env;
-	t_list	*tmp;
-	int	i;
-	int	sz;
-
-	sz = ft_lstsize(all->l_env) + 1;
-	env = (char **)malloc(sz * sizeof(char *));
-	if (!env)
-		return (NULL);
-	tmp = all->l_env;
-	i = -1;
-	while (tmp)
-	{
-		env[++i] = s_join(((t_env*)tmp->content)->name, '=',((t_env*)tmp->content)->value);
-		tmp = tmp->next;
-	}
-	env[i+1] = 0;
-	return (env);
-}
-
-char	**s_args(t_cmd *cmd)
-{
-	char **tmp;
-	int i;
-
-	i = 0;
-	tmp = (char **)malloc((cmd->args + 2) * sizeof(char*));
-	tmp[i] = cmd->cmd;
-	i++;
-	while (*cmd->arg)
-	{
-		tmp[i] = *cmd->arg;
-		cmd->arg++;
-		i++;
-	}
-	tmp[i] = 0;
-	return (tmp);
-}
-
-void	displayenv(t_all *all)
-{
-	char **tmp = all->envp;
-	int i = 0;
-	
-	while (tmp[i])
-	{
-		write(2, tmp[i], ft_strlen(tmp[i]));
-		write(2, "\n", 1);
-		i++;
-	}
-}
-
-void	s_found(t_all *all, struct stat *st, char *file, t_cmd *cmd)
-{
-	char **args = s_args(cmd);
-	char **tmp = args;
-	
-	if (!lstat(file, st))
-	{
-		//displayenv(all);
-		if (execve(file, tmp, all->envp) == -1)
-		{
-			s_perror(all, cmd->cmd, 126);
-			exit(126);
-		}
-	}
-	else if (!lstat(cmd->cmd, st))
-	{
-		//displayenv(all);
-		if (execve(cmd->cmd, tmp, all->envp) == -1)
-		{
-			s_perror(all, cmd->cmd, 126);
-			exit(126);
-		}
-	}
-	else
-	{
-		write(2, cmd->cmd, ft_strlen(cmd->cmd));
-		write(2, ": command not found\n", 20);
-		exit(127);
-	}
-}
-
-void	s_exec(t_all *all, t_cmd *cmd)
-{
-	char	**paths;
-	char	*file;
-	struct stat st;
-
-	paths = s_paths(all);
-	if (cmd->cmd && cmd->cmd[0] == '/')
-	{
-		//displayenv(all);
-		if (execve(cmd->cmd, s_args(cmd), all->envp) == -1)
-		{
-			s_perror(all, cmd->cmd, 126);
-			exit(126);
-		}
-	}
-	else
-	{
-		if (!paths)
-		{
-			write(2, cmd->cmd, ft_strlen(cmd->cmd));
-			write(2, ": command not found\n", 20);
-			exit(127);
-		}
-		file = s_join(*paths, '/', cmd->cmd);
-		while (*paths && lstat(file, &st))
-		{
-			paths++;
-			if (*paths)
-				file = s_join(*paths, '/', cmd->cmd);
-		}
-		s_found(all, &st, file, cmd);
-	}
-}
-
-void	s_check_exec(t_all *all, t_cmd *cmd)
-{
-	if (cmd->valid == 1)
-	{
-		execute_cmd(all, cmd);
-		exit(all->exits);
-	}
-	else if (cmd->valid == 2 && cmd->exec && all->pip)	
-		s_exec(all, cmd);
-}
-
-void	s_cmd(t_all *all, t_cmd *cmd)
-{
-	int	fd[2]; // needs to be moved to big loop
-	
-	if (pipe(fd) < 0)
-		s_perror(all, "pipe", 1);
-	cmd->pid = fork();
-	if (cmd->pid < 0)
-		s_perror(all, "fork", 1); //exit
-	g_child = 1;
-	if (cmd->pid == 0)
-	{
-		dup2(cmd->infd, 0);
-		if (cmd->fd != 1)
-			dup2(cmd->fd, 1);
-		else
-		{
-			//write(2, "here yoyo\n", 10);
-			dup2(fd[1], 1);
-		}
-		if (cmd->infd > 1)
-			close(cmd->infd);
-		if (cmd->fd > 1)
-			close(cmd->fd);
-		if (fd[0] > 1)
-			close(fd[0]);
-		if (fd[1] > 1)
-			close(fd[1]);
-		s_check_exec(all, cmd);
-	}
-	g_child = 0;
-	//s_wait(all, cmd);
-	if (fd[1] > 1)
-		close(fd[1]);
-	if (cmd->infd > 1)
-		close(cmd->infd);
-	if (cmd->fd > 1)
-		close(cmd->fd);
-	// need to to put fd[0] as infd for next cmd
-	all->nextin = fd[0];
-}
-
-void	s_last(t_all *all, t_cmd *cmd)
-{
-	//printf("%s %d %d\n", cmd->cmd, cmd->infd, cmd->fd);
-	cmd->pid = fork();
-	if (cmd->pid < 0)
-		s_perror(all, "fork", 1);
-	g_child = 1;
-	if (cmd->pid == 0)
-	{
-		dup2(cmd->infd, 0);
-		dup2(cmd->fd, 1);
-		if (cmd->infd > 1)
-			close(cmd->infd);
-		if (cmd->fd > 1)
-			close(cmd->fd);
-		s_exec(all, cmd);
-	}
-	if (!all->pip)
-		s_wait(all, cmd);
-	g_child = 0;
-	if (cmd->infd > 1)
-			close(cmd->infd);
-	if (cmd->fd > 1)
-			close(cmd->fd);
 }

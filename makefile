@@ -6,7 +6,7 @@
 #    By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 19:06:53 by nwakour           #+#    #+#              #
-#    Updated: 2021/10/04 00:47:31 by tenshi           ###   ########.fr        #
+#    Updated: 2021/10/06 04:21:14 by tenshi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,10 @@
 
 NAME			=	minishell
 
-SRCS			=	minishell.c builtins.c env.c fd_files.c handle_quotes.c make_ref.c parse.c helpers.c cmd.c terminal.c path.c system.c readline.c
+SRCS			=	builtins.c builtins_most.c builtins_more.c builtind_more_than_more.c \
+					cmd.c cmd_more.c env.c fd_files.c ft_exit.c handle_quotes.c\
+					helpers.c helpers_more.c make_ref.c minishell.c parse_more.c parse.c\
+					path.c readline.c system_more_than_more.c system_more.c system.c
 
 OBJS			=	${SRCS:.c=.o}
 

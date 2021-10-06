@@ -6,7 +6,7 @@
 /*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 10:57:41 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/04 04:33:15 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/06 01:07:47 by tenshi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	handle_var_in_q(char **line_mask, int *i)
 {
 	if (line_mask[LINE][*i + 1] == ' ')
 		line_mask[MASK][*i] = TEXT;
-	else  if (ft_isalpha(line_mask[LINE][*i + 1]) ||
+	else if (ft_isalpha(line_mask[LINE][*i + 1]) ||
 		(line_mask[LINE][*i + 1] == '_'))
 	{
 		line_mask[MASK][*i] = VAR;
@@ -38,7 +38,7 @@ void	handle_var(char **line_mask, int *i)
 		line_mask[MASK][*i] = TEXT;
 	else if (line_mask[LINE][*i + 1] == '\\')
 		line_mask[MASK][*i] = TEXT;
-	else  if (ft_isalpha(line_mask[LINE][*i + 1]) ||
+	else if (ft_isalpha(line_mask[LINE][*i + 1]) ||
 		(line_mask[LINE][*i + 1] == '_'))
 	{
 		line_mask[MASK][*i] = VAR;
@@ -61,8 +61,8 @@ void	handle_d_quotes(t_all *all, char **line_mask, int *i)
 {
 	if (line_mask[LINE][*i] == '\"' && line_mask[LINE][(*i) + 1] == '\"'
 		&& (((*i != 0) && (line_mask[LINE][(*i) - 1] == ' '))
-		|| (line_mask[LINE][(*i) + 1] 
-		&&	line_mask[LINE][(*i) + 2] && line_mask[LINE][(*i) + 2] == ' ')))
+		|| (line_mask[LINE][(*i) + 1]
+		&& line_mask[LINE][(*i) + 2] && line_mask[LINE][(*i) + 2] == ' ')))
 	{
 		line_mask[MASK][*i] = SKIP;
 		line_mask[MASK][++(*i)] = 's';
@@ -72,7 +72,7 @@ void	handle_d_quotes(t_all *all, char **line_mask, int *i)
 	while (line_mask[LINE][++(*i)] != '\0')
 	{
 		if (line_mask[LINE][*i] == VAR)
-		 	handle_var_in_q(line_mask, i);
+			handle_var_in_q(line_mask, i);
 		else if (line_mask[LINE][*i] == '\\')
 			skip_back_s_in_q(all, line_mask[MASK], i);
 		else if (line_mask[LINE][*i] == '\"')
@@ -90,8 +90,8 @@ void	handle_s_quotes(t_all *all, char **line_mask, int *i)
 {
 	if (line_mask[LINE][*i] == '\'' && line_mask[LINE][(*i) + 1] == '\''
 		&& (((*i != 0) && (line_mask[LINE][(*i) - 1] == ' '))
-		|| (line_mask[LINE][(*i) + 1] 
-		&&	line_mask[LINE][(*i) + 2] && line_mask[LINE][(*i) + 2] == ' ')))
+		|| (line_mask[LINE][(*i) + 1]
+		&& line_mask[LINE][(*i) + 2] && line_mask[LINE][(*i) + 2] == ' ')))
 	{
 		line_mask[MASK][*i] = SKIP;
 		line_mask[MASK][++(*i)] = 's';

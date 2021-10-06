@@ -6,7 +6,7 @@
 /*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/04 04:27:31 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/06 04:20:36 by tenshi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 
 int	g_child;
 
-typedef struct		s_cmd
+typedef struct s_cmd
 {
 	char	*cmd;
 	char	**arg;
@@ -62,37 +62,32 @@ typedef struct		s_cmd
 	int		valid;
 	int		pid;
 	int		exec;
-}					t_cmd;
+}t_cmd;
 
-typedef struct		s_env
+typedef struct s_line
 {
-	char *name;
-	char *value;
-}					t_env;
+	char	*line_mask[2];
+}t_line;
 
-typedef struct          s_dlist
+typedef struct s_env
 {
-    void                *cam;
-    struct s_dlist      *prev;
-    struct s_dlist      *next;
-}                       t_dlist;
+	char	*name;
+	char	*value;
+}t_env;
 
-// typedef struct		s_tc_cmd
-// {
-// 	char			*cl;
-// 	char			*dl;
-// 	char			*le;
-// 	char			*nd;
+typedef struct s_dlist
+{
+	void			*cam;
+	struct s_dlist	*prev;
+	struct s_dlist	*next;
+}t_dlist;
 
-// }					t_tc_cmd;
-
-typedef struct		s_all
+typedef struct s_all
 {
 	t_list	*l_cmd;
 	t_list	*l_env;
 	t_env	*env;
 	t_cmd	*cmd;
-	// t_tc_cmd	*tccmd;
 	char	**envp;
 	int		error;
 	int		exits;
@@ -103,41 +98,40 @@ typedef struct		s_all
 	int		add;
 }					t_all;
 
-/*				minishell			*/
-void	read_data(t_all *all);
-int    export_parse(t_all *all, char *s);
-void	get_data(t_all *all, char* line, char *ref_line);
-
 /*				builtins			*/
 void	ft_echo(t_all *all, char **arg);
-int		n_flag(char **arg, int i);
-void	ft_cd(t_all *all, char* path, int args);
-void	ft_pwd(t_all *all);
-void	ft_export(t_all *all, t_cmd *cmd);
-void	ft_export_na(t_all *all);
+t_list	*search_lst(t_list *list, t_env *var);
 void	ft_export_wa(t_all *all, t_env *var);
-void	ft_env(t_all *all);
+void	ft_export(t_all *all, t_cmd *cmd);
 void	ft_unset_co(t_all *all, char *var);
+void	ft_cd(t_all *all, char *path, int args);
 void	ft_unset(t_all *all, t_cmd *cmd);
+void	ft_pwd(t_all *all);
+void	ft_env(t_all *all);
 void	ft_exit(t_all *all, t_cmd *cmd);
+void	alpha_sort(t_list *list);
+void	print_export(t_list *list);
+void	ft_unset_co(t_all *all, char *var);
+
+/*				cmd					*/
+t_line	*ft_split_mask(char **line_mask, char c);
+void	get_cmd(t_all *all, char **line_mask);
+void	execute_cmd(t_all *all, t_cmd *cmd);
+char	*s_readdoc(t_all *all, char *limit, int expand);
 
 /*				parse				*/
-
-void    parse(t_all *all, char **line_mask);
-void	get_colons(t_all *all, char *line, char *ref_line);
-void	get_pips(t_all *all, char **line_mask, int size);
-void	free_all(t_all *all, char *line_mask[]);
+void	parse(t_all *all, char **line_mask);
+void	get_pips(t_all *all, char **line_mask);
 void	find_var(t_all *all, char **line_mask);
-void	handle_great(t_all *all, char **line_mask, int *i);
-void	handle_less(t_all *all, char **line_mask, int *i);
-void    parse_heredoc(t_all *all, char **line_mask, int expand);
-/*				make_ref			*/
+void	parse_heredoc(t_all *all, char **line_mask, int expand);
 
-int		cor_char(char c);
-void	skip_back_s(t_all *all, char *mask, int *i);
-void	skip_back_s_in_q(t_all *all, char *mask, int *i);
-int		is_char_from_set(char c, char *set);
-void	remove_zero_ref(char **line_mask);
+/*				env					*/
+void	parce_env(t_all *all, char **env);
+char	*check_env(t_list *list, char *str);
+int		export_parse(t_all *all, char *s);
+/*				fd_files			*/
+
+void	fd_files(t_all *all, t_cmd *cmd);
 
 /*				handle quotes		*/
 
@@ -146,66 +140,35 @@ void	handle_d_quotes(t_all *all, char **line_mask, int *i);
 void	handle_var(char **line_mask, int *i);
 void	handle_var_in_q(char **line_mask, int *i);
 
-/*				env					*/
-
-void	parce_env(t_all *all, char **env);
-char	*check_env(t_list *list, char *str);
-
-/*				cmd					*/
-
-int		check_cmd(t_cmd *cmd);
-int		args_nb(char *ref);
-void	get_cmd(t_all *all, char **line_mask, int size);
-void	execute_cmd(t_all *all, t_cmd *cmd);
-void	new_func(t_all *all, t_cmd *cmd);
-
-/*				fd_files			*/
-
-void	fd_files(t_all *all, t_cmd *cmd);
-
 /*				helpers				*/
-char	*ft_strjoinchar(char *s, char c);
-int		str_n_char(char *str, char c);
-void	free_content(void *content);
-void	double_char_to_list(t_list **list, char **str);
-void	prev_node(t_dlist **list);
-void	next_node(t_dlist **list);
-void	lstadd_dlist(t_dlist **alst, t_dlist *new);
-t_dlist	*lstnewc(void *cam);
-void	free_char(char **s);
-int		skip_char(char *str, char c);
+int		str_n_set(char *str, char *set);
 int		skip_space(char *str);
-int 	spl_nb(char *s, char c);
+int		skip_char(char *str, char c);
+char	*ft_strjoinchar(char *s, char c);
+int		is_char_from_set(char c, char *set);
+void	free_content(void *content);
+void	free_array(char **array);
+/*				make_ref			*/
 
-/*				history				*/
-void	save_history(t_all *all, char *line);
-
-/*				terminal			*/
-int	terminal(t_all *all, char **line, char *promt);
-// int		init_term(t_tc_cmd *tccmd);
+void	skip_back_s(t_all *all, char *mask, int *i);
+void	skip_back_s_in_q(t_all *all, char *mask, int *i);
+void	remove_zero_ref(char **line_mask);
 
 /*				path				*/
 char	*find_path(t_all *all);
-void	check_path(t_all *all);
+char	**s_paths(t_all *all);
+
+/*				readline			*/
+char	*s_readline(t_all *all, char *prompt);
 
 /*				system				*/
-char	**s_paths(t_all *all);
 void	s_perror(t_all *all, char *name, int err);
 void	s_wait(t_all *all, t_cmd *cmd);
-char	*s_join(char *name, char c, char *val);
 char	**s_env(t_all *all);
-void	s_found(t_all *all, struct stat *st, char *file, t_cmd *cmd);
-void	s_exec(t_all *all, t_cmd *cmd);
 void	s_cmd(t_all *all, t_cmd *cmd);
 void	s_last(t_all *all, t_cmd *cmd);
-void	s_heredoc(t_all *all, t_cmd *cmd);
-
-char	*s_readline(t_all *all, char *prompt);
-void	s_cmd_files(t_cmd *cmd);
-
-void 	ft_split_mask(char *split_mask[][2], char **line_mask, char c);
-int		is_char_from_set(char c, char *set);
-int		str_n_set(char *str, char *set);
-void	s_dup(t_cmd *cmd);
-int		s_tern(int cond, int iftrue, int iffalse);
+char	*s_join(char *name, char c, char *val);
+void	s_exec(t_all *all, t_cmd *cmd);
+char	**s_args(t_cmd *cmd);
+void	s_found(t_all *all, struct stat *st, char *file, char **args);
 #endif

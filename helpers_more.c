@@ -1,35 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path.c                                             :+:      :+:    :+:   */
+/*   helpers_more.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/06 02:22:49 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/06 02:22:50 by tenshi           ###   ########.fr       */
+/*   Created: 2021/10/06 02:19:57 by tenshi            #+#    #+#             */
+/*   Updated: 2021/10/06 03:34:03 by tenshi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_path(t_all *all)
+void	free_content(void *content)
 {
-	t_list	*tmp;
-
-	tmp = all->l_env;
-	while (tmp)
+	if ((char *)content)
 	{
-		if (!(ft_strcmp(((t_env *)tmp->content)->name, "PATH")))
-			return (ft_strdup(((t_env *)tmp->content)->value));
-		tmp = tmp->next;
+		free((char *)content);
+		content = 0;
 	}
-	return (NULL);
 }
 
-char	**s_paths(t_all *all)
+int	is_char_from_set(char c, char *set)
 {
-	char	**path;
+	int	i;
 
-	path = ft_split(find_path(all), ':');
-	return (path);
+	i = -1;
+	if (!set)
+		return (0);
+	while (set[++i])
+	{
+		if (set[i] == c)
+			return (1);
+	}
+	return (0);
+}
+
+void	free_array(char **array)
+{
+	int	i;
+
+	if (!(array))
+		return ;
+	i = -1;
+	while (array[++i])
+	{
+		free(array[i]);
+		array[i] = NULL;
+	}
+	free(array);
 }
