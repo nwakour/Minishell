@@ -15,32 +15,19 @@
 static void	s_handle_c(int sig)
 {
 	(void)sig;
-	if (!g_child)
+	if (g_child == 0)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-	}
-	else
-	{
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
 	}
 }
 
 static void	s_handle_q(int sig)
 {
 	(void)sig;
-	if (g_child)
-	{
-		write(1, "Quit: 3\n", 8);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	else
+	if (g_child == 0)
 	{
 		rl_on_new_line();
 		rl_redisplay();

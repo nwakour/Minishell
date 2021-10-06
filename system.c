@@ -37,7 +37,10 @@ void	s_wait(t_all *all, t_cmd *cmd)
 		if (WTERMSIG(status) == SIGINT)
 			all->exits = 130;
 		else if (WTERMSIG(status) == SIGQUIT)
+		{
 			all->exits = 131;
+			write(1, "Quit: 3\n", 8);
+		}
 	}
 }
 
