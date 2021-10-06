@@ -44,3 +44,11 @@ bash-3.2$
 more bs but this I don't have to fix yaaaaaay
 echo "sleep 1\necho lol" > srpt.sh
 >la ls | >la sh srpt.sh
+Minisheeesh-> ""
+: command not found
+
+Minisheeesh-> $fff
+: command not found
+
+
+after control c  $? shall have 1

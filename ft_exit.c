@@ -65,3 +65,15 @@ void	ft_exit(t_all *all, t_cmd *cmd)
 		ft_exit_more(all, cmd);
 	}
 }
+
+t_all	*get_exit__ptr(t_all *exit)
+{
+	static t_all	*_exit = NULL;
+
+	if (exit)
+	{
+		_exit = exit;
+		return (_exit);
+	}
+	return (_exit);
+}

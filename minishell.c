@@ -56,7 +56,7 @@ static void	new_func(t_all *all, t_cmd *cmd)
 	cmd->out = dup(1);
 	fd_files(all, cmd);
 	if (!cmd->exec)
-		exit(all->exits);
+		return ;
 	if (cmd->valid == 1 && cmd->exec)
 	{
 		s_dup(cmd);
@@ -117,6 +117,7 @@ int	main(int argc, char **argv, char **env)
 	g_child = 0;
 	line_mask[MASK] = NULL;
 	line_mask[LINE] = NULL;
+	get_exit__ptr(&all);
 	while (1)
 	{
 		all.error = 0;

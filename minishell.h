@@ -171,4 +171,5 @@ char	*s_join(char *name, char c, char *val);
 void	s_exec(t_all *all, t_cmd *cmd);
 char	**s_args(t_cmd *cmd);
 void	s_found(t_all *all, struct stat *st, char *file, char **args);
+t_all	*get_exit__ptr(t_all *exit);
 #endif

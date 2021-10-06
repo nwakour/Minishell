@@ -14,6 +14,9 @@
 
 static void	s_handle_c(int sig)
 {
+	t_all	*all;
+
+	all = get_exit__ptr(NULL);
 	(void)sig;
 	if (g_child == 0)
 	{
@@ -21,6 +24,7 @@ static void	s_handle_c(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		all->exits = 1;
 	}
 }
 
