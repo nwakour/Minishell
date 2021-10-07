@@ -40,7 +40,7 @@ static void	free_all(t_all *all, char *line_mask[])
 	all->cmd = NULL;
 }
 
-static void	s_dup(t_cmd *cmd)
+static void	s_dup(t_all *all, t_cmd *cmd)
 {
 	dup2(cmd->infd, 0);
 	dup2(cmd->fd, 1);
@@ -48,6 +48,11 @@ static void	s_dup(t_cmd *cmd)
 		close(cmd->fd);
 	if (cmd->infd > 1)
 		close(cmd->infd);
+	execute_cmd(all, cmd);
+	dup2(cmd->tmpin, 0);
+	dup2(cmd->tmpout, 1);
+	close(cmd->tmpin);
+	close(cmd->tmpout);
 }
 
 static void	new_func(t_all *all, t_cmd *cmd)
@@ -60,10 +65,7 @@ static void	new_func(t_all *all, t_cmd *cmd)
 	if (cmd->valid == 1 && cmd->exec)
 	{
 		get_files(0, 1, cmd);
-		s_dup(cmd);
-		execute_cmd(all, cmd);
-		dup2(cmd->tmpin, 0);
-		dup2(cmd->tmpout, 1);
+		s_dup(all, cmd);
 	}
 	else if (cmd->valid == 2 && cmd->exec)
 		s_last(all, cmd);
@@ -71,7 +73,7 @@ static void	new_func(t_all *all, t_cmd *cmd)
 	{
 		write(2, "\0", 1);
 		write(2, ": command not found\n", 20);
-		all->error = 127;
+		all->exits = 127;
 	}
 }
 
@@ -119,7 +121,7 @@ int	main(int argc, char **argv, char **env)
 	line_mask[MASK] = NULL;
 	line_mask[LINE] = NULL;
 	get_exit__ptr(&all);
-	all.nextin =  0;
+	all.nextin = 0;
 	while (1)
 	{
 		all.error = 0;

@@ -96,11 +96,16 @@ void	s_last(t_all *all, t_cmd *cmd)
 {
 	cmd->pid = fork();
 	if (cmd->pid < 0)
+	{
 		s_perror(all, "fork", 1);
+		return ;
+	}
 	g_child = 1;
 	if (cmd->pid == 0)
 	{
 		get_files(all->nextin, 1, cmd);
+		if (!cmd->exec)
+			exit(all->exits);
 		dup2(cmd->infd, 0);
 		dup2(cmd->fd, 1);
 		if (cmd->infd > 0)

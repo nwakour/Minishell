@@ -62,28 +62,6 @@ static void	s_check_exec(t_all *all, t_cmd *cmd)
 		s_exec(all, cmd);
 }
 
-// static void	s_cmd_more(t_all *all, t_cmd *cmd, int *fd)
-// {
-// 	g_child = 1;
-// 	if (cmd->pid == 0)
-// 	{
-// 		dup2(cmd->infd, 0);
-// 		if (cmd->fd != 1)
-// 			dup2(cmd->fd, 1);
-// 		else
-// 			dup2(fd[1], 1);
-// 		if (cmd->infd > 1)
-// 			close(cmd->infd);
-// 		if (cmd->fd > 1)
-// 			close(cmd->fd);
-// 		if (fd[0] > 1)
-// 			close(fd[0]);
-// 		if (fd[1] > 1)
-// 			close(fd[1]);
-// 		s_check_exec(all, cmd);
-// 	}
-// }
-
 static void	s_cmd_more(t_all *all, t_cmd *cmd, int *fd)
 {
 	g_child = 1;
@@ -103,16 +81,21 @@ static void	s_cmd_more(t_all *all, t_cmd *cmd, int *fd)
 	}
 }
 
-
 void	s_cmd(t_all *all, t_cmd *cmd)
 {
 	int	fd[2];
 
 	if (pipe(fd) < 0)
+	{
 		s_perror(all, "pipe", 1);
+		return ;
+	}
 	cmd->pid = fork();
 	if (cmd->pid < 0)
+	{
 		s_perror(all, "fork", 1);
+		return ;
+	}
 	s_cmd_more(all, cmd, fd);
 	g_child = 0;
 	close(fd[1]);
