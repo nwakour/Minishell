@@ -67,6 +67,31 @@ char	**s_env(t_all *all)
 	return (env);
 }
 
+// void	s_last(t_all *all, t_cmd *cmd)
+// {
+// 	cmd->pid = fork();
+// 	if (cmd->pid < 0)
+// 		s_perror(all, "fork", 1);
+// 	g_child = 1;
+// 	if (cmd->pid == 0)
+// 	{
+// 		dup2(cmd->infd, 0);
+// 		dup2(cmd->fd, 1);
+// 		if (cmd->infd > 1)
+// 			close(cmd->infd);
+// 		if (cmd->fd > 1)
+// 			close(cmd->fd);
+// 		s_exec(all, cmd);
+// 	}
+// 	if (!all->pip)
+// 		s_wait(all, cmd);
+// 	g_child = 0;
+// 	if (cmd->infd > 1)
+// 		close(cmd->infd);
+// 	if (cmd->fd > 1)
+// 		close(cmd->fd);
+// }
+
 void	s_last(t_all *all, t_cmd *cmd)
 {
 	cmd->pid = fork();
@@ -75,9 +100,10 @@ void	s_last(t_all *all, t_cmd *cmd)
 	g_child = 1;
 	if (cmd->pid == 0)
 	{
+		get_files(all->nextin, 1, cmd);
 		dup2(cmd->infd, 0);
 		dup2(cmd->fd, 1);
-		if (cmd->infd > 1)
+		if (cmd->infd > 0)
 			close(cmd->infd);
 		if (cmd->fd > 1)
 			close(cmd->fd);
@@ -86,10 +112,6 @@ void	s_last(t_all *all, t_cmd *cmd)
 	if (!all->pip)
 		s_wait(all, cmd);
 	g_child = 0;
-	if (cmd->infd > 1)
-		close(cmd->infd);
-	if (cmd->fd > 1)
-		close(cmd->fd);
 }
 
 char	*s_join(char *name, char c, char *val)

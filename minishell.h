@@ -54,8 +54,10 @@ typedef struct s_cmd
 	char	**f_name;
 	int		infd;
 	int		fd;
-	char	in;
-	char	out;
+	char	*in;
+	char	*out;
+	int		tmpin;
+	int		tmpout;
 	int		append;
 	int		link;
 	int		args;
@@ -172,4 +174,7 @@ void	s_exec(t_all *all, t_cmd *cmd);
 char	**s_args(t_cmd *cmd);
 void	s_found(t_all *all, struct stat *st, char *file, char **args);
 t_all	*get_exit__ptr(t_all *exit);
+void	get_files(int nextin, int nextout, t_cmd *cmd);
+int		s_tern(int cond, int iftrue, int iffalse);
+
 #endif

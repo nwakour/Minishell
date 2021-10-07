@@ -52,17 +52,18 @@ static void	s_dup(t_cmd *cmd)
 
 static void	new_func(t_all *all, t_cmd *cmd)
 {
-	cmd->in = dup(0);
-	cmd->out = dup(1);
+	cmd->tmpin = dup(0);
+	cmd->tmpout = dup(1);
 	fd_files(all, cmd);
 	if (!cmd->exec)
 		return ;
 	if (cmd->valid == 1 && cmd->exec)
 	{
+		get_files(0, 1, cmd);
 		s_dup(cmd);
 		execute_cmd(all, cmd);
-		dup2(cmd->in, 0);
-		dup2(cmd->out, 1);
+		dup2(cmd->tmpin, 0);
+		dup2(cmd->tmpout, 1);
 	}
 	else if (cmd->valid == 2 && cmd->exec)
 		s_last(all, cmd);
@@ -118,6 +119,7 @@ int	main(int argc, char **argv, char **env)
 	line_mask[MASK] = NULL;
 	line_mask[LINE] = NULL;
 	get_exit__ptr(&all);
+	all.nextin =  0;
 	while (1)
 	{
 		all.error = 0;
