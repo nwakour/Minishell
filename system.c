@@ -116,6 +116,8 @@ void	s_last(t_all *all, t_cmd *cmd)
 	}
 	if (!all->pip)
 		s_wait(all, cmd);
+	if (all->nextin > 1)
+		close(all->nextin);
 	g_child = 0;
 }
 

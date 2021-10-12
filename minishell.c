@@ -100,7 +100,7 @@ static void	parse_exec(t_all *all, char **line_mask)
 			ft_putstr_fd("syntax error\n", 1);
 		else if (!line_mask[LINE])
 		{
-			printf("exit\n");
+			write(1, "exit\n", 5);
 			exit(0);
 		}
 	}

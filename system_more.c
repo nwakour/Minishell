@@ -72,9 +72,10 @@ static void	s_cmd_more(t_all *all, t_cmd *cmd, int *fd)
 			exit(all->exits);
 		dup2(cmd->infd, 0);
 		dup2(cmd->fd, 1);
-		if (cmd->infd > 0)
+		if (cmd->infd != 0)
 			close(cmd->infd);
-		close(cmd->fd);
+		if (cmd->fd != 1)
+			close(cmd->fd);
 		close(fd[0]);
 		close(fd[1]);
 		s_check_exec(all, cmd);
@@ -99,5 +100,7 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 	s_cmd_more(all, cmd, fd);
 	g_child = 0;
 	close(fd[1]);
+	if (all->nextin > 1)
+		close(all->nextin);
 	all->nextin = fd[0];
 }
