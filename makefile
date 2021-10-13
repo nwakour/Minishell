@@ -23,7 +23,7 @@ OBJS			=	${SRCS:.c=.o}
 
 CC				=	gcc
 
-FLAGS           =	-Wall -Wextra -Werror -ltermcap -lreadline -g -fsanitize=address
+FLAGS           =	-Wall -Wextra -Werror -ltermcap -lreadline -fsanitize=address -g3
 
 READLINE		=  -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include
 

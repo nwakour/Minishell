@@ -52,3 +52,9 @@ Minisheeesh-> $fff
 
 
 after control c  $? shall have 1
+
+
+<< eee cat (ctrl + d)
+
+FIXED unset path should display command not found
+

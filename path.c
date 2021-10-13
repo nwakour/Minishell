@@ -29,7 +29,11 @@ char	*find_path(t_all *all)
 char	**s_paths(t_all *all)
 {
 	char	**path;
+	char	*ss;
 
-	path = ft_split(find_path(all), ':');
+	path = NULL;
+	ss = find_path(all);
+	if (ss)
+		path = ft_split(ss, ':');
 	return (path);
 }
