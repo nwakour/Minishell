@@ -58,3 +58,17 @@ after control c  $? shall have 1
 
 FIXED unset path should display command not found
 
+Only spaces in line should be ignored
+\
+exit -1
+
+echo $something55something
+
+echo """something"""  (empty stings are not tokens)
+
+add last word of line (expanded) to the "_" env variable (echo $_)
+
+echo a | exit
+
+cat | echo
+wc | echo

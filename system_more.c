@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   system_more.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:27:49 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/06 04:30:56 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/15 10:09:48 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,19 @@ void	s_exec(t_all *all, t_cmd *cmd)
 	paths = s_paths(all);
 	if (cmd->cmd && cmd->cmd[0] == '/')
 	{
-		if (execve(cmd->cmd, s_args(cmd), all->envp) == -1)
+		if (!lstat(cmd->cmd, &st))
 		{
-			s_perror(all, cmd->cmd, 126);
-			exit(126);
+			if (execve(cmd->cmd, s_args(cmd), all->envp) == -1)
+			{
+				s_perror(all, cmd->cmd, 126);
+				exit(126);
+			}
+		}
+		else
+		{
+			write(2, all->cmd->cmd, ft_strlen(all->cmd->cmd));
+			write(2, ": no such file or directory\n", 28);
+			exit(127);
 		}
 	}
 	else

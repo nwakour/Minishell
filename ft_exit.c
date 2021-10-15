@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:12:32 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/06 03:50:04 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/15 09:46:07 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ static void	ft_exit_more(t_all *all, t_cmd *cmd)
 	}
 	if (cmd->args > 1)
 	{
-		write(2, "exit: ", 5);
-		write(2, "too many arguments\n", 18);
+		write(2, "exit: ", 6);
+		write(2, "too many arguments\n", 19);
 		all->exits = 1;
 	}
 }

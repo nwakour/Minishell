@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+         #
+#    By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 19:06:53 by nwakour           #+#    #+#              #
-#    Updated: 2021/10/06 04:21:14 by tenshi           ###   ########.fr        #
+#    Updated: 2021/10/15 09:31:50 by hmahjour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ OBJS			=	${SRCS:.c=.o}
 
 CC				=	gcc
 
-FLAGS           =	-Wall -Wextra -Werror -ltermcap -lreadline -fsanitize=address -g3
+FLAGS           =	-Wall -Wextra -Werror -ltermcap -lreadline
 
 READLINE		=  -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include
 
