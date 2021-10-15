@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/06 04:38:15 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/15 09:27:31 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		all.error = 0;
 		all.add = 1;
-		line_mask[LINE] = s_readline(&all, "Minisheeesh-> ");
+		line_mask[LINE] = s_readline(&all, "Minisheeesh-> ", 0);
 		parse_exec(&all, line_mask);
 		free_all(&all, line_mask);
 	}

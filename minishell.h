@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/06 04:20:36 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/15 09:26:27 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ char	*find_path(t_all *all);
 char	**s_paths(t_all *all);
 
 /*				readline			*/
-char	*s_readline(t_all *all, char *prompt);
+char	*s_readline(t_all *all, char *prompt, int doc);
 
 /*				system				*/
 void	s_perror(t_all *all, char *name, int err);

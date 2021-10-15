@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_more.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:14:09 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/06 03:39:31 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/15 09:27:16 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,13 @@ char	*s_readdoc(t_all *all, char *limit, int expand)
 	all->add = 0;
 	file = ft_strjoin("/tmp/s_", ft_itoa(all->hdoc));
 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
-	line_mask[LINE] = s_readline(all, ">");
+	line_mask[LINE] = s_readline(all, ">", 1);
 	parse_heredoc(all, line_mask, expand);
 	while (line_mask[LINE] && ft_strcmp(line_mask[LINE], limit))
 	{
 		write(fd, line_mask[LINE], ft_strlen(line_mask[LINE]));
 		write(fd, "\n", 1);
-		line_mask[LINE] = s_readline(all, ">");
+		line_mask[LINE] = s_readline(all, ">", 1);
 		parse_heredoc(all, line_mask, expand);
 	}
 	close(fd);

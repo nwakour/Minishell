@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:54:26 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/10/06 04:40:13 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/15 09:27:49 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	s_handle_q(int sig)
 	}
 }
 
-char	*s_readline(t_all *all, char *prompt)
+char	*s_readline(t_all *all, char *prompt, int doc)
 {
 	char	*line_mask;
 
@@ -50,7 +50,7 @@ char	*s_readline(t_all *all, char *prompt)
 		add_history(line_mask);
 		return (line_mask);
 	}
-	if (!line_mask)
+	if (!line_mask && !doc)
 	{
 		write(1, "exit", 5);
 		exit(all->exits);
