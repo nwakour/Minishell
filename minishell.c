@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/15 09:27:31 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/16 14:36:43 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,10 @@ static void	parse_exec(t_all *all, char **line_mask)
 	if (line_mask[LINE] && line_mask[LINE][0] != '\0')
 	{
 		parse(all, line_mask);
+		//printf("%s\n", line_mask[MASK]);
 		find_var(all, line_mask);
 		parse(all, line_mask);
+		//printf("%s\n", line_mask[MASK]);
 		if (!all->error)
 		{
 			if (ft_strchr(line_mask[MASK], '|'))

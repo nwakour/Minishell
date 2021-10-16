@@ -71,4 +71,24 @@ add last word of line (expanded) to the "_" env variable (echo $_)
 echo a | exit
 
 cat | echo
-wc | echo
+wc | echo //g_child position
+
+
+export somethimg should be added to export list but not env list
+
+bash-3.2$ mkdir exp
+bash-3.2$ cd exp
+bash-3.2$ rm -rf ../exp
+bash-3.2$ cd .
+cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+bash-3.2$ pwd
+/Users/hmahjour/Desktop/minienv/exp/.
+bash-3.2$ cd .
+cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+bash-3.2$ pwd
+/Users/hmahjour/Desktop/minienv/exp/./.
+
+
+bash-3.2$ exit 77777777777777777777777777777777777
+exit
+bash: exit: 77777777777777777777777777777777777: numeric argument required

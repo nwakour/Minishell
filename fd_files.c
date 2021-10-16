@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_files.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:06:22 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/06 02:59:09 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/16 14:21:54 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	fd_files(t_all *all, t_cmd *cmd)
 			fd = fd_treat_files(cmd, i);
 			if (fd == -1)
 			{
-				s_perror(all, cmd->f_name[i], 1);
+				s_perror(all, cmd->f_name[i] + 1, 1);
 				cmd->exec = 0;
 				break ;
 			}

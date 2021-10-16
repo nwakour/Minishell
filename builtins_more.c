@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_more.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:07:17 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/06 02:40:14 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/16 14:15:44 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	ft_pwd(t_all *all)
 {
 	char	*s;
 
+// check if NULL
 	s = getcwd(NULL, 0);
 	write(1, s, ft_strlen(s));
 	write(1, "\n", 1);

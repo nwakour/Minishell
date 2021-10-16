@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:12:32 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/15 09:46:07 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/16 14:19:49 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ static void	ft_exit_more(t_all *all, t_cmd *cmd)
 	if (s_isnum(cmd->arg[0]) && cmd->args == 1)
 	{
 		all->exits = ft_atoi(cmd->arg[0]);
-		exit(all->exits);
+		if (!all->pip)
+			exit(all->exits);
 	}
 	if (cmd->args > 1)
 	{
@@ -49,7 +50,11 @@ static void	ft_exit_more(t_all *all, t_cmd *cmd)
 void	ft_exit(t_all *all, t_cmd *cmd)
 {
 	if (cmd->args == 0)
-		exit(0);
+	{
+		if (!all->pip)
+			exit(all->exits);
+		all->exits = 0;
+	}
 	if (cmd->args >= 1)
 	{
 		if (!s_isnum(cmd->arg[0]))
@@ -60,7 +65,9 @@ void	ft_exit(t_all *all, t_cmd *cmd)
 				write(2, "exit: ", 6);
 			write(2, cmd->arg[0], ft_strlen(cmd->arg[0]));
 			write(2, ": numeric argument required\n", 29);
-			exit(255);
+			all->exits = 255;
+			if (!all->pip)
+				exit(255);
 		}
 		ft_exit_more(all, cmd);
 	}
