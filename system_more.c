@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:27:49 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/15 10:09:48 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/19 19:51:47 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,14 @@ void	s_exec(t_all *all, t_cmd *cmd)
 		s_exec_more(all, cmd, paths, &st);
 }
 
-static void	s_check_exec(t_all *all, t_cmd *cmd)
+void	s_check_exec(t_all *all, t_cmd *cmd)
 {
 	if (cmd->valid == 1)
 	{
 		execute_cmd(all, cmd);
 		exit(all->exits);
 	}
-	else if (cmd->valid == 2 && cmd->exec && all->pip)
+	else if (cmd->valid == 2 && cmd->exec /*&& all->pip*/)
 		s_exec(all, cmd);
 }
 
@@ -107,7 +107,6 @@ void	s_cmd(t_all *all, t_cmd *cmd)
 		return ;
 	}
 	s_cmd_more(all, cmd, fd);
-	g_child = 0;
 	close(fd[1]);
 	if (all->nextin > 1)
 		close(all->nextin);

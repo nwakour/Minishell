@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/15 09:26:27 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/19 19:51:54 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,5 +176,6 @@ void	s_found(t_all *all, struct stat *st, char *file, char **args);
 t_all	*get_exit__ptr(t_all *exit);
 void	get_files(int nextin, int nextout, t_cmd *cmd);
 int		s_tern(int cond, int iftrue, int iffalse);
+void	s_check_exec(t_all *all, t_cmd *cmd);
 
 #endif

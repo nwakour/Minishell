@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   system.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 14:53:16 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/10/06 04:34:50 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/19 19:53:26 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	s_wait(t_all *all, t_cmd *cmd)
 			write(1, "Quit: 3\n", 8);
 		}
 	}
+	g_child = 0;
 }
 
 char	**s_env(t_all *all)
@@ -112,13 +113,12 @@ void	s_last(t_all *all, t_cmd *cmd)
 			close(cmd->infd);
 		if (cmd->fd > 1)
 			close(cmd->fd);
-		s_exec(all, cmd);
+		s_check_exec(all, cmd);
 	}
 	if (!all->pip)
 		s_wait(all, cmd);
 	if (all->nextin > 1)
 		close(all->nextin);
-	g_child = 0;
 }
 
 char	*s_join(char *name, char c, char *val)
