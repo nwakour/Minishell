@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 10:57:41 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/16 15:31:03 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/20 18:07:54 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	handle_d_quotes(t_all *all, char **line_mask, int *i)
 		else
 			line_mask[MASK][*i] = TEXT;
 	}
+	(*i)--;
 	all->error = 1;
 }
 
@@ -90,5 +91,6 @@ void	handle_s_quotes(t_all *all, char **line_mask, int *i)
 		else
 			line_mask[MASK][*i] = TEXT;
 	}
+	(*i)--;
 	all->error = 1;
 }

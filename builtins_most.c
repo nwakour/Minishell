@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_most.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:11:34 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/06 03:38:30 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/20 17:53:19 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,12 @@ void	ft_export(t_all *all, t_cmd *cmd)
 	else
 		ft_export_na(all);
 	if (all->envp)
+	{
+		i = -1;
+		while (all->envp[++i])
+			free(all->envp[i]);
 		free(all->envp);
+	}
 	all->envp = s_env(all);
 	all->exits = 0;
 }
@@ -79,6 +84,8 @@ void	ft_unset_co(t_all *all, char *var)
 			list = list->next;
 			all->l_env = list;
 		}
+		free(((t_env*)f->content)->name);
+		free(((t_env*)f->content)->value);
 		free(f->content);
 		free(f);
 	}
