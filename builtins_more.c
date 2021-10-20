@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:07:17 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/19 20:01:18 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/20 17:32:49 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,18 @@
 static void	ft_update_pwd(t_all *all, char *var)
 {
 	t_list	*tmp;
+	char	*path;
 
 	tmp = all->l_env;
+	path = getcwd(NULL, 0);
+	if (!path)
+		return ;
 	while (tmp)
 	{
 		if (!(ft_strcmp(((t_env *)tmp->content)->name, var)))
 		{
 			free(((t_env *)tmp->content)->value);
-			((t_env *)tmp->content)->value = getcwd(NULL, 0);
+			((t_env *)tmp->content)->value = path;
 			break ;
 		}
 		tmp = tmp->next;
@@ -43,7 +47,7 @@ static void	ft_cd_home(t_all *all)
 
 static void	ft_follow_cd(t_all *all, int r, char *path)
 {
-	if (r != 0)
+	if (r == -1)
 	{
 		write(2, "cd: ", 4);
 		write(2, path, ft_strlen(path));
@@ -59,6 +63,8 @@ void	ft_cd(t_all *all, char *path, int args)
 	int	r;
 
 	r = 0;
+	write(2, path, ft_strlen(path));
+	write(2, "\n", 1);
 	ft_update_pwd(all, "OLDPWD");
 	all->exits = 0;
 	if (args == 1 && !path)
@@ -76,9 +82,16 @@ void	ft_cd(t_all *all, char *path, int args)
 		r = chdir(getenv("HOME"));
 		if (path[1] && path[1] == '/' && path[2])
 			r = chdir(path + 2);
-	}	
+	}
+	else if (!ft_strcmp(path, "."))
+	{
+		if (!getcwd(NULL, 0))
+			s_perror(all, "cd", 1);
+	}
 	else
+	{
 		r = chdir(path);
+	}
 	ft_follow_cd(all, r, path);
 }
 
