@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/06 03:05:31 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/20 19:17:04 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static void	handle_great(t_all *all, char **line_mask, int *i)
 		line_mask[MASK][++(*i)] = SKIP;
 		while (line_mask[LINE][(*i) + 1] && line_mask[LINE][(*i) + 1] == ' ')
 			line_mask[MASK][++(*i)] = SKIP;
-		if (line_mask[LINE][(*i) + 1] == GREAT && ++(*i))
+		if ((line_mask[LINE][(*i) + 1] == GREAT || line_mask[LINE][(*i) + 1] == LESS
+			|| line_mask[LINE][(*i) + 1] == PIP || line_mask[LINE][(*i) + 1] == '\0') && ++(*i))
 			all->error = 1;
 	}
 	else
@@ -28,7 +29,8 @@ static void	handle_great(t_all *all, char **line_mask, int *i)
 		line_mask[MASK][(*i)] = GREAT;
 		while (line_mask[LINE][(*i) + 1] && line_mask[LINE][(*i) + 1] == ' ')
 			line_mask[MASK][++(*i)] = SKIP;
-		if (line_mask[LINE][(*i) + 1] == GREAT && ++(*i))
+		if ((line_mask[LINE][(*i) + 1] == GREAT || line_mask[LINE][(*i) + 1] == LESS
+			|| line_mask[LINE][(*i) + 1] == PIP || line_mask[LINE][(*i) + 1] == '\0') && ++(*i))
 			all->error = 1;
 	}
 }
@@ -47,7 +49,8 @@ static void	handle_less(t_all *all, char **line_mask, int *i)
 		line_mask[MASK][++(*i)] = SKIP;
 		while (line_mask[LINE][(*i) + 1] && line_mask[LINE][(*i) + 1] == ' ')
 			line_mask[MASK][++(*i)] = SKIP;
-		if (line_mask[LINE][(*i) + 1] == LESS && ++(*i))
+		if ((line_mask[LINE][(*i) + 1] == LESS || line_mask[LINE][(*i) + 1] == GREAT
+			|| line_mask[LINE][(*i) + 1] == PIP || line_mask[LINE][(*i) + 1] == '\0') && ++(*i))
 			all->error = 1;
 	}
 	else
@@ -55,7 +58,8 @@ static void	handle_less(t_all *all, char **line_mask, int *i)
 		line_mask[MASK][(*i)] = LESS;
 		while (line_mask[LINE][(*i) + 1] && line_mask[LINE][(*i) + 1] == ' ')
 			line_mask[MASK][++(*i)] = SKIP;
-		if (line_mask[LINE][(*i) + 1] == LESS && ++(*i))
+		if ((line_mask[LINE][(*i) + 1] == LESS || line_mask[LINE][(*i) + 1] == GREAT
+			|| line_mask[LINE][(*i) + 1] == PIP || line_mask[LINE][(*i) + 1] == '\0') && ++(*i))
 			all->error = 1;
 	}
 }
@@ -134,5 +138,7 @@ void	parse(t_all *all, char **line_mask)
 			handle_d_quotes(all, line_mask, &i);
 		else
 			i = continue_parse(all, line_mask, i, ret);
+		if (i != 0 && line_mask[LINE][i] == '\0')
+			return ;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_ref.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 04:31:32 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/06 04:31:34 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/20 19:26:35 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ void	remove_zero_ref(char **line_mask)
 					line_mask[MASK][i]);
 			if (line_mask[MASK][i] == 's')
 				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE], ' ');
+			else if (is_char_from_set(line_mask[MASK][i], "<>!?") && i != 0 && line_mask[MASK][i - 1] != ' ')
+			{
+				nw_line_mask[MASK][i] = ' ';
+				nw_line_mask[MASK] = ft_strjoin_char(nw_line_mask[MASK],
+					line_mask[MASK][i]);
+				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE], ' ');
+				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE],
+						line_mask[LINE][i]);
+			}
 			else
 				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE],
 						line_mask[LINE][i]);
