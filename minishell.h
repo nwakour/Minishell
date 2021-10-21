@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/19 19:51:54 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/21 16:14:10 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void	fd_files(t_all *all, t_cmd *cmd);
 
 void	handle_s_quotes(t_all *all, char **line_mask, int *i);
 void	handle_d_quotes(t_all *all, char **line_mask, int *i);
-void	handle_var(char **line_mask, int *i);
+void	handle_var(t_all *all, char **line_mask, int *i);
 void	handle_var_in_q(char **line_mask, int *i);
 
 /*				helpers				*/

@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 10:57:41 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/20 19:17:51 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/21 16:13:43 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,24 @@ void	handle_var_in_q(char **line_mask, int *i)
 	}
 }
 
-void	handle_var(char **line_mask, int *i)
+void	handle_var(t_all *all, char **line_mask, int *i)
 {
 	if (line_mask[LINE][*i + 1] == ' ')
 		line_mask[MASK][*i] = TEXT;
-	else if (line_mask[LINE][*i + 1] == '\\')
-		line_mask[MASK][*i] = TEXT;
+	// else if (line_mask[LINE][*i + 1] == '\\')
+	// 	line_mask[MASK][*i] = TEXT;
+	else if (line_mask[LINE][*i + 1] == '\"')
+	{
+		line_mask[MASK][*i] = SKIP;
+		(*i)++;
+		handle_d_quotes(all, line_mask, i);
+	}
+	else if (line_mask[LINE][*i + 1] == '\'')
+	{
+		line_mask[MASK][*i] = SKIP;
+		(*i)++;
+		handle_s_quotes(all, line_mask, i);
+	}
 	else if (ft_isalpha(line_mask[LINE][*i + 1]) ||
 		(line_mask[LINE][*i + 1] == '_'))
 	{
@@ -72,8 +84,8 @@ void	handle_d_quotes(t_all *all, char **line_mask, int *i)
 	{
 		if (line_mask[LINE][*i] == VAR)
 			handle_var_in_q(line_mask, i);
-		else if (line_mask[LINE][*i] == '\\')
-			skip_back_s_in_q(all, line_mask[MASK], i);
+		// else if (line_mask[LINE][*i] == '\\')
+		// 	skip_back_s_in_q(all, line_mask[MASK], i);
 		else if (line_mask[LINE][*i] == '\"')
 		{
 			line_mask[MASK][*i] = CLOSE_D_Q + 48;
