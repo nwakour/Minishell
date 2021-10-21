@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 04:31:32 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/20 19:26:35 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/21 15:20:30 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,8 @@ void	skip_back_s_in_q(t_all *all, char *mask, int *i)
 		mask[*i] = TEXT;
 }
 
-void	remove_zero_ref(char **line_mask)
+static void	cont_remove_zero_ref(char **line_mask, char **nw_line_mask, int i)
 {
-	int		i;
-	char	*nw_line_mask[2];
-
-	if (!line_mask[LINE] || !str_n_set(line_mask[MASK], "01234"))
-		return ;
-	nw_line_mask[LINE] = NULL;
-	nw_line_mask[MASK] = NULL;
-	i = -1;
 	while (line_mask[LINE][++i] != '\0')
 	{
 		if (!is_char_from_set(line_mask[MASK][i], "01234"))
@@ -56,11 +48,12 @@ void	remove_zero_ref(char **line_mask)
 					line_mask[MASK][i]);
 			if (line_mask[MASK][i] == 's')
 				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE], ' ');
-			else if (is_char_from_set(line_mask[MASK][i], "<>!?") && i != 0 && line_mask[MASK][i - 1] != ' ')
+			else if (is_char_from_set(line_mask[MASK][i], "<>!?")
+				&& i != 0 && line_mask[MASK][i - 1] != ' ')
 			{
 				nw_line_mask[MASK][i] = ' ';
 				nw_line_mask[MASK] = ft_strjoin_char(nw_line_mask[MASK],
-					line_mask[MASK][i]);
+						line_mask[MASK][i]);
 				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE], ' ');
 				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE],
 						line_mask[LINE][i]);
@@ -70,6 +63,17 @@ void	remove_zero_ref(char **line_mask)
 						line_mask[LINE][i]);
 		}
 	}
+}
+
+void	remove_zero_ref(char **line_mask)
+{
+	char	*nw_line_mask[2];
+
+	if (!line_mask[LINE] || !str_n_set(line_mask[MASK], "01234"))
+		return ;
+	nw_line_mask[LINE] = NULL;
+	nw_line_mask[MASK] = NULL;
+	cont_remove_zero_ref(line_mask, nw_line_mask, -1);
 	free(line_mask[LINE]);
 	free(line_mask[MASK]);
 	line_mask[LINE] = nw_line_mask[LINE];
