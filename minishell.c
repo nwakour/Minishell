@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/21 15:48:13 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/21 16:35:34 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,12 @@ static void	new_func(t_all *all, t_cmd *cmd)
 	}
 	else if (cmd->valid == 2 && cmd->exec)
 		s_last(all, cmd);
-	else if (!cmd->valid)
-	{
-		write(2, "\0", 1);
-		write(2, ": command not found\n", 20);
-		all->exits = 127;
-	}
+	// else if (!cmd->valid)
+	// {
+	// 	write(2, "\0", 1);
+	// 	write(2, ": command not found\n", 20);
+	// 	all->exits = 127;
+	// }
 }
 
 static void	parse_exec(t_all *all, char **line_mask)

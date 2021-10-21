@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:26:40 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/16 11:16:32 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/21 16:35:17 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ static void	more_pips(t_all *all)
 		tmp = tmp->next;
 	}
 	fd_files(all, ((t_cmd *)tmp->content));
-	if (((t_cmd *)tmp->content)->valid > 0)
-		s_last(all, tmp->content);
-	else
-	{
-		write(2, "\0", 1);
-		write(2, ": command not found\n", 20);
-		all->exits = 127;
-	}
+	//if (((t_cmd *)tmp->content)->valid > 0)
+	s_last(all, tmp->content);
+	// else
+	// {
+	// 	write(2, "\0", 1);
+	// 	write(2, ": command not found\n", 20);
+	// 	all->exits = 127;
+	// }
 	tmp = all->l_cmd;
 	while (tmp)
 	{
