@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/20 18:08:16 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/21 14:07:54 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,8 @@ static void	parse_exec(t_all *all, char **line_mask)
 	if (line_mask[LINE] && line_mask[LINE][0] != '\0')
 	{
 		parse(all, line_mask);
-		//printf("%s\n", line_mask[MASK]);
 		find_var(all, line_mask);
 		parse(all, line_mask);
-		//printf("%s\n", line_mask[MASK]);
 		if (!all->error)
 		{
 			if (ft_strchr(line_mask[MASK], '|'))
@@ -131,7 +129,6 @@ int	main(int argc, char **argv, char **env)
 		line_mask[LINE] = s_readline(&all, "Minisheeesh-> ", 0);
 		parse_exec(&all, line_mask);
 		free_all(&all, line_mask);
-		// system("leaks minishell");
 	}
 	return (all.exits);
 }

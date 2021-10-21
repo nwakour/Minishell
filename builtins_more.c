@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:07:17 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/20 17:32:49 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/21 14:17:45 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,23 +58,11 @@ static void	ft_follow_cd(t_all *all, int r, char *path)
 		ft_update_pwd(all, "PWD");
 }
 
-void	ft_cd(t_all *all, char *path, int args)
+int	ft_cd_cont(t_all *all, char *path)
 {
 	int	r;
 
 	r = 0;
-	write(2, path, ft_strlen(path));
-	write(2, "\n", 1);
-	ft_update_pwd(all, "OLDPWD");
-	all->exits = 0;
-	if (args == 1 && !path)
-		return ;
-	if (args > 1)
-	{
-		write(2, "cd: too many arguments\n", 23);
-		all->exits = 1;
-		return ;
-	}
 	if (!path)
 		ft_cd_home(all);
 	else if (path && path[0] == '~')
@@ -89,25 +77,25 @@ void	ft_cd(t_all *all, char *path, int args)
 			s_perror(all, "cd", 1);
 	}
 	else
-	{
 		r = chdir(path);
-	}
-	ft_follow_cd(all, r, path);
+	return (r);
 }
 
-void	ft_pwd(t_all *all)
+void	ft_cd(t_all *all, char *path, int args)
 {
-	char	*s;
+	int	r;
 
-// check if NULL
-	s = getcwd(NULL, 0);
-	if (s)
+	r = 0;
+	ft_update_pwd(all, "OLDPWD");
+	all->exits = 0;
+	if (args == 1 && !path)
+		return ;
+	if (args > 1)
 	{
-		write(1, s, ft_strlen(s));
-		write(1, "\n", 1);
-		free(s);
-		all->exits = 0;
+		write(2, "cd: too many arguments\n", 23);
+		all->exits = 1;
+		return ;
 	}
-	else
-		s_perror(all, "pwd", 1);
+	r = ft_cd_cont(all, path);
+	ft_follow_cd(all, r, path);
 }

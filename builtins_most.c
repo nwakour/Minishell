@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_most.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:11:34 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/20 17:53:19 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/21 14:15:59 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ void	ft_unset_co(t_all *all, char *var)
 			list = list->next;
 			all->l_env = list;
 		}
-		free(((t_env*)f->content)->name);
-		free(((t_env*)f->content)->value);
+		free(((t_env *)f->content)->name);
+		free(((t_env *)f->content)->value);
 		free(f->content);
 		free(f);
 	}

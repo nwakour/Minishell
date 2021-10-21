@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtind_more_than_more.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:10:19 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/06 03:28:15 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/21 14:12:07 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,20 @@ void	ft_env(t_all *all)
 		free(all->envp);
 	all->envp = s_env(all);
 	all->exits = 0;
+}
+
+void	ft_pwd(t_all *all)
+{
+	char	*s;
+
+	s = getcwd(NULL, 0);
+	if (s)
+	{
+		write(1, s, ft_strlen(s));
+		write(1, "\n", 1);
+		free(s);
+		all->exits = 0;
+	}
+	else
+		s_perror(all, "pwd", 1);
 }

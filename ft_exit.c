@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:12:32 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/20 17:53:37 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/21 14:09:16 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ void	ft_exit(t_all *all, t_cmd *cmd)
 	}
 	if (cmd->args >= 1)
 	{
-		if (!s_isnum(cmd->arg[0]) || ft_strcmp(cmd->arg[0], "9223372036854775807") > 0 || ft_strlen(cmd->arg[0]) > 19)
+		if (!s_isnum(cmd->arg[0])
+			|| ft_strcmp(cmd->arg[0], "9223372036854775807") > 0
+			|| ft_strlen(cmd->arg[0]) > 19)
 		{
 			if (!all->pip)
 				write(2, "exit\nexit: ", 12);

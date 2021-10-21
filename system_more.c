@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:27:49 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/19 19:51:47 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/21 14:07:05 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	s_check_exec(t_all *all, t_cmd *cmd)
 		execute_cmd(all, cmd);
 		exit(all->exits);
 	}
-	else if (cmd->valid == 2 && cmd->exec /*&& all->pip*/)
+	else if (cmd->valid == 2 && cmd->exec)
 		s_exec(all, cmd);
 }
 
