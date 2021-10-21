@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/21 15:42:38 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/21 15:56:57 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	continue_parse(t_all *all, char **mline, int i, int ret)
 		mline[MASK][i] = PIP;
 		while (mline[LINE][i + 1] == ' ')
 			mline[MASK][++i] = SPICE;
-		if (mline[LINE][i + 1] == PIP)
+		if (mline[LINE][i + 1] == PIP || mline[LINE][i + 1] == '\0')
 		{
 			all->error = 1;
 			i++;

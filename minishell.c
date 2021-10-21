@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/21 14:07:54 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/21 15:48:13 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,10 @@ static void	parse_exec(t_all *all, char **line_mask)
 			}
 		}
 		else if (all->error)
+		{
+			all->exits = 258;
 			ft_putstr_fd("syntax error\n", 1);
+		}
 		else if (!line_mask[LINE])
 		{
 			write(1, "exit\n", 5);

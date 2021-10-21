@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:54:26 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/10/19 19:50:37 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/21 15:47:26 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*s_readline(t_all *all, char *prompt, int doc)
 	}
 	if (!line_mask && !doc)
 	{
-		write(1, "exit", 5);
+		write(1, "exit\n", 6);
 		exit(all->exits);
 	}
 	return (line_mask);
