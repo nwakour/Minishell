@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/21 16:14:10 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/22 17:47:21 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef struct s_all
 	t_env	*env;
 	t_cmd	*cmd;
 	char	**envp;
+	int		empty_cmd;
 	int		error;
 	int		exits;
 	int		pip;
@@ -122,7 +123,7 @@ void	execute_cmd(t_all *all, t_cmd *cmd);
 char	*s_readdoc(t_all *all, char *limit, int expand);
 
 /*				parse				*/
-void	parse(t_all *all, char **line_mask);
+void	parse(t_all *all, char **mline, int i, int ret);
 void	get_pips(t_all *all, char **line_mask);
 void	find_var(t_all *all, char **line_mask);
 void	parse_heredoc(t_all *all, char **line_mask, int expand);
@@ -150,6 +151,7 @@ char	*ft_strjoinchar(char *s, char c);
 int		is_char_from_set(char c, char *set);
 void	free_content(void *content);
 void	free_array(char **array);
+void	find_cmd(t_all *all, char **mline);
 /*				make_ref			*/
 
 void	skip_back_s(t_all *all, char *mask, int *i);

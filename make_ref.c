@@ -6,37 +6,11 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 04:31:32 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/21 15:20:30 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/22 17:49:34 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	skip_back_s(t_all *all, char *mask, int *i)
-{
-	mask[*i] = SKIP;
-	*i += 1;
-	if (mask[*i] != '\0')
-		mask[*i] = TEXT;
-	else
-		all->error = 1;
-}
-
-void	skip_back_s_in_q(t_all *all, char *mask, int *i)
-{
-	if (mask[(*i) + 1] == '$' || mask[(*i) + 1] == '\\'
-		|| mask[(*i) + 1] == '\"')
-	{
-		mask[*i] = SKIP;
-		*i += 1;
-		if (mask[*i] != '\0')
-			mask[*i] = TEXT;
-		else
-			all->error = 1;
-	}
-	else
-		mask[*i] = TEXT;
-}
 
 static void	cont_remove_zero_ref(char **line_mask, char **nw_line_mask, int i)
 {
@@ -44,16 +18,13 @@ static void	cont_remove_zero_ref(char **line_mask, char **nw_line_mask, int i)
 	{
 		if (!is_char_from_set(line_mask[MASK][i], "01234"))
 		{
-			nw_line_mask[MASK] = ft_strjoin_char(nw_line_mask[MASK],
-					line_mask[MASK][i]);
 			if (line_mask[MASK][i] == 's')
 				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE], ' ');
-			else if (is_char_from_set(line_mask[MASK][i], "<>!?")
+			else if (nw_line_mask[LINE]
+				&& is_char_from_set(line_mask[MASK][i], "<>!?")
 				&& i != 0 && line_mask[MASK][i - 1] != ' ')
 			{
-				nw_line_mask[MASK][i] = ' ';
-				nw_line_mask[MASK] = ft_strjoin_char(nw_line_mask[MASK],
-						line_mask[MASK][i]);
+				nw_line_mask[MASK] = ft_strjoin_char(nw_line_mask[MASK], ' ');
 				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE], ' ');
 				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE],
 						line_mask[LINE][i]);
@@ -61,6 +32,8 @@ static void	cont_remove_zero_ref(char **line_mask, char **nw_line_mask, int i)
 			else
 				nw_line_mask[LINE] = ft_strjoin_char(nw_line_mask[LINE],
 						line_mask[LINE][i]);
+			nw_line_mask[MASK] = ft_strjoin_char(nw_line_mask[MASK],
+					line_mask[MASK][i]);
 		}
 	}
 }

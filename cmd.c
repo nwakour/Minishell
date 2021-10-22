@@ -6,16 +6,18 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/21 15:51:17 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/22 18:00:35 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	check_cmd(t_cmd *cmd)
+static int	check_cmd(t_all *all, t_cmd *cmd)
 {
-	if (!cmd->cmd)
+	if ((!cmd->cmd && !cmd->f_name[0]) || (!cmd->cmd && all->empty_cmd))
 		return (0);
+	else if (!cmd->cmd)
+		return (3);
 	else if (!ft_strcmp(cmd->cmd, "echo"))
 		return (1);
 	else if (!ft_strcmp(cmd->cmd, "cd"))
@@ -83,10 +85,9 @@ static void	make_cmd(t_all *all, t_line *split_mask, char **line_mask, int args)
 	int	i;
 
 	i = 0;
-	while (split_mask && split_mask[i].line_mask[LINE])
-		i++;
+	while (split_mask && split_mask[i++].line_mask[LINE])
+		args++;
 	redirs = str_n_set(line_mask[MASK], "><?=@");
-	args += i;
 	if (args < 0)
 		args = 0;
 	all->cmd->args += args;
@@ -99,9 +100,10 @@ static void	make_cmd(t_all *all, t_line *split_mask, char **line_mask, int args)
 			split_mask[i].line_mask[LINE][0] = split_mask[i].line_mask[MASK][0];
 			all->cmd->f_name[--redirs] = split_mask[i].line_mask[LINE];
 		}
-		else if (i == 0 || (i != 0 && all->cmd->cmd == NULL && args == 0))
+		else if (!all->empty_cmd && (i == 0
+				|| (i != 0 && all->cmd->cmd == NULL && args == 0)))
 			all->cmd->cmd = split_mask[i].line_mask[LINE];
-		else
+		else if (args != 0)
 			all->cmd->arg[--args] = split_mask[i].line_mask[LINE];
 	}
 }
@@ -130,5 +132,5 @@ void	get_cmd(t_all *all, char **line_mask)
 	while (all->cmd->cmd && all->cmd->cmd[++i])
 		 all->cmd->cmd[i] = ft_tolower(all->cmd->cmd[i]);
 	s_heredoc(all, all->cmd);
-	all->cmd->valid = check_cmd(all->cmd);
+	all->cmd->valid = check_cmd(all, all->cmd);
 }

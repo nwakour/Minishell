@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:05:04 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/21 16:14:23 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/22 17:47:49 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,8 @@ static int	cor_char(char c)
 		return (TEXT);
 }
 
-void	parse(t_all *all, char **mline)
+void	parse(t_all *all, char **mline, int i, int ret)
 {
-	int		i;
-	int		ret;
-
-	i = -1;
 	free(mline[MASK]);
 	mline[MASK] = strdup(mline[LINE]);
 	if (mline[LINE][skip_space(mline[LINE])] == PIP)
@@ -129,12 +125,16 @@ void	parse(t_all *all, char **mline)
 		all->error = 1;
 		return ;
 	}
+	else if (mline[LINE][skip_space(mline[LINE])] == '\0')
+	{
+		mline[MASK][0] = '\0';
+		return ;
+	}
+	find_cmd(all, mline);
 	while (mline[LINE][++i])
 	{
 		ret = cor_char(mline[LINE][i]);
-		if (ret == BACK_S)
-			skip_back_s(all, mline[MASK], &i);
-		else if (ret == OPEN_S_Q)
+		if (ret == OPEN_S_Q)
 			handle_s_quotes(all, mline, &i);
 		else if (ret == OPEN_D_Q)
 			handle_d_quotes(all, mline, &i);

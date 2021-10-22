@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   helpers_more.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tenshi <tenshi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:19:57 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/06 03:34:03 by tenshi           ###   ########.fr       */
+/*   Updated: 2021/10/22 17:47:14 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	find_cmd(t_all *all, char **mline)
+{
+	int	i;
+
+	i = skip_space(mline[LINE]);
+	if (mline[LINE][i] == '\'' && mline[LINE][i + 1]
+		&& mline[LINE][i + 1] == '\'' && mline[LINE][i + 2] == ' ')
+		all->empty_cmd = 1;
+	else if (mline[LINE][i] == '\"' && mline[LINE][i + 1]
+		&& mline[LINE][i + 1] == '\"' && mline[LINE][i + 2] == ' ')
+		all->empty_cmd = 1;
+}
 
 void	free_content(void *content)
 {

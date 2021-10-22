@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/21 16:35:34 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/22 17:44:52 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,26 +69,26 @@ static void	new_func(t_all *all, t_cmd *cmd)
 	}
 	else if (cmd->valid == 2 && cmd->exec)
 		s_last(all, cmd);
-	// else if (!cmd->valid)
-	// {
-	// 	write(2, "\0", 1);
-	// 	write(2, ": command not found\n", 20);
-	// 	all->exits = 127;
-	// }
+	else if (!cmd->valid)
+	{
+		write(2, "\0", 1);
+		write(2, ": command not found\n", 20);
+		all->exits = 127;
+	}
 }
 
 static void	parse_exec(t_all *all, char **line_mask)
 {
 	if (line_mask[LINE] && line_mask[LINE][0] != '\0')
 	{
-		parse(all, line_mask);
+		parse(all, line_mask, -1, 0);
 		find_var(all, line_mask);
-		parse(all, line_mask);
+		parse(all, line_mask, -1, 0);
 		if (!all->error)
 		{
 			if (ft_strchr(line_mask[MASK], '|'))
 				get_pips(all, line_mask);
-			else
+			else if (line_mask[MASK][0] != '\0')
 			{
 				all->pip = 0;
 				all->nextin = 0;
@@ -129,6 +129,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		all.error = 0;
 		all.add = 1;
+		all.empty_cmd = 0;
 		line_mask[LINE] = s_readline(&all, "Minisheeesh-> ", 0);
 		parse_exec(&all, line_mask);
 		free_all(&all, line_mask);
