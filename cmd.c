@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/22 18:00:35 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/23 15:24:56 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ static void	make_cmd(t_all *all, t_line *split_mask, char **line_mask, int args)
 	int	redirs;
 	int	i;
 
-	i = 0;
-	while (split_mask && split_mask[i++].line_mask[LINE])
+	i = -1;
+	while (split_mask && split_mask[++i].line_mask[LINE])
 		args++;
 	redirs = str_n_set(line_mask[MASK], "><?=@");
 	if (args < 0)
