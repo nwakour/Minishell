@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:11:34 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/21 14:15:59 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/25 20:24:08 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,13 @@ void	ft_unset(t_all *all, t_cmd *cmd)
 		while (cmd->arg[++i])
 			ft_unset_co(all, cmd->arg[i]);
 	}
+	if (all->envp)
+	{
+		i = -1;
+		while (all->envp[++i])
+			free(all->envp[i]);
+		free(all->envp);
+	}
+	all->envp = s_env(all);
 	all->exits = 0;
 }
