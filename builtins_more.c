@@ -6,21 +6,40 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:07:17 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/21 14:17:45 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/25 21:11:58 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	ft_update_pwd(t_all *all, char *var)
+static void	ft_update_pwd(t_all *all, char *var, int old)
 {
 	t_list	*tmp;
 	char	*path;
 
 	tmp = all->l_env;
-	path = getcwd(NULL, 0);
-	if (!path)
-		return ;
+	path = NULL;
+	if (!old)
+	{
+		path = getcwd(NULL, 0);
+		if (!path)
+			return ;
+	}
+	else
+	{
+		while (tmp)
+		{
+			if (!(ft_strcmp(((t_env *)tmp->content)->name, "PWD")))
+			{
+				path = ft_strdup(((t_env *)tmp->content)->value);
+				break ;
+			}
+			tmp = tmp->next;
+		}
+		if (!path)
+			path = ft_strdup("");
+	}
+	tmp = all->l_env;
 	while (tmp)
 	{
 		if (!(ft_strcmp(((t_env *)tmp->content)->name, var)))
@@ -55,7 +74,10 @@ static void	ft_follow_cd(t_all *all, int r, char *path)
 		all->exits = 1;
 	}
 	else
-		ft_update_pwd(all, "PWD");
+	{
+		ft_update_pwd(all, "OLDPWD", 1);
+		ft_update_pwd(all, "PWD", 0);
+	}
 }
 
 int	ft_cd_cont(t_all *all, char *path)
@@ -86,7 +108,6 @@ void	ft_cd(t_all *all, char *path, int args)
 	int	r;
 
 	r = 0;
-	ft_update_pwd(all, "OLDPWD");
 	all->exits = 0;
 	if (args == 1 && !path)
 		return ;
