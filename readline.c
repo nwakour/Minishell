@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 16:54:26 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/10/21 15:47:26 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/25 19:56:09 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ char	*s_readline(t_all *all, char *prompt, int doc)
 {
 	char	*line_mask;
 
-	line_mask = readline(prompt);
 	signal(SIGINT, s_handle_c);
 	signal(SIGQUIT, s_handle_q);
+	line_mask = readline(prompt);
 	if (line_mask && line_mask[0] != '\0' && all->add)
 	{
 		add_history(line_mask);
