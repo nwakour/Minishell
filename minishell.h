@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/22 17:47:21 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/27 15:52:26 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,5 +179,8 @@ t_all	*get_exit__ptr(t_all *exit);
 void	get_files(int nextin, int nextout, t_cmd *cmd);
 int		s_tern(int cond, int iftrue, int iffalse);
 void	s_check_exec(t_all *all, t_cmd *cmd);
+void	s_exec_most(t_all *all, char **tmp, char *file, struct stat *st);
+void	s_exit_error(char *cmd, char *msg, int excode);
+char	*update_path(t_all *all, int old);
 
 #endif

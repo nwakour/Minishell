@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:07:17 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/25 21:11:58 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/27 15:52:13 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,9 @@ static void	ft_update_pwd(t_all *all, char *var, int old)
 	char	*path;
 
 	tmp = all->l_env;
-	path = NULL;
-	if (!old)
-	{
-		path = getcwd(NULL, 0);
-		if (!path)
-			return ;
-	}
-	else
-	{
-		while (tmp)
-		{
-			if (!(ft_strcmp(((t_env *)tmp->content)->name, "PWD")))
-			{
-				path = ft_strdup(((t_env *)tmp->content)->value);
-				break ;
-			}
-			tmp = tmp->next;
-		}
-		if (!path)
-			path = ft_strdup("");
-	}
-	tmp = all->l_env;
+	path = update_path(all, old);
+	if (!path)
+		return ;
 	while (tmp)
 	{
 		if (!(ft_strcmp(((t_env *)tmp->content)->name, var)))

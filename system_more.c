@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:27:49 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/25 20:10:00 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/27 15:38:55 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	s_exec_more(t_all *all, t_cmd *cmd, char **paths, struct stat *st)
 {
 	char	*file;
 	char	**tmp;
-	
+
 	tmp = s_args(cmd);
 	if (!lstat(all->cmd->cmd, st))
 	{
@@ -27,11 +27,7 @@ static void	s_exec_more(t_all *all, t_cmd *cmd, char **paths, struct stat *st)
 		}
 	}
 	else if (!paths)
-	{
-		write(2, cmd->cmd, ft_strlen(cmd->cmd));
-		write(2, ": command not found\n", 20);
-		exit(127);
-	}
+		s_exit_error(cmd->cmd, ": command not found\n", 127);
 	file = s_join(*paths, '/', cmd->cmd);
 	while (*paths && lstat(file, st))
 	{
@@ -40,21 +36,7 @@ static void	s_exec_more(t_all *all, t_cmd *cmd, char **paths, struct stat *st)
 			file = s_join(*paths, '/', cmd->cmd);
 	}
 	all->cmd = cmd;
-	if (!lstat(file, st))
-	{
-		if (execve(file, tmp, all->envp) == -1)
-		{
-			s_perror(all, all->cmd->cmd, 126);
-			exit(126);
-		}
-	}
-	else
-	{
-		write(2, all->cmd->cmd, ft_strlen(all->cmd->cmd));
-		write(2, ": command not found\n", 20);
-		exit(127);
-	}
-	//s_found(all, st, file, s_args(cmd));
+	s_exec_most(all, tmp, file, st);
 }
 
 void	s_exec(t_all *all, t_cmd *cmd)
