@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   system_more_than_more.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/06 04:19:11 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/27 15:52:18 by hmahjour         ###   ########.fr       */
+/*   Created: 2021/10/29 15:44:48 by nwakour           #+#    #+#             */
+/*   Updated: 2021/10/29 15:44:49 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,19 @@
 
 char	**s_args(t_cmd *cmd)
 {
+	t_cmd	*tcmd;
 	char	**tmp;
 	int		i;
 
 	i = 0;
-	tmp = (char **)malloc((cmd->args + 2) * sizeof(char *));
-	tmp[i] = cmd->cmd;
+	tcmd = cmd;
+	tmp = (char **)malloc((tcmd->args + 2) * sizeof(char *));
+	tmp[i] = tcmd->cmd;
 	i++;
-	while (*cmd->arg)
+	while (*tcmd->arg)
 	{
-		tmp[i] = *cmd->arg;
-		cmd->arg++;
+		tmp[i] = *tcmd->arg;
+		tcmd->arg++;
 		i++;
 	}
 	tmp[i] = 0;

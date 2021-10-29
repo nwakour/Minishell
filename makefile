@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+         #
+#    By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/29 19:06:53 by nwakour           #+#    #+#              #
-#    Updated: 2021/10/20 17:28:13 by hmahjour         ###   ########.fr        #
+#    Updated: 2021/10/29 15:36:26 by nwakour          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAME			=	minishell
 SRCS			=	builtins.c builtins_most.c builtins_more.c builtind_more_than_more.c \
 					cmd.c cmd_more.c env.c fd_files.c ft_exit.c handle_quotes.c\
 					helpers.c helpers_more.c make_ref.c minishell.c parse_more.c parse.c\
-					path.c readline.c system_more_than_more.c system_more.c system.c
+					path.c readline.c system_more_than_more.c system_more.c system.c handle_var.c
 
 OBJS			=	${SRCS:.c=.o}
 

@@ -3,10 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   system_more.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+<<<<<<< HEAD
 /*   Created: 2021/10/06 02:27:49 by tenshi            #+#    #+#             */
 /*   Updated: 2021/10/29 17:41:15 by hmahjour         ###   ########.fr       */
+=======
+/*   Created: 2021/10/29 15:44:53 by nwakour           #+#    #+#             */
+/*   Updated: 2021/10/29 15:44:54 by nwakour          ###   ########.fr       */
+>>>>>>> 0714fb7d70f7d7ae6f4fd53bb1e99637e98adcb4
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +23,18 @@ static void	s_exec_more(t_all *all, t_cmd *cmd, char **paths, struct stat *st)
 	char	**tmp;
 
 	tmp = s_args(cmd);
-	if (!lstat(all->cmd->cmd, st))
+	if (!lstat(cmd->cmd, st))
 	{
-		if (execve(all->cmd->cmd, tmp, all->envp) == -1)
+		if (execve(cmd->cmd, tmp, all->envp) == -1)
 		{
-			s_perror(all, all->cmd->cmd, 126);
+			s_perror(all, cmd->cmd, 126);
 			exit(126);
 		}
 	}
 	else if (!paths)
 		s_exit_error(cmd->cmd, ": command not found\n", 127);
 	if (*paths && *paths[0])
-	file = s_join(*paths, '/', cmd->cmd);
+		file = s_join(*paths, '/', cmd->cmd);
 	while (*paths && lstat(file, st))
 	{
 		paths++;
