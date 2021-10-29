@@ -6,7 +6,7 @@
 /*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 02:27:49 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/27 15:38:55 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/10/29 17:41:15 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@ static void	s_exec_more(t_all *all, t_cmd *cmd, char **paths, struct stat *st)
 	}
 	else if (!paths)
 		s_exit_error(cmd->cmd, ": command not found\n", 127);
+	if (*paths && *paths[0])
 	file = s_join(*paths, '/', cmd->cmd);
 	while (*paths && lstat(file, st))
 	{
 		paths++;
-		if (*paths)
+		if (*paths && *paths[0])
 			file = s_join(*paths, '/', cmd->cmd);
 	}
 	all->cmd = cmd;
