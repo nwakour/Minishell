@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   system_more.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/06 02:27:49 by tenshi            #+#    #+#             */
-/*   Updated: 2021/10/27 15:38:55 by hmahjour         ###   ########.fr       */
+/*   Created: 2021/10/29 15:44:53 by nwakour           #+#    #+#             */
+/*   Updated: 2021/10/29 15:44:54 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ static void	s_exec_more(t_all *all, t_cmd *cmd, char **paths, struct stat *st)
 	char	**tmp;
 
 	tmp = s_args(cmd);
-	if (!lstat(all->cmd->cmd, st))
+	if (!lstat(cmd->cmd, st))
 	{
-		if (execve(all->cmd->cmd, tmp, all->envp) == -1)
+		if (execve(cmd->cmd, tmp, all->envp) == -1)
 		{
-			s_perror(all, all->cmd->cmd, 126);
+			s_perror(all, cmd->cmd, 126);
 			exit(126);
 		}
 	}
