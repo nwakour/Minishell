@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/29 15:45:35 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/10/29 17:55:49 by hmahjour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void	free_all(t_all *all, char *line_mask[])
 			all->cmd->arg = NULL;
 			free_array(all->cmd->f_name);
 			all->cmd->f_name = NULL;
+			free(all->cmd->in);
+			free(all->cmd->out);
 		}
 		tmp = tmp->next;
 	}
@@ -128,6 +130,7 @@ int	main(int argc, char **argv, char **env)
 		line_mask[LINE] = s_readline(&all, "Minisheeesh-> ", 0);
 		parse_exec(&all, line_mask);
 		free_all(&all, line_mask);
+		system("leaks minishell");
 	}
 	return (all.exits);
 }
