@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:29:27 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/23 15:24:56 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/11/01 15:52:53 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static void	s_heredoc(t_all *all, t_cmd *cmd)
 	char	*name;
 
 	tmp = cmd->f_name;
+	name = NULL;
 	i = 0;
 	while (tmp[i])
 	{
@@ -77,6 +78,7 @@ static void	s_heredoc(t_all *all, t_cmd *cmd)
 		}
 		i++;
 	}
+	free(name);
 }
 
 static void	make_cmd(t_all *all, t_line *split_mask, char **line_mask, int args)
@@ -121,6 +123,7 @@ void	get_cmd(t_all *all, char **line_mask)
 	if (!ft_struct_list(&all->l_cmd, (void **)&all->cmd, sizeof(t_cmd))
 		|| !split_mask)
 		return ;
+	check_for_empty(split_mask);
 	args = 0 - str_n_set(line_mask[MASK], "><?=@") - 1;
 	all->cmd->args = nb_args;
 	make_cmd(all, split_mask, line_mask, args);

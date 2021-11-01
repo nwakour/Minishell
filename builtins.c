@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 15:43:28 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/29 15:43:31 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/11/01 16:08:54 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_echo(t_all *all, char **arg)
 		if (!n_flag(arg, i) || (n_flag(arg, i) && f))
 		{
 			write(1, arg[i], ft_strlen(arg[i]));
-			if (arg[i + 1] && arg[i + 1][0] != '\0')
+			if (arg[i + 1])
 				write(1, " ", 1);
 			f = 1;
 		}
@@ -70,7 +70,12 @@ void	ft_export_wa(t_all *all, t_env *var)
 	list = all->l_env;
 	exist = search_lst(list, var);
 	if (exist && var->value)
+	{
+		free(((t_env*)exist->content)->name);
+		free(((t_env*)exist->content)->value);
+		free(exist->content);
 		exist->content = var;
+	}
 	else if (!exist)
 		ft_lstadd_back(&all->l_env, ft_lstnew(var));
 }

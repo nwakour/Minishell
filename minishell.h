@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/27 15:52:26 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/11/01 15:53:17 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ t_line	*ft_split_mask(char **line_mask, char c);
 void	get_cmd(t_all *all, char **line_mask);
 void	execute_cmd(t_all *all, t_cmd *cmd);
 char	*s_readdoc(t_all *all, char *limit, int expand);
+void	check_for_empty(t_line *split_mask);
 
 /*				parse				*/
 void	parse(t_all *all, char **mline, int i, int ret);

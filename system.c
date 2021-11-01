@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   system.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 14:53:16 by hmahjour          #+#    #+#             */
-/*   Updated: 2021/10/19 19:53:26 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/11/01 15:36:46 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,31 +67,6 @@ char	**s_env(t_all *all)
 	env[i + 1] = 0;
 	return (env);
 }
-
-// void	s_last(t_all *all, t_cmd *cmd)
-// {
-// 	cmd->pid = fork();
-// 	if (cmd->pid < 0)
-// 		s_perror(all, "fork", 1);
-// 	g_child = 1;
-// 	if (cmd->pid == 0)
-// 	{
-// 		dup2(cmd->infd, 0);
-// 		dup2(cmd->fd, 1);
-// 		if (cmd->infd > 1)
-// 			close(cmd->infd);
-// 		if (cmd->fd > 1)
-// 			close(cmd->fd);
-// 		s_exec(all, cmd);
-// 	}
-// 	if (!all->pip)
-// 		s_wait(all, cmd);
-// 	g_child = 0;
-// 	if (cmd->infd > 1)
-// 		close(cmd->infd);
-// 	if (cmd->fd > 1)
-// 		close(cmd->fd);
-// }
 
 void	s_last(t_all *all, t_cmd *cmd)
 {

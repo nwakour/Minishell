@@ -6,11 +6,24 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 15:43:42 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/29 15:43:43 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/11/01 15:53:29 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	check_for_empty(t_line *split_mask)
+{
+	int	i;
+
+	i = -1;
+	while (split_mask[++i].line_mask[LINE])
+	{
+		if (split_mask[i].line_mask[MASK][0] == 's'
+			&& split_mask[i].line_mask[MASK][1] == '\0')
+			split_mask[i].line_mask[LINE][0] = '\0';
+	}
+}
 
 t_line	*ft_split_mask(char **line_mask, char c)
 {
@@ -70,10 +83,12 @@ char	*s_readdoc(t_all *all, char *limit, int expand)
 {
 	char	*line_mask[2];
 	char	*file;
+	char	*ito;
 	int		fd;
 
 	all->add = 0;
-	file = ft_strjoin("/tmp/s_", ft_itoa(all->hdoc));
+	ito = ft_itoa(all->hdoc);
+	file = ft_strjoin("/tmp/s_", ito);
 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
 	line_mask[LINE] = s_readline(all, ">", 1);
 	parse_heredoc(all, line_mask, expand);
@@ -81,9 +96,14 @@ char	*s_readdoc(t_all *all, char *limit, int expand)
 	{
 		write(fd, line_mask[LINE], ft_strlen(line_mask[LINE]));
 		write(fd, "\n", 1);
+		free(line_mask[LINE]);
+		free(line_mask[MASK]);
 		line_mask[LINE] = s_readline(all, ">", 1);
 		parse_heredoc(all, line_mask, expand);
 	}
+	free(line_mask[LINE]);
+	free(line_mask[MASK]);
+	free(ito);
 	close(fd);
 	return (file);
 }
