@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 15:44:07 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/29 15:44:08 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/11/04 16:27:27 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@ void	find_cmd(t_all *all, char **mline)
 
 	i = skip_space(mline[LINE]);
 	if (mline[LINE][i] == '\'' && mline[LINE][i + 1]
-		&& mline[LINE][i + 1] == '\'' && mline[LINE][i + 2] == ' ')
+		&& mline[LINE][i + 1] == '\'' && (mline[LINE][i + 2] == ' '
+		|| mline[LINE][i + 2] == '\0'))
 		all->empty_cmd = 1;
 	else if (mline[LINE][i] == '\"' && mline[LINE][i + 1]
-		&& mline[LINE][i + 1] == '\"' && mline[LINE][i + 2] == ' ')
+		&& mline[LINE][i + 1] == '\"' && (mline[LINE][i + 2] == ' '
+		|| mline[LINE][i + 2] == '\0'))
 		all->empty_cmd = 1;
 }
 

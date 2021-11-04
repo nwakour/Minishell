@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 15:44:15 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/29 15:44:16 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/11/04 16:50:35 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,14 @@ char	*ft_strjoinchar(char *s, char c)
 	str[i + 1] = '\0';
 	free(s);
 	return (str);
+}
+
+void	freeeee(t_all *all, char *line_mask[])
+{
+	free(line_mask[LINE]);
+	line_mask[LINE] = NULL;
+	free(line_mask[MASK]);
+	line_mask[MASK] = NULL;
+	all->l_cmd = NULL;
+	all->cmd = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 15:43:28 by nwakour           #+#    #+#             */
-/*   Updated: 2021/11/01 16:08:54 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/11/04 16:47:54 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ void	ft_export_wa(t_all *all, t_env *var)
 	exist = search_lst(list, var);
 	if (exist && var->value)
 	{
-		free(((t_env*)exist->content)->name);
-		free(((t_env*)exist->content)->value);
+		free(((t_env *)exist->content)->name);
+		free(((t_env *)exist->content)->value);
 		free(exist->content);
 		exist->content = var;
 	}

@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 15:43:57 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/29 15:43:58 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/11/04 16:33:33 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static int	s_isnum(char *str)
 
 	ret = 1;
 	i = 0;
+	if (str[i] && (str[i] == '+' || str[i] == '-'))
+		i++;
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
@@ -37,7 +39,10 @@ static void	ft_exit_more(t_all *all, t_cmd *cmd)
 	{
 		all->exits = ft_atoi(cmd->arg[0]);
 		if (!all->pip)
+		{
+			write(2, "exit\n", 5);
 			exit(all->exits);
+		}
 	}
 	if (cmd->args > 1)
 	{

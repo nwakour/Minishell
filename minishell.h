@@ -6,7 +6,7 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:59:03 by nwakour           #+#    #+#             */
-/*   Updated: 2021/11/01 15:53:17 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/11/04 16:50:44 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ int		is_char_from_set(char c, char *set);
 void	free_content(void *content);
 void	free_array(char **array);
 void	find_cmd(t_all *all, char **mline);
+void	freeeee(t_all *all, char *line_mask[]);
 /*				make_ref			*/
 
 void	skip_back_s(t_all *all, char *mask, int *i);

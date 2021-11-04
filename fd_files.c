@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_files.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmahjour <hmahjour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 11:06:22 by nwakour           #+#    #+#             */
-/*   Updated: 2021/10/16 14:21:54 by hmahjour         ###   ########.fr       */
+/*   Updated: 2021/11/04 16:38:00 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	get_files(int nextin, int nextout, t_cmd *cmd)
 	{
 		cmd->infd = open(cmd->in, O_RDONLY);
 		free(cmd->in);
+		cmd->in = NULL;
 	}
 	if (cmd->out)
 	{
@@ -38,6 +39,7 @@ void	get_files(int nextin, int nextout, t_cmd *cmd)
 			cmd->fd = open(cmd->out, O_WRONLY | O_CREAT
 					| O_TRUNC, S_IRUSR | S_IWUSR);
 		free(cmd->out);
+		cmd->out = NULL;
 	}
 }
 

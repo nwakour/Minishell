@@ -6,13 +6,13 @@
 /*   By: nwakour <nwakour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 14:56:01 by nwakour           #+#    #+#             */
-/*   Updated: 2021/11/01 16:16:50 by nwakour          ###   ########.fr       */
+/*   Updated: 2021/11/04 16:50:20 by nwakour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	free_all(t_all *all, char *line_mask[])
+static void	free_all(t_all *all)
 {
 	t_list	*tmp;
 
@@ -28,16 +28,14 @@ static void	free_all(t_all *all, char *line_mask[])
 			all->cmd->arg = NULL;
 			free_array(all->cmd->f_name);
 			all->cmd->f_name = NULL;
+			free(all->cmd->in);
+			all->cmd->in = NULL;
+			free(all->cmd->out);
+			all->cmd->out = NULL;
 		}
 		tmp = tmp->next;
 	}
 	ft_lstclear(&all->l_cmd, &free_content);
-	free(line_mask[LINE]);
-	line_mask[LINE] = NULL;
-	free(line_mask[MASK]);
-	line_mask[MASK] = NULL;
-	all->l_cmd = NULL;
-	all->cmd = NULL;
 }
 
 static void	s_dup(t_all *all, t_cmd *cmd)
@@ -127,8 +125,8 @@ int	main(int argc, char **argv, char **env)
 		all.empty_cmd = 0;
 		line_mask[LINE] = s_readline(&all, "Minisheeesh-> ", 0);
 		parse_exec(&all, line_mask);
-		free_all(&all, line_mask);
-		// system("leaks minishell");
+		free_all(&all);
+		freeeee(&all, line_mask);
 	}
 	return (all.exits);
 }
